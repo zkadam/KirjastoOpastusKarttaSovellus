@@ -262,6 +262,7 @@
     <Content Include="Models\KirjastoDBEntities.edmx.diagram">
       <DependentUpon>KirjastoDBEntities.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\KirjastoApp.pubxml" />
     <None Include="Properties\PublishProfiles\KirjastoAppScrum20200708143158 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\KirjastoAppScrum20200708143158 - ReadOnly - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\KirjastoAppScrum20200708143158 - Web Deploy.pubxml" />
