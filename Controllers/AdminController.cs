@@ -16,7 +16,6 @@ namespace KirjastoAppScrum.Controllers
         KirjastoProjektiEntities1 db = new KirjastoProjektiEntities1();
 
         public static bool indexAll; // tehdään staattinen muuttuja jolla kerrotaan kummalle indexille palautetaan RJ
-
         public ActionResult Index(int? kategoriaRefer, string itemName)
         {
             if (Session["PaaAdmin"] != null || Session["PerusAdmin"] != null || Session["PerusUser"] != null)
