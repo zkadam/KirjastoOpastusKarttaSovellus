@@ -1,0 +1,427 @@
+﻿@model IEnumerable<KirjastoAppScrum.Models.Koordinaatit>
+
+@{
+    ViewBag.Title = "NaytaKartta";
+}
+
+
+<div>
+    @if (ViewBag.naviListToData != null)
+    {
+        foreach (var data in ViewBag.naviListToData)
+        {
+            <a style="font-size:xx-large;font-weight:bold" href='@Url.Action("Kategoriat", "User", new { referi = @data.Refer, koordinaatit = @data.Koordinaatti,luokka = @data.Luokka, id = @data.Id })'> @data.Teksti > </a>
+        }
+    }
+</div>
+
+<h2>@ViewBag.NoCoords</h2>
+
+
+@foreach (var item in Model)
+{
+    //bringing all the coordinates to a same classed name element - which JavaScr will collect ZK
+    //first checking if it is circle by checking if it has radius ZK
+    //json apperanetly needs double quotes so they need to be marked with \"
+    string thisKoordinate = "";
+    if (item.radius.HasValue)
+    {
+        thisKoordinate = "{\"x\":" + item.startX + ", \"y\":" + item.startY + " ,\"radius\":" + item.radius + ", \"kerros\":" + item.kerros + ", \"color\":\"red\"}";
+    }
+    else
+    {
+        thisKoordinate = "{\"x\":" + item.startX + ", \"y\":" + item.startY + ", \"width\":" + item.width + " ,\"height\":" + item.height + ", \"kerros\":" + item.kerros + ", \"color\":\"red\"}";
+    }
+
+    //tänne sitten tulee kaikki koordinaatit listattu paragrapheiksi samaalla classilla että script pystyy niitä näppärästi hakea-ZK
+    <p class="koordinaatit" style="display:none">@thisKoordinate</p>
+
+}
+
+
+
+
+@*tähän tulee kerros kirjoitettu valitulla kielällä, js päivitää kerros numeron id-n perusteella - ZK*@
+<h3 style="display:none"><span id="kerrosNumero"></span> @ViewBag.Kerros</h3>
+
+<!-- setting up a container div where we put a background picture
+   on top of it we place the canvas ysing z-index attributes  HUOM all resolutions have to be the same
+    HUOM2 id="container" - siihen viitataan scriptillä! ZK
+    -->
+
+<div id="container" style="text-align:center; ">
+
+    @*putting the library picture to the background , setting the z-index to -1 so that the canvas objects are being drawn over it
+        if condition decides if it's first or second floor*@
+
+    @*TOSI TÄRKEÄ IMAGE JA KANVASRAATIO ASETUKSET canvakselle ja kuville jotka ovat kanvaksen alla:
+        MAX-WIDTH 95VW - eli maximissa menää 95% näytön läväyydestä,
+        HEIGHT:AUTO - eli kuvan leväytään mukaan joka on 95, automaattisesti muokautu sillä että aspect ratio pysyy hyvänä -ZK*@
+    <img id="KirjastonKarttaKuva1" width="3840" height="1881" style="position: absolute; z-index:-5;display:none; max-width:78vw; height:auto" src="~/Maps/1krs_Tyhja_V5.svg" alt="Ensimmäinen kerros" />
+    <img id="KirjastonKarttaKuva2" width="3840" height="1881" style="position: absolute; z-index:-5; display:none; max-width:78vw; height:auto" src="~/Maps/2krs_Tyhja_V5.svg" alt="Toinen kerros" />
+    @*defining the canvas, putting z-index to higher so it will be over  background*@
+    <canvas id="myCanvas" width="3840" height="1881" style="position: relative; z-index:10;max-width:78vw; height:auto " onload="drawingRectangle">
+        Your browser does not support the HTML5 canvas tag.
+
+    </canvas>
+</div>
+
+@*kerros vaihto buttonien value käytetään js kartta pohjan sekä kordinaattien kerros filteröintiin
+    buttonin teksti tulee viewbagin kautta, niin se vaihtuu kielen mukaan - ZK*@
+
+<button id="changeFloor1" class="btn btn-primary" value="KirjastonKarttaKuva1" onclick="drawTheCanvas(this.value,1)">1  @ViewBag.Kerros</button>
+
+<button id="changeFloor2" class="btn btn-primary" value="KirjastonKarttaKuva2" onclick="drawTheCanvas(this.value,2)">2  @ViewBag.Kerros</button>
+
+@*divin tarkoitus toimia booleanina, koska on helppo vaihta inner html-in, js functio tarkistaa inner htmlin myöhämmin ja asetta sen "1" iks, sen jälkeen funktio ei toistu koska ekaks tarkistetaan onko innerhtml == 0 -ZK*@
+<div id="boolDiv" style="display:none">0</div>
+
+@*bootstrapi modal viestin varten ZK*@
+<!-- Trigger the modal with a button -->
+<button id="myModalBtn" style="display:none" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade " role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body" id="modaal" style="text-align:left">
+                <p id="changeModal">@ViewBag.KoordsToisessa</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@*here starts the javascript ZK*@
+
+<script charset="UTF-8">
+
+
+    //kun sivu latautuu kutsutaan canvas piirto funktion, johon välitetään eka kerroksen parametrit ZK
+    window.onload = drawTheCanvas("KirjastonKarttaKuva1", 1);
+
+    //canvas piirtyy aina kun kerros button on painettu ZK
+
+    function drawTheCanvas(imgIdPar, floorPar) {
+        //document.getElementById("myModalBtn").click();
+
+        //sijoitetaan parametrit kuvan id ja kerroksen numero ZK
+        let imgId = imgIdPar;
+        let currentFloor = floorPar;
+
+        // canvas related vars, setting the canvas up ZK
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+
+        var cw = canvas.width;
+        var ch = canvas.height;
+        //  we append changes to the "container" div where the canvas is ZK
+        document.getElementById("container").appendChild(canvas);
+
+        //importing shape coordinates with htmlattribute class="koordinates" ZK
+        var Koordinates = document.getElementsByClassName('koordinaatit');
+
+        console.log(Koordinates);
+
+        //defining apumuuttuja and an array where we collect the koordinates ZK
+        let k;
+        var koordArray = [];
+            console.log(Koordinates.value)
+            //silmukka goes thrue koordinates , parse them to JSON objects and pushes them to array ZK
+            for (k = 0; k < Koordinates.length; k++) {
+                koordArray.push(JSON.parse(Koordinates[k].textContent));
+                //console.log(koordArray[k].color); -just a testZK
+
+            }
+        //tsekkataan onko yhteen elementti, jos ei oo, niin pushataan fantom elementin että kartta piirtyis siltiZK
+        if (!koordArray.length > 0) {
+
+            console.log(Koordinates.value)
+            //puhsataan yhden fantom koordinaatit että eka kerros tulisi näkymään, ja ilmoitetaan asiakas että sijainti ei löytyy viewbagin kautta ZK
+            koordArray.push({ x: 0, y: 0, width: 0, height: 0, kerros: 1, color: 'orange' });
+            document.getElementById("changeModal").innerText = ("@Html.Raw(ViewBag.notFound)");
+            $("#myModal").modal("toggle");
+            setTimeout(closeModal, 180000);
+
+            //modal piiloutuu automaattisesti ZK
+            function closeModal() {
+                $("#myModal").modal("hide");
+            }
+
+        }
+
+        //tässä tarkistetaan onko eka canvas piirto tehty jo, jos ei oo sitten lasketaan montako koordinaatti löytyy missä kerroksessa ZK
+        if (document.getElementById("boolDiv").innerText == "0") {
+            kerrosTarkastus(imgId);
+
+            function kerrosTarkastus(imgId) {
+
+                //laitetaan boolDiville arvo 1 että se tätä ei tekisi seuraava kertaa
+                document.getElementById("boolDiv").innerText = "1"
+                var ekaKerrosCount = 0;
+                var tokaKerrosCount = 0;
+                //silmukassa käydään läpi kaikki koordinaatteja jotka saatiin, ja lasketaan montako niitä on , jos eka kerroksessa ei oo, mutta tokassa on, niin vaihetaan kerros -ZK
+                for (var j = 0; j < koordArray.length; j++) {
+
+                    var shape = koordArray[j];
+
+                    if (shape.kerros == 1) {
+
+                        ekaKerrosCount = ekaKerrosCount + 1;
+                    }
+                    if (shape.kerros == 2) {
+
+                        tokaKerrosCount = tokaKerrosCount + 1;
+                    }
+
+                    //tässä tarkistetaan onko ekass kerroksessa yhteen etsitty elementti, jos ei oo katsotaan onko tokassa - ja jos sieltä löytyy piirrätään sen ekaks ZK
+                    if (ekaKerrosCount > 0) {
+                        console.log("we ar in if");
+
+                        //buttonien näkymä vaihtoo sen mukaan kummassa kerroksessa ollaan -ZK
+
+                     
+
+                        let currentFloor = 1;
+                        
+
+                        let imgId = "KirjastonKarttaKuva1"
+                        drawAll(imgId, currentFloor);
+                    }
+                    else if (tokaKerrosCount > 0) {
+
+                        //document.getElementById("changeFloor2").click();
+                        let currentFloor2 = 2;
+                        let imgId2 = "KirjastonKarttaKuva2";
+
+
+                        console.log('we are in else if');
+                        drawAll(imgId2, currentFloor2);
+
+                        //kutsutaan modalin näkyväksi ZK
+                        $("#myModal").modal("toggle");
+                        setTimeout(closeModal, 180000);
+
+                        //modal piiloutuu automaattisesti ZK
+                        function closeModal() {
+
+                            $("#myModal").modal("hide");
+
+                        }
+                    }
+                    else {
+
+                        //buttonien näkymä vaihtoo sen mukaan kummassa kerroksessa ollaan -ZK
+                
+                        let currentFloor = 1;
+
+                        let imgId = "KirjastonKarttaKuva1";
+                        console.log("we ar in else");
+
+                        drawAll(imgId, currentFloor);
+
+                    }
+                }
+            }
+        }
+
+        else {
+
+
+            let currentFloor = floorPar;
+            let imgId = imgIdPar;
+            drawAll(imgId, currentFloor)
+        }
+
+
+
+        //------------------------------------the actual drawing function------------------------
+            function drawAll(imgIdPar, currentFloorPar) {
+                let imgId = imgIdPar;
+                let currentFloor = currentFloorPar;
+                document.getElementById("kerrosNumero").innerText = currentFloor;
+
+                // clear the canvasv, the background stays coz its a div behind the canvas ZK
+                ctx.clearRect(0, 0, cw, ch);
+
+                //global alpha - eli läpinäkevyys aina pitää laitta 1 arvoks, että kuva tulisi terävänä ZK
+                ctx.globalAlpha = 1;
+
+
+                // canvaksen alla vaihtuu kerros kuva ZK
+                if (currentFloorPar == 2) {
+
+                    document.getElementById("KirjastonKarttaKuva2").style.display = "";
+                    document.getElementById("KirjastonKarttaKuva1").style.display = "none";
+                    document.getElementById("changeFloor1").classList.remove("active");
+                    document.getElementById("changeFloor1").classList.remove("btn-lg");
+                    document.getElementById("changeFloor2").classList.add("btn-lg");
+                    document.getElementById("changeFloor2").classList.add("active");
+                    }
+                else {
+                    document.getElementById("KirjastonKarttaKuva1").style.display = "";
+                    document.getElementById("KirjastonKarttaKuva2").style.display = "none";
+                    document.getElementById("changeFloor2").classList.remove("active");
+                    document.getElementById("changeFloor2").classList.remove("btn-lg");
+                    document.getElementById("changeFloor1").classList.add("btn-lg");
+                    document.getElementById("changeFloor1").classList.add("active");
+
+                }
+                           
+             //------------------------------------------------kerros kirjoitus canvakselle              
+                ctx.globalAlpha = 1;
+                ctx.font = "700 80px Arial ";
+                ctx.fillStyle = "black";
+                ctx.textAlign = "center";
+                //kerros texti tulee kontrollerin kautta, monikielinen sovelluksen takia
+                ctx.fillText(currentFloorPar + ". @Html.Raw(ViewBag.Kerros)", 700, 80); 
+                ctx.globalAlpha = 0.8; //sets the transparency
+                ctx.lineWidth = "18";
+
+
+                //condition to decide if it is circle or rectangle(based on if it has radius) ZK
+
+                for (var i = 0; i < koordArray.length; i++) {
+
+                    var shape = koordArray[i];
+
+                    //checking the floor number so we only draw the coordinates belonging to the current floor - ZK
+                    if (currentFloor == shape.kerros) {
+
+                        //checking if circle or rectangle and drawing them -ZK
+                        if (shape.radius) {
+                            // it's a circle ZK
+                            ctx.globalAlpha = 1; //sets the transparency ZK
+                            // Shadow
+
+                            ctx.shadowColor = 'black';
+                            ctx.shadowBlur = 30;
+                            ctx.shadowOffsetX = 20;
+                            ctx.shadowOffsetY = 20;
+                            ctx.beginPath();
+                            ctx.fillStyle = shape.color;
+
+                            ctx.strokeStyle = shape.color; //setting shape color ZK
+                            //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
+                            ctx.arc(shape.x * 3, shape.y * 3, shape.radius * 3, 0, Math.PI * 2);//drawing circle by given koords the math.pi*2 is to make a full circle ZK
+                            ctx.stroke();
+                            ctx.globalAlpha = 0.4; //sets the transparency ZK
+
+                            ctx.fill();
+                            ctx.closePath();
+
+                        } else if (shape.width) {
+                            // Shadow
+
+                            ctx.shadowColor = 'black';
+                            ctx.shadowBlur = 30;
+                            ctx.shadowOffsetX = 20;
+                            ctx.shadowOffsetY = 20;
+                            ctx.beginPath();
+                            ctx.fillStyle = shape.color;
+                            // it's a rectangle ZK
+                            ctx.strokeStyle = shape.color;
+                            //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
+                            ctx.globalAlpha = 0.4; //sets the transparency ZK
+
+                            ctx.fillRect(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3);
+                            ctx.closePath();
+
+                            ctx.lineWidth = "18";
+                            ctx.globalAlpha = 1; //sets the transparency ZK
+                            ctx.beginPath();
+                            ctx.rect(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3);
+                            ctx.stroke();
+                            //ctx.fill();
+                            //ctx.closePath();
+                        }
+                    }
+
+                }
+                //olet tässä pisten piirto eka kerrokseen
+                    if (currentFloor == 1) {
+
+                        ctx.beginPath();
+                        ctx.fillStyle = 'red';
+                        ctx.globalAlpha = 0.6; //sets the transparency ZK
+
+                        //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
+                        ctx.arc(1750, 1340, 30, 0, Math.PI * 2, );//drawing circle by given koords the math.pi*2 is to make a full circle ZK
+                        ctx.fill();
+                        ctx.strokeStyle = 'red'; //setting shape color ZK
+                        //ctx.stroke();
+                        ctx.closePath();
+                        ctx.shadowColor = 'white';
+
+                        ctx.fillStyle = "white";
+                        //piirretään valkoinen neliön textin ympäri koska muuten mustat seinät antaisivat huonon kntrastin
+                      var width = ctx.measureText("@Html.Raw(ViewBag.OletTassa)").width;
+                        ctx.fillRect(1750-(width/2), 1395, width, 65);
+
+                        ctx.globalAlpha = 1;
+                        ctx.font = "700 60px Arial ";
+                        ctx.fillStyle = "red";
+                        ctx.textAlign = "center";
+                        //olet tässä texti tulee kontrollerin kautta, monikielinen sovelluksen takia
+                        ctx.fillText("@Html.Raw(ViewBag.OletTassa)", 1750, 1450);
+                        ctx.globalAlpha = 0.6;
+                        ctx.shadowColor = 'black';
+                    }
+                //jos elementti on 2. kerroksessa highlight portaille pushataan arrayin ja piirrätään niitä ZK
+                if (currentFloor == 2) {
+                    var portaat = [];
+                    //ympyrä portaat ZK
+                    portaat.push({ x: 460, y: 187, width: 45, height: 155, kerros: 2, color: 'orange' });
+                    //rectangle portaat ZK
+                    portaat.push({ x: 912, y: 491, radius: 25, kerros: 2, color: 'orange' });
+
+                    for (var t = 0; t < portaat.length; t++) {
+
+                        var stairs = portaat[t];
+
+                        //checking the floor number so we only draw the coordinates belonging to the current floor - ZK
+                        if (currentFloor == stairs.kerros) {
+
+                            //checking if circle or rectangle and drawing them -ZK
+                            if (stairs.radius) {
+                                // it's a circle ZK
+
+                                ctx.beginPath();
+                                ctx.fillStyle = stairs.color;
+                                ctx.globalAlpha = 0.6; //sets the transparency ZK
+
+                                //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
+                                ctx.arc(stairs.x * 3, stairs.y * 3, stairs.radius * 3, 0, Math.PI * 2);//drawing circle by given koords the math.pi*2 is to make a full circle ZK
+                                ctx.fill();
+                                ctx.strokeStyle = stairs.color; //setting shape color ZK
+                                //ctx.stroke();
+                                ctx.closePath();
+
+                            } else if (stairs.width) {
+                                // it's a rectangle ZK
+                                ctx.globalAlpha = 0.6; //sets the transparency ZK
+                                ctx.beginPath();
+                                ctx.fillStyle = stairs.color;
+
+                                ctx.lineWidth = "18";
+                                //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
+
+                                ctx.fillRect(stairs.x * 3, stairs.y * 3, stairs.width * 3, stairs.height * 3);
+                                ctx.strokeStyle = stairs.color;
+                                ctx.stroke();
+                                ctx.closePath();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    //-----------------------------------------------------------------------------------------------------------------------//
+</script>
+

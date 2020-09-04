@@ -1,0 +1,100 @@
+﻿@model IEnumerable<KirjastoAppScrum.Models.Tekstit>
+
+@{
+    ViewBag.Title = "Kategoriat";
+
+}
+@{
+    TempData.Keep("setLangTemp");
+}
+
+@section scripts{
+    @*Tarkastetaan jokaisen buttonin width&height ja asetetaan lopuksi kaikille sama width&height joka on maxWidth&maxHeight spawnatuista buttoneista RJ,LL*@
+
+    <script>
+        var MaxWidth = 0;   // Alustetaan MaxWidth
+        var MaxHeight = 0; // Alustetaan MaxHeight
+        $('.button').each(function (index) {
+            var currentWidth = $(this).width();   // otetaan currentWidth
+            var currentHeight = $(this).height(); // otetaan currentHeight
+
+            if (currentWidth > MaxWidth) {
+                MaxWidth = currentWidth;     // asetetaan MaxWidth jos current > maxWidth
+            }
+            if (currentHeight > MaxHeight) {
+                MaxHeight = currentHeight;   // asetetaan MaxHeight jos current > maxHeight
+            }
+        });
+        $('.button').width(MaxWidth); // muutetaan .button width => maxWidth
+        $('.button').height(MaxHeight); // muutetaan .button height => maxHeight
+    </script>
+
+    <script type="text/javascript">
+        //Lasketaan kuinka monta buttonia tulostuu ruudulle. Jos enemmän kuin 6, tulostetaan Loppuun ja Alkuun buttonit skrollausta varten.(LL)
+        $(function () {
+            var buttons = $('.buttonsDiv button').length;
+            console.log(buttons);
+            if (buttons > 6) { // Tätä määrää voi muuttaa halutessa
+                console.log("More than 6 buttons");
+                $('.scrollButton').show();
+            }
+            else {
+                console.log("Less than 6 buttons");
+                $('.scrollButton').hide();
+            }
+        });
+    </script>
+
+    @*Smooth scrolling efekti Loppuun ja Alkuun buttoneille.(LL)*@
+    <script type="text/javascript">
+        $('.scrollButton').click(function () {
+            var clickedId = $(this).attr('href');
+            $('html, body').animate({ scrollTop: ($(clickedId).offset().top) }, 3000);
+            return false;
+        });
+    </script>
+}
+
+@*Foreach tuo kaikki kategoriat buttoneiksi näkymään.
+    Käyttää Action metodia joka kutsuu Kategoriat actionin UserControllerista.
+    (R.J)  *@
+
+<div>
+    @if (ViewBag.naviListToData != null)
+    {
+        foreach (var data in ViewBag.naviListToData)
+        {
+
+            <a style="font-size:xx-large;font-weight:bold" href='@Url.Action("Kategoriat", "User", new { referi = @data.Refer, koordinaatit = @data.Koordinaatti, id = @data.Id, luokka = @data.Luokka})'> @data.Teksti > </a>
+        }
+    }
+</div>
+
+<div class="buttonsDiv">    
+    <div class="scrollButtons">
+        @*Sivun loppuun vievä button (LL)*@
+        <br />
+        <a href="#end" class="scrollButton"><img src="~/Icons/arrow-down-circle.svg" style="width:3vw;height:3vw" /></a>
+    </div>
+    <div class="jumbotron" style="text-align:center;">
+        <div class="row">
+            @* Tekee listan  tarkastusta varten niin ei tulostu samannimisiä, esim istumapaikkoja ja pöytiä. Karttatulostukseen koodaus että tulostaa
+                Kaikkien samannimisten koordinaatit kartalle. Esimerkkinä just istumapaikkoja ja pöytiä.(R.J)*@
+            @*@{ List<string> lista = new List<string>();*@
+            @foreach (var item in Model)
+            {
+                <div class="col-md pt-3 buttonBody">
+                    @*muutin koordinaatti parameti item.KategoriaIdksi-sitten kontroller tarkistaa sitä onko koordinaatti taulussa sellasta ZK*@
+                    <button type="button" class="button buttonVäri" onclick="location.href='@Url.Action("Kategoriat", "User", new { referi = item.Kategoria.ReferTo, id = item.ReferTo, koordinaatit = item.Kategoria.KategoriaID, nimi = item.Teksti, luokka = item.Kategoria.Class, dublikaatti = item.Kategoria.SN})'">@Html.DisplayFor(modelItem => item.Teksti)</button>
+                </div>
+            }
+
+        </div>
+        <div id="end">
+            @*Sivun alkuun vievä button (LL)*@
+            <a href="#home" class="scrollButton"><img src="~/Icons/arrow-up-circle.svg" style="width:3vw;height:3vw" /></a>
+        </div>
+    </div>
+
+</div>
+

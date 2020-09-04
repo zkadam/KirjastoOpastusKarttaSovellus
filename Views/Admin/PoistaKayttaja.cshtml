@@ -1,0 +1,56 @@
+﻿@model KirjastoAppScrum.Models.Logins
+
+@{
+    ViewBag.Title = "Poista käyttäjä";
+}
+
+<h2>Poista käyttäjä</h2>
+
+<div class="row">
+    <div class="col-6" style="text-align:start">
+        <h4 style="color:red">Oletko varma että haluat poistaa tämän käyttäjän tiedot järjestelmästä?</h4>
+    </div>
+
+    <div class="col-6" style="text-align:end">
+        <a id="logOut" href="~/Admin/Uloskirjautuminen" class="btn btn-danger" style="color:white">Kirjaudu ulos</a> @*Kirjaudu ulos painike*@
+    </div>
+</div>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Käyttäjätunnus
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nimi)
+        </dd>
+
+        <dt>
+            Salasana
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Hash)
+        </dd>
+
+        <dt>
+            Käyttöoikeudet
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserRoles.RooliID)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+        <input type="submit" value="Poista" class="btn btn-danger" />
+        <input type="button" class="btn btn-warning" value="Takaisin" onclick="location.href='@Url.Action("IndexUsers", "Admin")'" />
+    </div>
+    }
+</div>

@@ -1,0 +1,68 @@
+﻿@model IEnumerable<KirjastoAppScrum.Models.Logins>
+
+@{
+    ViewBag.Title = "Käyttäjätilien hallinta";
+}
+
+@using System.Globalization
+@{
+    string loggausInfo = ""; /*Tarkistaa käyttäjän session ja tulostaa näytölle käyttäjän nimen ja oikeudet/rooli -FW*/
+    if (Session["PaaAdmin"] != null)
+    {
+        loggausInfo = "Olet kirjautunut käyttäjätunnuksella: " + @Session["PaaAdmin"];
+    }
+    else
+    {
+        Session.Abandon();
+    }
+}
+
+<h2>Käyttäjätilien hallinta</h2>
+<br />
+<div class="row">
+    <div class="col-6" style="text-align:start">
+        <p class="loginInfoParagraph">@loggausInfo</p> @*Tähän tulostuu käyttäjän nimen näytölle ja oikeudet/rooli -FW*@
+    </div>
+
+    <div class="col-6" style="text-align:end">
+        <a id="logOut" href="~/Admin/Uloskirjautuminen" class="btn btn-danger" style="color:white">Kirjaudu ulos</a> @*Kirjaudu ulos painike*@
+    </div>
+</div>
+<div class="container-fluid">
+    <table class="table table-striped">
+        <tr>
+            <th>
+                Käyttäjätunnus
+            </th>
+            <th>
+                Käyttöoikeudet
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nimi)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserRoles.RooliID)
+                </td>
+                <td>
+                    <a class="btn btn-success" @Html.ActionLink("Muokkaa käyttäjän tietoja", "MuokkaaKayttaja", new { id = item.Nimi })
+                <a class="btn btn-danger" @Html.ActionLink("Poista käyttäjä", "PoistaKayttaja", new { id = item.Nimi })
+                </td>
+            </tr>
+        }
+        <tr>
+
+            <td>
+                @Html.ActionLink("Lisää uusi käyttäjä", "LisaaKayttaja", null, new { @class = "btn btn-primary" })
+                @Html.ActionLink("Takaisin kategorioihin", "Index", null, new { @class = "btn btn-warning" })
+            </td>
+        </tr>
+
+    </table>
+</div>

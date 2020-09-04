@@ -1,0 +1,274 @@
+﻿.button {
+    color: white;
+    border: none;
+    color: white;
+    padding: 40px 80px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: inherit;
+    font-size: 25px;
+    margin: 20px 18px;
+    border-radius: 12px;
+    font-weight: bold;
+    box-shadow: 0 9px #999;
+}
+
+
+.buttonVäri {
+    background-color: #113c68; /*Tumman merensininen(Näyttö default)*/
+    font-weight: bold !important;
+    font-size: 25px !important;
+}
+.buttonBody .button {
+
+}
+
+.row {
+    text-align: center;
+}
+
+.jumbotron {
+    /*background-color: #ffff;*/ /*Perus vakoinen(Näyttö defaultille contentille väri rajaus)*/
+}
+body,
+.jumbotron {
+    background-color: #ffff;
+}
+body {
+
+    padding-top: 0px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/*Kategoria buttonien design*/
+.kategoriaButtonit {
+    border: 5px solid black !important;
+    border-radius: 25px !important;
+    width: 200px !important;
+    min-height: 200px !important;
+    min-width: 350px !important;
+    font-weight: bold !important;
+    font-size: 25px !important;
+    overflow-wrap: break-word !important;
+    background-color:darkslategrey;
+}
+
+/*Home/Index sivun ohjekupla*/
+.ohjeButton {
+    border: 1px solid black !important;
+    border-radius: 25px !important;
+    width: 100% !important;
+    min-height: 150px !important;
+    min-width: 350px !important;
+    font-weight: bold !important;
+    font-size: 25px !important;
+    overflow-wrap: break-word !important;
+    background-color: #8abfdb !important;
+    cursor: none !important;
+    margin: 0 80px 0 80px!important;
+}
+/*---------- Navbar START (LL) ----------*/
+
+.navbar-custom {
+/*    width: 100vw;*/
+    background-color: transparent;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.navbar-text-small{
+    font-size:large;
+    font-weight:bold;
+}
+
+/* Navbar links (LL) */
+a:link {
+    text-decoration: none;
+    font-size: small;
+    color: rgb(49,35,34);
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+    color: rgb(49,35,34);
+}
+
+/* Navbar brand text (LL) */
+
+.navbar-brand-text {
+    font-size: 2vw;
+    font-family: Arial;
+    font-weight: bold;
+    color: rgb(49,35,34);
+}
+
+/* Navbar buttons (LL) */
+
+/* Kieli */
+.navbar-langBtn {
+    height: 55px;
+    width: 80px;
+    margin: 5px;
+    text-indent: -9999px;
+    background-color: transparent;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+.navbar-langBtn:hover {
+    background-color: #c84436;
+}
+
+.navbar-langBtn-selected {
+    height: 55px;
+    width: 80px;
+    margin: 5px;
+    background-color: #0065bd;
+    border: none;
+    border-radius: 5px;
+    cursor: none;
+}
+
+/*---------- Navbar END ----------*/
+
+
+/*Footerin style classit ja ikonien style*/
+.FooterIkoni {
+    height: 100px;
+    width: 100px;
+    cursor: pointer;
+}
+
+.FooterLeft {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+}
+
+.FooterRight {
+    float: right;
+}
+/* Jouduin fiksaamaan - 15 marginit arvoon 15px koska muuten iconi peittyy reunasta. R.J*/
+.footerDiv {
+    z-index:100;
+    background-color: #ffff;
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+}
+
+/*fixed footer pois jos laitella on pinempi näyttö*/
+@media only screen and (max-width: 600px) {
+    .footerDiv {
+        position: relative;
+    }
+    
+
+}
+
+.FooterRow {
+    padding-top: 20px;
+    flex-wrap: wrap;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+/*Pohjakartta*/
+.map {
+    padding-top: -0.5em;
+    width: 90%;
+    height: 90%;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.mapImg {
+    align-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/*Info test*/
+#overlay {
+    position: absolute;
+    background: #000;
+    color: #fff;
+    top: 20px;
+    left: 20px;
+}
+/*margin render bodyn alla niin kerrosvaihto buttonit ja muu ei peittyy fixed footerista*/
+/*.bodyRender {
+    margin-bottom: 100px; // voi olla 0px
+}*/
+/*Porvoon värikoodista*/
+/*background-color: #fd495c;*/ /*(Syke)Vaaleapunainen*/
+/*background-color: #c84436;*/ /*Punamulta*/
+/*background-color: #64d2a7;*/ /*(Pusito)Turkoosi*/
+/*background-color: #8996a0;*/ /*Porvoo Harmaa*/
+/*background-color: #8abfdb;*/ /*(Taivas)Valeansininen*/
+/*background-color: #0065bd*/ /*Porvoo sininen*/
+/*background-color: #312322*/ /*Terva*/
+/*background-color: #e6bbb4;*/ /*(Ruusu) Vaaleampipunainen */
+
+
+
+/*----------------------------------------------scrollit näkyviin androidille jos on tarve*/
+.scrollDiv {
+    overflow-y: auto;
+    overflow-x: auto;
+    height: 80vh;
+}
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+    ::-webkit-scrollbar:vertical {
+        width: 20px;
+        padding-right:0px;
+        padding-left:5px;
+        position:absolute;
+        right:0px;
+        
+    }
+
+    ::-webkit-scrollbar:horizontal {
+        display:none;
+    }
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, .5);
+    border-radius: 10px;
+    border: 2px solid #0065bd;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #8abfdb;
+}

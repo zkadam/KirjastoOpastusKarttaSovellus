@@ -1,0 +1,56 @@
+﻿@*Aloitusruudun (Index) navbar (LL)*@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opastussovellus</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-fixed-top container-fluid">
+        <div class="navbar-header">
+            <a href="~/Home/Index/">
+                <img class="navbar-brand" src="~/Pics/PorvooLogo_orig.png" style="width:80px;height:80px" alt="Porvoo/Borgå" title="Porvoo/Borgå">
+            </a>
+        </div>
+    </nav>
+
+    <div class="container-fluid body-content" >
+        @RenderBody()
+    </div>
+
+    <script type="text/javascript">
+
+        //Session timeout javascript
+        var logOut;
+        //Timer alkaa sivun latautuessa. Timerin kuluttua loppuun palautetaan login-sivulle.
+        window.onload = function myFunction() {
+            //Sovellus autoclikkaa 'Kirjaudu ulos' painiketta 180000 millisekunnin (5 min) jälkeen jos sovelluksessa ei ole taphtunut mitään tänä aikana.
+            logOut = setTimeout(function () { document.getElementById("logOut").click(); }, 300000);
+
+            //Jos sovelluskessa klikataan painiketta kutsutaan funktiota, joka resetoi timerin.
+            window.addEventListener("click", function () {
+                myStopFunction();
+            });
+        }
+        //Timerin resetointifunktio
+        function myStopFunction() {
+            clearTimeout(logOut);
+            logOut = setTimeout(function () { document.getElementById("logOut").click(); }, 300000);
+        }
+    </script>
+</body>   
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+</html>

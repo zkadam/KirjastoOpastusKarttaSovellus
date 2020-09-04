@@ -1,0 +1,174 @@
+﻿@*Aloitus-sivun (Index) navbar*@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    @*<meta charset="utf-8" />*@
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opastussovellus</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</head>
+<body style="padding-top:0">
+    @* Kielitoiminnon testauksessa käytetty Navbar-koodi. Kategoriat viewssa Navbar sisältää kielivalintabuttonit. (LL) *@
+    <nav class="navbar navbar-fixed-top container-fluid">
+        <div class="navbar-header" id="home">
+            <a href="~/Home/">
+                <img id="homeLogo" class="navbar-brand" src="~/Pics/PorvooLogo_orig.png" style="width:80px;height:80px" alt="Porvoo/Borgå" title="Alkuun"></a>
+                <a href="~/Home/Index"><img src="~/Icons/house.svg" class="FooterIkoni" style="padding-right: 1%;width:50px; height:50px;" alt="Alkuun" title="Alkuun" /></a>
+                <a data-toggle="modal" href="#infoModal"><img src="~/Icons/info-square.svg" class="FooterIkoni" style="padding-left: 5%; padding-right: 5%;width:70px; height:70px;" alt="Lisätietoa" title="Lisätietoa" /></a>
+                <a href="~/User/Map"><img src="~/Icons/map.svg" class="FooterIkoni" style="padding-left: 5%;width:60px; height:60px;" alt="Pohjakartta" title="Pohjakartta" /></a>
+        </div>
+
+        @* Kielivalintapainikkeet (LL) *@
+
+        @*tempdata changed to session , first condition checks if session has a string value-ZK*@
+        @*action linkeihin tulee parametrinä nykyinen action ja controller, kielet, ja parametrit liityän mikä kategoria/koordinaatti olimme katsomassa näin onnistuu kielen lennosta vaihto ZK*@
+        @if (Session["setLangTemp"] != null)
+        {
+            if (Session["setLangTemp"].ToString() == "FI")
+            {
+                <div class="navbar nav-item">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <button class="navbar-langBtn-selected" style="background-color:#0065bd; cursor:none; border:none" title="Valittu kieli suomi"><img src="/Pics/Suomi.svg" /></button>
+                        </div>
+                        <div class="col-sm-4">
+                            @Html.ActionLink("Svenska", @ViewContext.RouteData.Values["action"].ToString(), @ViewContext.RouteData.Values["controller"].ToString(), new { referi = Session["linkkiPolkku"], koordinaatit = Session["koordinaatiPolku"], dublikaatti = Session["dublikaattiPolkku"], luokka = Session["luokkaPolku"], jsonString = Session["naviPolku"], kieli = "SE" }, new { @class = "navbar-langBtn", @style = "background-position: center; background-image: url('/Pics/Svenska.svg'); background-repeat: no-repeat" })
+                        </div>
+                        <div class="col-sm-4">
+                            @Html.ActionLink("English", @ViewContext.RouteData.Values["action"].ToString(), @ViewContext.RouteData.Values["controller"].ToString(), new { referi = Session["linkkiPolkku"], koordinaatit = Session["koordinaatiPolku"], dublikaatti = Session["dublikaattiPolkku"], luokka = Session["luokkaPolku"], jsonString = Session["naviPolku"], kieli = "EN" }, new { @class = "navbar-langBtn", @style = "background-position: center; background-image: url('/Pics/English.svg'); background-repeat: no-repeat" })
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (Session["setLangTemp"].ToString() == "SE")
+            {
+                <div class="navbar nav-item">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            @Html.ActionLink("Suomi", @ViewContext.RouteData.Values["action"].ToString(), @ViewContext.RouteData.Values["controller"].ToString(), new { referi = Session["linkkiPolkku"], koordinaatit = Session["koordinaatiPolku"], dublikaatti = Session["dublikaattiPolkku"], luokka = Session["luokkaPolku"], jsonString = Session["naviPolku"], kieli = "FI" }, new { @class = "navbar-langBtn", @style = "background-position: center; background-image: url('/Pics/Suomi.svg'); background-repeat: no-repeat" })
+                        </div>
+                        <div class="col-sm-4">
+                            <button class="navbar-langBtn-selected" style="background-color:#0065bd; cursor:none; border:none" title="Vald språk svensk"><img src="~/Pics/Svenska.svg" /></button>
+                        </div>
+                        <div class="col-sm-4">
+                            @Html.ActionLink("English", @ViewContext.RouteData.Values["action"].ToString(), @ViewContext.RouteData.Values["controller"].ToString(), new { referi = Session["linkkiPolkku"], koordinaatit = Session["koordinaatiPolku"], dublikaatti = Session["dublikaattiPolkku"], luokka = Session["luokkaPolku"], jsonString = Session["naviPolku"], kieli = "EN" }, new { @class = "navbar-langBtn", @style = "background-position: center; background-image: url('/Pics/English.svg'); background-repeat: no-repeat" })
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (Session["setLangTemp"].ToString() == "EN")
+            {
+                <div class="navbar nav-item">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            @Html.ActionLink("Suomi", @ViewContext.RouteData.Values["action"].ToString(), @ViewContext.RouteData.Values["controller"].ToString(), new { referi = Session["linkkiPolkku"], koordinaatit = Session["koordinaatiPolku"], dublikaatti = Session["dublikaattiPolkku"], luokka = Session["luokkaPolku"], jsonString = Session["naviPolku"], kieli = "FI" }, new { @class = "navbar-langBtn", @style = "background-position: center; background-image: url('/Pics/Suomi.svg'); background-repeat: no-repeat" })
+                        </div>
+                        <div class="col-sm-4">
+                            @Html.ActionLink("Svenska", @ViewContext.RouteData.Values["action"].ToString(), @ViewContext.RouteData.Values["controller"].ToString(), new { referi = Session["linkkiPolkku"], koordinaatit = Session["koordinaatiPolku"], dublikaatti = Session["dublikaattiPolkku"], luokka = Session["luokkaPolku"], jsonString = Session["naviPolku"], kieli = "SE" }, new { @class = "navbar-langBtn", @style = "background-position: center; background-image: url('/Pics/Svenska.svg'); background-repeat: no-repeat" })
+                        </div>
+                        <div class="col-sm-4">
+                            <button class="navbar-langBtn-selected" style="background-color:#0065bd; cursor:none; border:none" title="Selected language English"><img src="~/Pics/English.svg" /></button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        }
+        else
+        {
+            <div class="navbar nav-item">
+                <div class="row">
+                    <div class="col-sm-4">
+                        @Html.ActionLink("Suomi", @ViewContext.RouteData.Values["action"].ToString(), @ViewContext.RouteData.Values["controller"].ToString(), new { referi = Session["linkkiPolkku"], koordinaatit = Session["koordinaatiPolku"], dublikaatti = Session["dublikaattiPolkku"], luokka = Session["luokkaPolku"], jsonString = Session["naviPolku"], kieli = "FI" }, new { @class = "navbar-langBtn", @style = "background-position: center; background-image: url('/Pics/Suomi.png'); background-repeat: no-repeat" })
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.ActionLink("Svenska", @ViewContext.RouteData.Values["action"].ToString(), @ViewContext.RouteData.Values["controller"].ToString(), new { referi = Session["linkkiPolkku"], koordinaatit = Session["koordinaatiPolku"], dublikaatti = Session["dublikaattiPolkku"], luokka = Session["luokkaPolku"], jsonString = Session["naviPolku"], kieli = "SE" }, new { @class = "navbar-langBtn", @style = "background-position: center; background-image: url('/Pics/Svenska.png'); background-repeat: no-repeat" })
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.ActionLink("English", @ViewContext.RouteData.Values["action"].ToString(), @ViewContext.RouteData.Values["controller"].ToString(), new { referi = Session["linkkiPolkku"], koordinaatit = Session["koordinaatiPolku"], dublikaatti = Session["dublikaattiPolkku"], luokka = Session["luokkaPolku"], jsonString = Session["naviPolku"], kieli = "EN" }, new { @class = "navbar-langBtn", @style = "background-position: center; background-image: url('/Pics/English.png'); background-repeat: no-repeat" })
+                    </div>
+                </div>
+            </div>
+        }
+    </nav>
+    <div class="container-fluid" style="text-align:center">
+        <div class="bodyRender">
+            @RenderBody()
+        </div>
+
+    </div>
+    @*Footer ja home-, back-, info- ja karttaiknoit*@
+    <div class="footerDiv fixed-bottom">
+        <footer class="FooterRow">
+            @*Vasemmanpuolinen ikoneista missä on back-button löytyy*@
+            <div class="FooterLeft">
+                <img src="~/Icons/arrow-left.svg" style="width:70px; height:70px; border-radius:12px; background-color:lightblue" class="FooterIkoni" onclick="history.back()" alt="counterclockwise image" title="counterclockwise" />
+            </div>
+            @*Oikeapuolinen ikoneista missä on home-, info- ja kartta-buttonit löytyy*@
+            <div class="FooterRight">
+                
+            </div>
+
+        </footer>
+    </div>
+    <script type="text/javascript">
+
+        var goHome;
+        //aina kun sivu latautuu aloitetaan laskemista , laskemisen lopulta funktio vie aloitus sivulle - ZK
+        window.onload = function myFunction() {
+            //sovellus autoclikkaa homebuttonin 180000 millisecundin jälkeen eli 3 min jos ei tulee clikkausta ennen -
+            goHome = setTimeout(function () { document.getElementById("homeLogo").click(); }, 180000);
+
+            //jos klikkaataan kutsutaan funktio joka resetoi laskemista - ZK
+            window.addEventListener("click", function () {
+                myStopFunction();
+            });
+        }
+        //funktio joka resetoi laskemista ZK
+        function myStopFunction() {
+            clearTimeout(goHome);
+            goHome = setTimeout(function () { document.getElementById("homeLogo").click(); }, 180000);
+        }
+    </script>
+</body>
+@RenderSection("scripts", required: false)
+
+@*Info modal*@
+<div id="infoModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-xl" style="max-width:75vw; text-align:center">
+            <div class="modal-content">
+                <div class="modal-body">
+                    @if (Session["setLangTemp"] != null)
+                    {
+                        if (Session["setLangTemp"].ToString() == "FI")
+                        {
+                            <img src="/Pics/Map_Info_FI.png" style="max-width:70vw" />
+                        }
+                        else if (Session["setLangTemp"].ToString() == "SE")
+                        {
+                            <img src="/Pics/Map_Info_SE.png" style="max-width:70vw" />
+                        }
+                        else if (Session["setLangTemp"].ToString() == "EN")
+                        {
+                            <img src="/Pics/Map_Info_EN.png" style="max-width:70vw" />
+                        }
+                        else
+                        {
+                            <img src="/Pics/Map_Info_FI.png" style="max-width:70vw" />
+                        }
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</html>

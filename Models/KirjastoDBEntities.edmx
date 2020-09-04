@@ -1,0 +1,372 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="KirjastoProjektiModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Kategoria">
+          <Key>
+            <PropertyRef Name="KategoriaID" />
+          </Key>
+          <Property Name="KategoriaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SN" Type="nvarchar" MaxLength="100" />
+          <Property Name="ReferTo" Type="int" />
+          <Property Name="Class" Type="int" />
+        </EntityType>
+        <EntityType Name="Kieli">
+          <Key>
+            <PropertyRef Name="KieliID" />
+          </Key>
+          <Property Name="KieliID" Type="nvarchar" MaxLength="3" Nullable="false" />
+          <Property Name="Nimi" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Koordinaatit">
+          <Key>
+            <PropertyRef Name="KoordinaattiID" />
+          </Key>
+          <Property Name="KoordinaattiID" Type="int" Nullable="false" />
+          <Property Name="startX" Type="int" />
+          <Property Name="startY" Type="int" />
+          <Property Name="width" Type="int" />
+          <Property Name="height" Type="int" />
+          <Property Name="radius" Type="int" />
+          <Property Name="kerros" Type="int" />
+        </EntityType>
+        <EntityType Name="Logins">
+          <Key>
+            <PropertyRef Name="Nimi" />
+          </Key>
+          <Property Name="Nimi" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Hash" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Salt" Type="nvarchar" MaxLength="20" />
+          <Property Name="Rooli" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Tekstit">
+          <Key>
+            <PropertyRef Name="TekstiID" />
+          </Key>
+          <Property Name="TekstiID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KieliID" Type="nvarchar" MaxLength="3" />
+          <Property Name="Teksti" Type="nvarchar" MaxLength="500" />
+          <Property Name="ReferTo" Type="int" />
+        </EntityType>
+        <EntityType Name="UserRoles">
+          <Key>
+            <PropertyRef Name="RooliID" />
+          </Key>
+          <Property Name="RooliID" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'KirjastoProjekti.dbo.kategoriatNimetJaViittaukset' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <Association Name="FK_KoordinaattiToKategoria">
+          <End Role="Kategoria" Type="Self.Kategoria" Multiplicity="1" />
+          <End Role="Koordinaatit" Type="Self.Koordinaatit" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Kategoria">
+              <PropertyRef Name="KategoriaID" />
+            </Principal>
+            <Dependent Role="Koordinaatit">
+              <PropertyRef Name="KoordinaattiID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RooliToUserRoles">
+          <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="0..1" />
+          <End Role="Logins" Type="Self.Logins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRoles">
+              <PropertyRef Name="RooliID" />
+            </Principal>
+            <Dependent Role="Logins">
+              <PropertyRef Name="Rooli" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TekstiToKategoria">
+          <End Role="Kategoria" Type="Self.Kategoria" Multiplicity="0..1" />
+          <End Role="Tekstit" Type="Self.Tekstit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kategoria">
+              <PropertyRef Name="KategoriaID" />
+            </Principal>
+            <Dependent Role="Tekstit">
+              <PropertyRef Name="ReferTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TekstiToKieli">
+          <End Role="Kieli" Type="Self.Kieli" Multiplicity="0..1" />
+          <End Role="Tekstit" Type="Self.Tekstit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kieli">
+              <PropertyRef Name="KieliID" />
+            </Principal>
+            <Dependent Role="Tekstit">
+              <PropertyRef Name="KieliID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="PROC_Lis___Koordinaatit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" StoreFunctionName="PROC_Lis��_Koordinaatit">
+          <Parameter Name="ID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="PROC_Poista_Ja_Siirra_Sub" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="KirjastoProjektiModelStoreContainer">
+          <EntitySet Name="Kategoria" EntityType="Self.Kategoria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kieli" EntityType="Self.Kieli" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Koordinaatit" EntityType="Self.Koordinaatit" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Logins" EntityType="Self.Logins" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tekstit" EntityType="Self.Tekstit" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_KoordinaattiToKategoria" Association="Self.FK_KoordinaattiToKategoria">
+            <End Role="Kategoria" EntitySet="Kategoria" />
+            <End Role="Koordinaatit" EntitySet="Koordinaatit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RooliToUserRoles" Association="Self.FK_RooliToUserRoles">
+            <End Role="UserRoles" EntitySet="UserRoles" />
+            <End Role="Logins" EntitySet="Logins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TekstiToKategoria" Association="Self.FK_TekstiToKategoria">
+            <End Role="Kategoria" EntitySet="Kategoria" />
+            <End Role="Tekstit" EntitySet="Tekstit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TekstiToKieli" Association="Self.FK_TekstiToKieli">
+            <End Role="Kieli" EntitySet="Kieli" />
+            <End Role="Tekstit" EntitySet="Tekstit" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="KirjastoProjektiModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Kategoria">
+          <Key>
+            <PropertyRef Name="KategoriaID" />
+          </Key>
+          <Property Name="KategoriaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SN" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ReferTo" Type="Int32" />
+          <Property Name="Class" Type="Int32" />
+          <NavigationProperty Name="Koordinaatit" Relationship="Self.FK_KoordinaattiToKategoria" FromRole="Kategoria" ToRole="Koordinaatit" />
+          <NavigationProperty Name="Tekstit" Relationship="Self.FK_TekstiToKategoria" FromRole="Kategoria" ToRole="Tekstit" />
+        </EntityType>
+        <EntityType Name="Kieli">
+          <Key>
+            <PropertyRef Name="KieliID" />
+          </Key>
+          <Property Name="KieliID" Type="String" MaxLength="3" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Nimi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Tekstit" Relationship="Self.FK_TekstiToKieli" FromRole="Kieli" ToRole="Tekstit" />
+        </EntityType>
+        <EntityType Name="Koordinaatit">
+          <Key>
+            <PropertyRef Name="KoordinaattiID" />
+          </Key>
+          <Property Name="KoordinaattiID" Type="Int32" Nullable="false" />
+          <Property Name="startX" Type="Int32" />
+          <Property Name="startY" Type="Int32" />
+          <Property Name="width" Type="Int32" />
+          <Property Name="height" Type="Int32" />
+          <Property Name="radius" Type="Int32" />
+          <Property Name="kerros" Type="Int32" />
+          <NavigationProperty Name="Kategoria" Relationship="Self.FK_KoordinaattiToKategoria" FromRole="Koordinaatit" ToRole="Kategoria" />
+        </EntityType>
+        <EntityType Name="Logins">
+          <Key>
+            <PropertyRef Name="Nimi" />
+          </Key>
+          <Property Name="Nimi" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Hash" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Salt" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Rooli" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserRoles" Relationship="Self.FK_RooliToUserRoles" FromRole="Logins" ToRole="UserRoles" />
+        </EntityType>
+        <EntityType Name="Tekstit">
+          <Key>
+            <PropertyRef Name="TekstiID" />
+          </Key>
+          <Property Name="TekstiID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KieliID" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="Teksti" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ReferTo" Type="Int32" />
+          <NavigationProperty Name="Kategoria" Relationship="Self.FK_TekstiToKategoria" FromRole="Tekstit" ToRole="Kategoria" />
+          <NavigationProperty Name="Kieli" Relationship="Self.FK_TekstiToKieli" FromRole="Tekstit" ToRole="Kieli" />
+        </EntityType>
+        <EntityType Name="UserRoles">
+          <Key>
+            <PropertyRef Name="RooliID" />
+          </Key>
+          <Property Name="RooliID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Logins" Relationship="Self.FK_RooliToUserRoles" FromRole="UserRoles" ToRole="Logins" />
+        </EntityType>
+        <Association Name="FK_KoordinaattiToKategoria">
+          <End Role="Kategoria" Type="Self.Kategoria" Multiplicity="1" />
+          <End Role="Koordinaatit" Type="Self.Koordinaatit" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Kategoria">
+              <PropertyRef Name="KategoriaID" />
+            </Principal>
+            <Dependent Role="Koordinaatit">
+              <PropertyRef Name="KoordinaattiID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TekstiToKategoria">
+          <End Role="Kategoria" Type="Self.Kategoria" Multiplicity="0..1" />
+          <End Role="Tekstit" Type="Self.Tekstit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kategoria">
+              <PropertyRef Name="KategoriaID" />
+            </Principal>
+            <Dependent Role="Tekstit">
+              <PropertyRef Name="ReferTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TekstiToKieli">
+          <End Role="Kieli" Type="Self.Kieli" Multiplicity="0..1" />
+          <End Role="Tekstit" Type="Self.Tekstit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kieli">
+              <PropertyRef Name="KieliID" />
+            </Principal>
+            <Dependent Role="Tekstit">
+              <PropertyRef Name="KieliID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RooliToUserRoles">
+          <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="0..1" />
+          <End Role="Logins" Type="Self.Logins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRoles">
+              <PropertyRef Name="RooliID" />
+            </Principal>
+            <Dependent Role="Logins">
+              <PropertyRef Name="Rooli" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="KirjastoProjektiEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Kategoria" EntityType="Self.Kategoria" />
+          <EntitySet Name="Kieli" EntityType="Self.Kieli" />
+          <EntitySet Name="Koordinaatit" EntityType="Self.Koordinaatit" />
+          <EntitySet Name="Logins" EntityType="Self.Logins" />
+          <EntitySet Name="Tekstit" EntityType="Self.Tekstit" />
+          <EntitySet Name="UserRoles" EntityType="Self.UserRoles" />
+          <AssociationSet Name="FK_KoordinaattiToKategoria" Association="Self.FK_KoordinaattiToKategoria">
+            <End Role="Kategoria" EntitySet="Kategoria" />
+            <End Role="Koordinaatit" EntitySet="Koordinaatit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TekstiToKategoria" Association="Self.FK_TekstiToKategoria">
+            <End Role="Kategoria" EntitySet="Kategoria" />
+            <End Role="Tekstit" EntitySet="Tekstit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TekstiToKieli" Association="Self.FK_TekstiToKieli">
+            <End Role="Kieli" EntitySet="Kieli" />
+            <End Role="Tekstit" EntitySet="Tekstit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RooliToUserRoles" Association="Self.FK_RooliToUserRoles">
+            <End Role="UserRoles" EntitySet="UserRoles" />
+            <End Role="Logins" EntitySet="Logins" />
+          </AssociationSet>
+          <FunctionImport Name="PROC_Lis___Koordinaatit">
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="PROC_Poista_Ja_Siirra_Sub">
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="KirjastoProjektiModelStoreContainer" CdmEntityContainer="KirjastoProjektiEntities1">
+          <EntitySetMapping Name="Kategoria">
+            <EntityTypeMapping TypeName="KirjastoProjektiModel.Kategoria">
+              <MappingFragment StoreEntitySet="Kategoria">
+                <ScalarProperty Name="KategoriaID" ColumnName="KategoriaID" />
+                <ScalarProperty Name="SN" ColumnName="SN" />
+                <ScalarProperty Name="ReferTo" ColumnName="ReferTo" />
+                <ScalarProperty Name="Class" ColumnName="Class" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kieli">
+            <EntityTypeMapping TypeName="KirjastoProjektiModel.Kieli">
+              <MappingFragment StoreEntitySet="Kieli">
+                <ScalarProperty Name="KieliID" ColumnName="KieliID" />
+                <ScalarProperty Name="Nimi" ColumnName="Nimi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Koordinaatit">
+            <EntityTypeMapping TypeName="KirjastoProjektiModel.Koordinaatit">
+              <MappingFragment StoreEntitySet="Koordinaatit">
+                <ScalarProperty Name="KoordinaattiID" ColumnName="KoordinaattiID" />
+                <ScalarProperty Name="startX" ColumnName="startX" />
+                <ScalarProperty Name="startY" ColumnName="startY" />
+                <ScalarProperty Name="width" ColumnName="width" />
+                <ScalarProperty Name="height" ColumnName="height" />
+                <ScalarProperty Name="radius" ColumnName="radius" />
+                <ScalarProperty Name="kerros" ColumnName="kerros" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Logins">
+            <EntityTypeMapping TypeName="KirjastoProjektiModel.Logins">
+              <MappingFragment StoreEntitySet="Logins">
+                <ScalarProperty Name="Nimi" ColumnName="Nimi" />
+                <ScalarProperty Name="Hash" ColumnName="Hash" />
+                <ScalarProperty Name="Salt" ColumnName="Salt" />
+                <ScalarProperty Name="Rooli" ColumnName="Rooli" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tekstit">
+            <EntityTypeMapping TypeName="KirjastoProjektiModel.Tekstit">
+              <MappingFragment StoreEntitySet="Tekstit">
+                <ScalarProperty Name="TekstiID" ColumnName="TekstiID" />
+                <ScalarProperty Name="KieliID" ColumnName="KieliID" />
+                <ScalarProperty Name="Teksti" ColumnName="Teksti" />
+                <ScalarProperty Name="ReferTo" ColumnName="ReferTo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRoles">
+            <EntityTypeMapping TypeName="KirjastoProjektiModel.UserRoles">
+              <MappingFragment StoreEntitySet="UserRoles">
+                <ScalarProperty Name="RooliID" ColumnName="RooliID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PROC_Lis___Koordinaatit" FunctionName="KirjastoProjektiModel.Store.PROC_Lis___Koordinaatit" />
+          <FunctionImportMapping FunctionImportName="PROC_Poista_Ja_Siirra_Sub" FunctionName="KirjastoProjektiModel.Store.PROC_Poista_Ja_Siirra_Sub" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

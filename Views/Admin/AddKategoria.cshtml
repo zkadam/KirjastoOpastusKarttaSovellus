@@ -1,0 +1,108 @@
+﻿@model KirjastoAppScrum.Models.AddKategoriaViewModel
+
+
+@section scripts{
+
+    <script>
+        $('#tulostusCheck').on('change', function () {
+            var newVal;
+            if ($(this).is(':checked')) {
+                newVal = 1;
+            } else {
+                newVal = 0;
+            }
+            $("#SN").val(newVal)
+        });
+    </script>
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-6" style="text-align:start">
+            <h2>@ViewBag.Title</h2>
+        </div>
+
+        <div class="col-6" style="text-align:end">
+            <a id="logOut" href="~/Admin/Uloskirjautuminen" class="btn btn-danger" style="color:white">Kirjaudu ulos</a> @*Kirjaudu ulos painike*@
+        </div>
+    </div>
+    <hr />
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.SN)
+
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.SN, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SN, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SN, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TekstiFI, "Teksti suomeksi", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TekstiFI, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TekstiFI, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TekstiSE, "Teksti ruotsiksi", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TekstiSE, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TekstiSE, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TekstiEN, "Teksti englanniksi", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TekstiEN, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TekstiEN, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SN, "Tulostaako kategoria monta sijaintia?", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="checkbox" name="tulostusCheck" value="0" id="tulostusCheck"> <label for="tulostusCheck">Kyllä</label>
+                @Html.HiddenFor(model => model.SN, new { htmlAttributes = new { @class = "form-control" } })
+                @*@Html.DropDownListFor(m => m.SN, Enumerable.Range(0, 2).Select(i => new SelectListItem { Text = i.ToString(), Value = i.ToString() }))*@
+                @Html.ValidationMessageFor(model => model.SN, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" style="visibility: hidden">
+            @Html.LabelFor(model => model.ReferTo, "Kuuluu kategoriaan", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.TextBoxFor(model => model.ReferTo, new { @Value = ViewBag.id })*@
+                @Html.DropDownListFor(model => model.ReferTo, new SelectList(ViewBag.KategoriaLista, "Value", "Text", ViewBag.id))
+                @*Tuodaan referien viewbag lista josta voi valita kategorian joka on Masteri tälle itemille*@
+                @Html.ValidationMessageFor(model => model.ReferTo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" style="visibility: hidden">
+            @Html.LabelFor(model => model.Class, "Kategorialuokka", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Class, new SelectList(ViewBag.LuokkaLista, "Value", "Text", ViewBag.Luokka))
+                @*Luokille tehty oma lista josta valitaan luokka*@
+                @Html.ValidationMessageFor(model => model.Class, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input class="btn btn-primary" type="submit" value="Tallenna" />
+                <input type="button" class="btn btn-info" value="Takaisin kategorialistaan" onclick="location.href='@Url.Action("Index", "Admin")'" />
+            </div>
+        </div>
+    </div>
+}
+

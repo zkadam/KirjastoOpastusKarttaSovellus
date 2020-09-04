@@ -1,0 +1,70 @@
+﻿@model KirjastoAppScrum.Models.Kategoria
+
+@{
+    ViewBag.Title = "RemoveKategoria";
+}
+
+@*<h2>Poista kategoria</h2>*@
+<div class="row">
+    <div class="col-6" style="text-align:start">
+        <h2>Poista kategoria</h2>
+    </div>
+
+    <div class="col-6" style="text-align:end">
+        <a id="logOut" href="~/Admin/Uloskirjautuminen" class="btn btn-danger" style="color:white">Kirjaudu ulos</a> @*Kirjaudu ulos painike*@
+    </div>
+</div>
+<hr />
+
+<h3>@ViewBag.itemName</h3>
+<br/>
+
+<h5 style="color:red">Tahdotko varmasti poistaa tämän kategorian?</h5>
+<br/>
+<div>
+ 
+    <dl class="dl-horizontal">
+        <dt>
+            Tunniste
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SN)
+        </dd>
+
+        <dt>
+            Kuuluu kategoriaan
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReferTo)
+        </dd>
+
+        <dt>
+            Luokka
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Class)
+        </dd>
+
+        <dt>
+            Sijainti ID
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Koordinaatit.KoordinaattiID)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <input type="submit" value="Poista" class="btn btn-danger" />
+        <input type="button" class="btn btn-info" value="Takaisin kategorialistaan" onclick="location.href='@Url.Action("Index", "Admin")'" />
+    </div>
+    }
+</div>

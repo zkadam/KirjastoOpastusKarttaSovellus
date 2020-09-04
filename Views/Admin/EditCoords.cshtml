@@ -1,0 +1,360 @@
+﻿@model KirjastoAppScrum.Models.Koordinaatit
+
+@{
+    ViewBag.Title = "EditCoords";
+}
+
+<div class="row">
+    <div class="col-6" style="text-align:start">
+        <h2>Muokkaa sijaintia</h2>
+    </div>
+
+    <div class="col-6" style="text-align:end">
+        <a id="logOut" href="~/Admin/Uloskirjautuminen" class="btn btn-danger" style="color:white">Kirjaudu ulos</a> @*Kirjaudu ulos painike*@
+    </div>
+</div>
+<hr />
+
+<h3>@ViewBag.itemName</h3>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.KoordinaattiID)
+
+        <div class="form-group" style="display:none">
+            @Html.LabelFor(model => model.startX, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.startX, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.startX, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" style="display:none">
+            @Html.LabelFor(model => model.startY, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.startY, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.startY, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" style="display:none">
+            @Html.LabelFor(model => model.width, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.width, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.width, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" style="display:none">
+            @Html.LabelFor(model => model.height, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.height, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.height, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" style="display:none">
+            @Html.LabelFor(model => model.radius, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.radius, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.radius, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*kerros vaihtaminen kutsuu JS functionin että kerros kuvakin vaihtuis - ZK*@
+        <div class="form-group">
+            <div class="col-md-10">
+                <span style="font-size:large;font-weight:bold">Valitse kerros:</span>
+                @Html.DropDownListFor(model => model.kerros, Enumerable.Range(1, 2).Select(i => new SelectListItem { Text = i.ToString() + ". kerros", Value = i.ToString() }), new { @onchange = "setFloor()" })
+                @Html.ValidationMessageFor(model => model.kerros, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Tallenna" class="btn btn-danger" />
+                <input type="button" class="btn btn-info" value="Takaisin kategorialistaan" onclick="location.href='@Url.Action("Index", "Admin")'" />
+            </div>
+        </div>
+    </div>
+}
+
+
+<!-- setting up a container div for the Circle/Rectangle button -->
+<div>
+    @*the buttons call the drawing function and send the id to define if we draw circle or rectangle*@
+    <button id="newCircle" class="btn btn-success" onclick="makeNewShape(this.id)">Piirrä ympyrä</button>
+    <button id="newRectangle" class="btn btn-success" onclick="makeNewShape(this.id)">Piirrä neliö</button>
+
+</div>
+<br />
+<!-- setting up a container div where we put a background picture
+   on top of it we place the canvas ysing z-index attributes  HUOM all resolutions have to be the same -->
+<div id="container" @*style="position: relative;" width="889" height="436"*@>
+
+    @*putting the library picture to the background , setting the z-index to -1 so that the canvas objects are being drawn over it
+        if condition decides if it's first or second floor*@
+
+
+    <img id="KirjastonKarttaKuva1" width="1280" height="627" style="position: absolute; z-index:-1; " src="~/Maps/1krs_Tyhja_V5.svg" alt="Ensimmäinen kerros" />
+    <img id="KirjastonKarttaKuva2" width="1280" height="627" style="position: absolute; z-index:-1; display:none " src="~/Maps/2krs_Tyhja_V5.svg" alt="Toinen kerros" />
+    @*defining the canvas, putting z-index to higher so it will be over  background*@
+    <canvas id="myCanvas" width="1280" height="627" style="position: relative; z-index:10" onload="setFloor()">
+        Your browser does not support the HTML5 canvas tag.
+
+    </canvas>
+</div>
+
+
+
+@*here starts the javascript - seperate function for Circle and Rectangle coz it was problematic together(changing didnt work probably)*@
+
+<script>
+    //kun sivu latautuu vkutsutaan kerros valinta functio joka valitse oikea kerroskuva - ZK
+    window.onload = setFloor();
+
+    //function vaihtamaan kerroksen ZK
+
+    function setFloor() {
+        console.log('ollaan setfloor funktiossa')
+        //tarkistetaan kerros dropdown value, ja sen perusteella asetetaan mikä kuva on canvaksen alla(display property none/"") - ZK
+        switch (document.getElementById("kerros").value) {
+            case "0":
+                document.getElementById("KirjastonKarttaKuva2").style.display = "none";
+                document.getElementById("KirjastonKarttaKuva1").style.display = "";
+                break;
+            case "2":
+                document.getElementById("KirjastonKarttaKuva1").style.display = "none";
+                document.getElementById("KirjastonKarttaKuva2").style.display = "";
+                break;
+            default:
+                document.getElementById("KirjastonKarttaKuva2").style.display = "none";
+                document.getElementById("KirjastonKarttaKuva1").style.display = "";
+        }
+
+
+
+        drawTheCanvas()
+    }
+
+    //function jota kutsutaan kun clickataan uusi ympyrä/neliö buton - ZK
+    //function vaihtaa muokkaus kenttiän arvot rippuen, onko neliö tai ympyrä ZK
+    function makeNewShape(id) {
+
+        switch (id) {
+            //changing parameters to create circle
+            case 'newCircle':
+                document.getElementById("startX").value = 0;
+                document.getElementById("startY").value = 0;
+                document.getElementById("width").value = null;
+                document.getElementById("height").value = null;
+                document.getElementById("radius").value = 0;
+                //this bool is to know if we have clicked already to the drawing buttons
+                drawingNewShape = true;
+                break;
+            //changing parameters to create rectangle
+            case 'newRectangle':
+                document.getElementById("startX").value = 0;
+                document.getElementById("startY").value = 0;
+                document.getElementById("width").value = 0;
+                document.getElementById("height").value = 0;
+                document.getElementById("radius").value = null;
+                //this bool is to know if we have clicked already to the drawing buttons
+                drawingNewShape = true;
+                break;
+            default:
+                //this bool is to know if we have clicked already to the drawing buttons
+                //first this function is called on window load so it is set false coz we dont draw yet
+                //this way we bring first the database shape without modifying it until we click the buttons
+                drawingNewShape = false;
+        }
+
+        //calling the drawing
+        drawTheCanvas();
+    }
+
+    function drawTheCanvas() {
+
+
+        // canvas related vars, setting the canvas up
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+
+        var cw = canvas.width;
+        var ch = canvas.height;
+        //  we append changes to the "container" div where the canvas is
+        document.getElementById("container").appendChild(canvas);
+        // used to calc canvas position relative to window
+        function reOffset() {
+            var BB = canvas.getBoundingClientRect();
+            offsetX = BB.left;
+            offsetY = BB.top;
+        }
+        var offsetX, offsetY;
+        reOffset();
+        window.onscroll = function (e) { reOffset(); }
+        window.onresize = function (e) { reOffset(); }
+        canvas.onresize = function (e) { reOffset(); }
+
+        var isDragging = false;
+        //importing shape parameters with documentID
+        var newshape = {
+            x: document.getElementById("startX").value, y: document.getElementById("startY").value, color: 'green',
+            radius: document.getElementById("radius").value, width: document.getElementById("width").value, height: document.getElementById("height").value
+        };
+        console.log('radius is:', newshape.radius, 'width is : ', newshape.width);
+        drawAll();
+        // listen for mouse events
+        canvas.onmousedown = handleMouseDown;
+        canvas.onmousemove = handleMouseMove;
+        canvas.onmouseup = handleMouseUp;
+        canvas.onmouseout = handleMouseOut;
+
+
+
+        function handleMouseDown(e) {
+            //checking if admin clicked on create buttons
+            if (drawingNewShape) {
+
+                // tell the browser we're handling this event
+                e.preventDefault();
+                e.stopPropagation();
+                // calculate the current mouse position
+                startX = parseInt(e.clientX - offsetX);
+                startY = parseInt(e.clientY - offsetY);
+
+                //setting dragging true -dragging might be not the best word- but it means that you dont let go the mouse button, so when you "drag"- you resize the object
+                isDragging = true;
+            }
+            else { isDragging = false; }
+            return;
+        }
+
+        function handleMouseUp(e) {
+            // return if we're not dragging
+            if (!isDragging) { return; }
+            // tell the browser we're handling this event
+            e.preventDefault();
+            e.stopPropagation();
+            // the drag is over -- clear the isDragging flag
+            drawAll();
+            // window.alert(newshape.x)
+            isDragging = false;
+        }
+
+        function handleMouseOut(e) {
+            //so if the mouse leaves the canvas it stops the dragging if it is ongoing
+            // return if we're not dragging
+            if (!isDragging) { return; }
+            // tell the browser we're handling this event
+            e.preventDefault();
+            e.stopPropagation();
+            // the drag is over -- clear the isDragging flag
+            isDragging = false;
+
+        }
+
+        function handleMouseMove(e) {
+            // return if we're not dragging
+            if (!isDragging) { return; }
+            // tell the browser we're handling this event
+            e.preventDefault();
+            e.stopPropagation();
+            // calculate the current mouse position
+            mouseX = parseInt(e.clientX - offsetX);
+            mouseY = parseInt(e.clientY - offsetY);
+            // how far has the mouse dragged from its previous mousemove position?
+            // in order to determine the new shape we give the with and height of the object
+            // by substracting the mouse's current position from the position when we clicked with the mouse
+            newshape.x = startX;
+            newshape.y = startY;
+
+            //checking if it is a circle
+
+            if (newshape.radius) {
+                //its a circle
+                //depending on shape it increases  radius by mouse movement
+                //the math.squrt uses pitagoras method to calculate the distance
+                newshape.radius = Math.sqrt(Math.pow((startX - mouseX), 2) + Math.pow((startY - mouseY), 2));
+            }
+            else {
+                //its a rectangle
+                // changing width
+                newshape.width = mouseX - startX;
+                if (newshape.width <= 0) {
+                    newshape.x = mouseX;
+                    newshape.width = startX - mouseX
+                };
+                // changing height
+                //checking if height is positive, so there wont go negative value to database
+                //if height is negative, same trick as with width
+                newshape.height = mouseY - startY;
+                if (newshape.height <= 0)
+                //{newhape.height=1};
+                {
+                    newshape.y = mouseY;
+                    newshape.height = startY - mouseY
+                };
+
+            }
+
+
+            //drawing all by each move of mouse
+            drawAll();
+
+        }
+
+        //------------------------------------the actual drawing function------------------------
+        function drawAll() {
+
+            // clear the canvas
+            ctx.clearRect(0, 0, cw, ch);
+            ctx.beginPath();
+            //formatting the drawing
+            ctx.globalAlpha = 0.8; //sets the transparency
+            ctx.lineWidth = "6";
+            ctx.strokeStyle = newshape.color;
+            //condition to decide if it is circle or rectangle(based on if it has radius)
+            if (newshape.radius) {
+
+                // drawing circle
+                ctx.arc(newshape.x, newshape.y, newshape.radius, 0, Math.PI * 2);
+                //setting sides to null if it is a circle and updating radius
+                document.getElementById("width").value = null;
+                document.getElementById("height").value = null;
+                document.getElementById("radius").value = parseInt(newshape.radius);
+            }
+            else {
+                ctx.strokeStyle = newshape.color;
+                ctx.rect(newshape.x, newshape.y, newshape.width, newshape.height);
+                //updating sides width and height and setting radius field to null
+                document.getElementById("width").value = newshape.width;
+                document.getElementById("height").value = newshape.height;
+                document.getElementById("radius").value = null;
+            }
+            ctx.stroke();
+            //updating mvc input fields starting x,y
+            document.getElementById("startX").value = newshape.x;
+            document.getElementById("startY").value = newshape.y;
+
+
+
+
+        }
+
+    }
+
+
+    //-----------------------------------------------------------------------------------------------------------------------//
+</script>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

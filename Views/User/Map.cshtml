@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewBag.Title = "Map";
+}
+
+@section scripts{
+    <script type="text/javascript">
+        document.getElementById("changeFloor1").addEventListener("click", chngFloor1);
+        document.getElementById("changeFloor2").addEventListener("click", chngFloor2);
+        var setFloor;
+
+        function chngFloor1() {
+            floorImg.setAttribute('src', "/Maps/1krs_Tyhja_V5.svg");
+            document.getElementById("changeFloor1").classList.add("btn-lg");
+            document.getElementById("changeFloor2").classList.remove("btn-lg");
+        }
+        function chngFloor2() {
+            floorImg.setAttribute('src', "/Maps/2krs_Tyhja_V5.svg");
+            document.getElementById("changeFloor1").classList.remove("btn-lg");
+            document.getElementById("changeFloor2").classList.add("btn-lg");
+        }
+    </script>
+}
+
+@if (Session["setLangTemp"] != null)
+{
+    if (Session["setLangTemp"].ToString() == "FI")
+    {
+        <h1>Pohjakartta</h1>
+        <div class="map">
+            <img id="floorImg" class="mapImg" src="/Maps/1krs_Tyhja_V5.svg" alt="Map" style="max-width:78vw;">
+        </div>
+        <button id="changeFloor1" class="floorBtn btn btn-primary btn-lg">1. @ViewBag.Kerros</button>
+        <button id="changeFloor2" class="floorBtn btn btn-primary">2. @ViewBag.Kerros</button>
+    }
+    else if (Session["setLangTemp"].ToString() == "SE")
+    {
+        <h1>Plan</h1>
+        <div class="map">
+            <img id="floorImg" class="mapImg" src="/Maps/1krs_Tyhja_V5.svg" alt="Map" style="max-width:78vw;">
+        </div>
+        <button id="changeFloor1" class="floorBtn btn btn-primary btn-lg">1:a @ViewBag.Kerros</button>
+        <button id="changeFloor2" class="floorBtn btn btn-primary">2:a @ViewBag.Kerros</button>
+    }
+    else if (Session["setLangTemp"].ToString() == "EN")
+    {
+        <h1>Library map</h1>
+        <div class="map">
+            <img id="floorImg" class="mapImg" src="/Maps/1krs_Tyhja_V5.svg" alt="Map" style="max-width:78vw;">
+        </div>
+        <button id="changeFloor1" class="floorBtn btn btn-primary btn-lg">1st @ViewBag.Kerros</button>
+        <button id="changeFloor2" class="floorBtn btn btn-primary">2nd @ViewBag.Kerros</button>
+
+    }
+}
+else
+{
+    <h1>Pohjakartta</h1>
+    <div class="map">
+        <img id="floorImg" class="mapImg" src="/Maps/1krs_Tyhja_V5.svg" alt="Map" style="max-width:78vw;">
+    </div>
+}
+

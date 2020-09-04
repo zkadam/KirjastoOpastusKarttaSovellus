@@ -1,0 +1,174 @@
+﻿@model IEnumerable<KirjastoAppScrum.Models.Tekstit>
+
+<h2>Pääkategoriat</h2>
+<br />
+<div class="container-fluid">
+
+    @*Rivi missä löytyy uloskirjautuminen ja informaatio käyttäjälle kuka on sisäänkirjautunut -FW*@
+
+    @using System.Globalization
+    @{
+        string loggausInfo = ""; /*Tarkistaa käyttäjän session ja tulostaa näytölle käyttäjän nimen ja oikeudet/rooli -FW*/
+        if (Session["PaaAdmin"] != null)
+        {
+            loggausInfo = "Olet kirjautunut käyttäjätunnuksella: " + @Session["PaaAdmin"];
+        }
+        else if (Session["PerusAdmin"] != null)
+        {
+            loggausInfo = "Olet kirjautunut käyttäjätunnuksella: " + Session["PerusAdmin"];
+        }
+        else if (Session["PerusUser"] != null)
+        {
+            loggausInfo = "Olet kirjautunut käyttäjätunnuksella: " + Session["PerusUser"];
+        }
+        else
+        {
+            Session.Abandon();
+        }
+    }
+
+ 
+   <div class="row">
+
+       <div class="col-6" style="text-align:start">
+           <p class="loginInfoParagraph">@loggausInfo</p> @*Tähän tulostuu käyttäjän nimen näytölle ja oikeudet/rooli -FW*@
+       </div>
+
+       <div class="col-6" style="text-align:end">
+           @if (Session["PaaAdmin"] != null) {
+           @Html.ActionLink("Käyttäjätilien hallinta", "IndexUsers", null, new { @class = "btn btn-primary" }) @*Käyttäjien hallinta*@
+           }
+
+           <a id="logOut" href="~/Admin/Uloskirjautuminen" class="btn btn-danger" style="color:white">Kirjaudu ulos</a> @*Kirjaudu ulos painike*@
+       </div>
+   </div>
+</div>
+
+<div class="container-fluid">
+    <table class="table table-striped">
+        <tr>
+            <th>
+                Nimi
+            </th>
+            <th>
+                Muokkaa / Poista
+            </th>
+            <th>
+                Kuuluu kategoriaan
+            </th>
+            @*<th>
+                Taso
+            </th>*@
+            <th>
+                Monitulostus
+            </th>
+            <th>Koordinaatit</th>
+        </tr>
+
+            @foreach (var item in Model)
+            {
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Teksti)
+                </td>
+                <td>
+                    @Html.ActionLink("Muokkaa", "EditKategoria", new { id = item.Kategoria.KategoriaID, itemName = item.Teksti }, new { @class = "btn btn-success", @style = "color:white" })
+                    @Html.ActionLink("Poista", "RemoveKategoria", new { id = item.Kategoria.KategoriaID, itemName = item.Teksti }, new { @class = "btn btn-danger", @style = "color:white" })
+                </td>
+                <td>
+                    @* Tulostaa referin nimen numeron sijasta R.J *@
+                    @ViewBag.kategoriaReferiNimi
+                </td>
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.Kategoria.Class)
+                </td>*@
+                <td>
+                    @if (item.Kategoria.SN == 1.ToString())
+                    {
+                        <p>Kyllä</p>
+                    }
+                    else
+                    {
+                        <p>Ei</p>
+                    }
+                </td>
+
+                <td>
+                    @*Tähän koodaan vielä että tekee tarkastuksen että onko itemillä koordinaatteja, jos ei niin muokkauslinkki on disabled, jos on niin lisäys linkki on disabled. RJ  *@
+                    @*lisäsin tarkistuksen -----vois lisätä vielä erilaisia class marityksiä että tulisi eri värisäks esim. ---ZK*@
+
+                    @if (item.Kategoria.SN == 1.ToString())
+                    {
+                        var lisaaKoords = true;
+                        foreach (var data in ViewBag.listaData)
+                        {
+                            if (data == item.Kategoria.KategoriaID)
+                            {
+                                @Html.ActionLink("Siirry koordinaatteihin", "Index", new { id = item.Kategoria.KategoriaID, itemName = item.Teksti, kategoriaRefer = item.Kategoria.KategoriaID }, new { @class = "btn btn-info", @style = "color:white;" })
+
+                                lisaaKoords = false;
+                                break;
+                            }
+                        }
+
+                        if (lisaaKoords == true)
+                        {
+                            @Html.ActionLink("Lisää koordinaatteja", "AddKategCoords", new { sn = 0.ToString(), referTo = item.Kategoria.KategoriaID, luokka = 3, teksti = item.Teksti }, new { @class = "btn btn-info", @style = "color:white;" })
+                        }
+                    }
+
+                    else if (item.Kategoria.Koordinaatit != null)
+                    {
+                        @Html.ActionLink("Muokkaa sijaintia", "EditCoords", new { id = item.Kategoria.KategoriaID, referi = item.Kategoria.ReferTo, itemName = item.Teksti }, new { @class = "btn btn-success", @style = "color:white; margin-right: 25px;" })
+                        @Html.ActionLink("Poista sijainti", "RemoveCoords", new { id = item.Kategoria.Koordinaatit.KoordinaattiID, referi = item.Kategoria.ReferTo, itemName = item.Teksti }, new { @class = "btn btn-danger", @style = "color:white;" })
+                    }
+                    else
+                    {
+                        // Tehdään tarkastus löytyykö itemille child objektia porautumiseen, jos ei niin tulostaa vain lisää koordinaatti buttonin, jos löytyy niin
+                        // tulostaa siirry alakategorioihin buttonin R.J
+                        var lisaaKoord = true;
+                        foreach (var data in ViewBag.listaData)
+                        {
+                            if (data == item.Kategoria.KategoriaID)
+                            {
+                                @Html.ActionLink("Siirry alakategorioihin", "Index", new { id = item.Kategoria.KategoriaID, itemName = item.Teksti, kategoriaRefer = item.Kategoria.KategoriaID }, new { @class = "btn btn-info", @style = "color:white; margin-right: 25px;" })
+                                lisaaKoord = false;
+                                break;
+                            }
+                        }
+
+                        if (lisaaKoord == true)
+                        {
+                            if (item.Kategoria.Class == 3)
+                            {
+                                @Html.ActionLink("Lisää sijainti", "AddCoords", new { id = item.Kategoria.KategoriaID, referi = item.Kategoria.ReferTo, itemName = item.Teksti }, new { @class = "btn btn-primary", @style = "color:white;" })
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Lisää sijainti", "AddCoords", new { id = item.Kategoria.KategoriaID, referi = item.Kategoria.ReferTo, itemName = item.Teksti }, new { @class = "btn btn-primary", @style = "color:white; margin-right: 25px;" })
+                                @Html.ActionLink("Lisää uusi kategoria", "AddKategoria", new { id = item.Kategoria.KategoriaID }, new { @class = "btn btn-primary", @style = "color:white;" })
+                            }
+                        }
+                    }
+                </td>
+            </tr>
+            }
+        <tr>
+
+            <td>
+                @if (@ViewBag.kategoriaTulostus == 1.ToString())
+                {
+                    @Html.ActionLink("Lisää koordinaatti", "AddKategCoords", new { sn = 0.ToString(), referTo = @ViewBag.kategoriaRefer, luokka = 3, teksti = @ViewBag.Title }, new { @class = "btn btn-primary" })
+                }
+                else
+                {
+                    @Html.ActionLink("Lisää uusi", "AddKategoria", new { id = @ViewBag.kategoriaRefer }, new { @class = "btn btn-primary" })
+                }
+                @* Tämä edelliseen palautuminen ei vielä toimi *@
+                @Html.ActionLink("Takaisin", "Index", new { kategoriaRefer = @ViewBag.master }, new { @class = "btn btn-warning" })
+                @Html.ActionLink("Näytä kaikki", "IndexAll", null, new { @class = "btn btn-warning" })
+            </td>
+        </tr>        
+    </table>
+</div>
