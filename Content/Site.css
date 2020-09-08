@@ -19,6 +19,7 @@
     background-color: #113c68; /*Tumman merensininen(Näyttö default)*/
     font-weight: bold !important;
     font-size: 25px !important;
+    position:relative;
 }
 .buttonBody .button {
 

@@ -85,7 +85,8 @@
             {
                 <div class="col-md pt-3 buttonBody">
                     @*muutin koordinaatti parameti item.KategoriaIdksi-sitten kontroller tarkistaa sitä onko koordinaatti taulussa sellasta ZK*@
-                    <button type="button" class="button buttonVäri" onclick="location.href='@Url.Action("Kategoriat", "User", new { referi = item.Kategoria.ReferTo, id = item.ReferTo, koordinaatit = item.Kategoria.KategoriaID, nimi = item.Teksti, luokka = item.Kategoria.Class, dublikaatti = item.Kategoria.SN})'">@Html.DisplayFor(modelItem => item.Teksti)</button>
+                    <button type="button" class="button buttonVäri" onclick="location.href='@Url.Action("Kategoriat", "User", new { referi = item.Kategoria.ReferTo, id = item.ReferTo, koordinaatit = item.Kategoria.KategoriaID, nimi = item.Teksti, luokka = item.Kategoria.Class, dublikaatti = item.Kategoria.SN})'">@Html.DisplayFor(modelItem => item.Teksti)<img src="~/Icons/arrow-up-circle.svg" style="width:20px;height:20px; position:absolute; bottom:1px; right:1px;" /></button>
+                
                 </div>
             }
 
