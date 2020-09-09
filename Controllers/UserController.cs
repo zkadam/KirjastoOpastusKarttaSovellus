@@ -20,7 +20,7 @@ namespace KirjastoAppScrum.Controllers
 
         public ActionResult Kategoriat(string kieli, int? referi, int? id, int? koordinaatit, int? luokka, int? dublikaatti)
         {
-            var lista = from t in db.Tekstit.Include(t => t.Kategoria).Include(t => t.Kategoria.Koordinaatit)
+            var lista = from t in db.Tekstit.Include(t => t.Kategoria).Include(t => t.Kategoria.Koordinaatit).OrderBy(t => t.Teksti)
                         select t;
 
             string setLang = "";
