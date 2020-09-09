@@ -4,33 +4,33 @@
 
 @*Testisisältöä, esittää Infotaulun aloitusruutua. Asettelu, tekstit, buttonien stylet yms eivät vastaa lopullista muotoa. (LL) *@
 
-        @*<div class="jumbotron" style="background-color:transparent">
-            <div class="container-fluid">*@
+@*<div class="jumbotron" style="background-color:transparent">
+    <div class="container-fluid">*@
 
-                @* Kielivalintapainikkeet ACTIONLINK (LL) *@
+@* Kielivalintapainikkeet ACTIONLINK (LL) *@
 
-                <div class="container-fluid">
-                    <div class="row justify-content-center">
-                        <div class="col-md pt-9 ohjeButton">
-                            Tervetuloa kirjastoon! Opastekartta auttaa löytämään tiloja ja palveluita. Aloita painamalla Tervetuloa!<br />
-                            <br />
-                            Välkommen till biblioteket! På kartan kan du se var våra olika avdelningar och tjänster finns. Starta genom att trycka på Välkommen!<br />
-                            <br />
-                            Welcome to the library! We want to help you to find locations and services. To start, press the  Welcome! button.
-                        </div>
-                    </div>
-                    <br />
-                    <br />
-
-            <div class="row justify-content-center">
-                <div class="col-md pt-3">
-                    <button type="button" class="button buttonVäri"  onclick="location.href='@Url.Action("Kategoriat", "User", new { luokka = 1, kieli = "FI" })'">Tervetuloa!</button>
-                </div>
-                <div class="col-md pt-3">
-                    <button type="button" class="button buttonVäri" onclick="location.href='@Url.Action("Kategoriat", "User", new { luokka = 1, kieli = "SE" })'">Välkommen!</button>
-                </div>
-                <div class="col-md pt-3">
-                    <button type="button" class="button buttonVäri"  onclick="location.href='@Url.Action("Kategoriat", "User", new { luokka = 1, kieli = "EN" })'">Welcome!</button>
-                </div>
-            </div>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md pt-9 ohjeButton">
+            Opastekartta auttaa löytämään kirjaston tiloja ja palveluita. Aloita painamalla Tervetuloa!<br />
+            <br />
+            Kartan hjälper dig att hitta bibliotekets olika tjänster och avdelningar. Starta genom att trycka på Välkommen!<br />
+            <br />
+            This map helps you to find locations and services in the library. To start, press  Welcome!
         </div>
+    </div>
+    <br />
+    <br />
+
+    <div class="row justify-content-center">
+        <div class="col-md pt-3">
+            <button type="button" class="button buttonVäri" onclick="location.href='@Url.Action("Kategoriat", "User", new { luokka = 1, kieli = "FI" })'">Tervetuloa!</button>
+        </div>
+        <div class="col-md pt-3">
+            <button type="button" class="button buttonVäri" onclick="location.href='@Url.Action("Kategoriat", "User", new { luokka = 1, kieli = "SE" })'">Välkommen!</button>
+        </div>
+        <div class="col-md pt-3">
+            <button type="button" class="button buttonVäri" onclick="location.href='@Url.Action("Kategoriat", "User", new { luokka = 1, kieli = "EN" })'">Welcome!</button>
+        </div>
+    </div>
+</div>
