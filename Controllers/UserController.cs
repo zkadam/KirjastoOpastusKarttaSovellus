@@ -132,10 +132,10 @@ namespace KirjastoAppScrum.Controllers
             //setting apumuuttuja if it is null (eg you start the page from somewhere else then index) 
             //----------------------------------- - this was just necessary coz the code only had options for0 and 1ZK
 
-            if (luokka == 1 && referi == null)
-            {
-                luokka = 2;
-            }
+            //if (luokka == 1 && referi == null)
+            //{
+            //    luokka = 2;
+            //}
 
             Session["koordinaatiPolku"] = koordinaatit;
             Session["linkkiPolkku"] = referi;
@@ -167,11 +167,11 @@ namespace KirjastoAppScrum.Controllers
                 lista = lista.Where(t => t.Kategoria.Class<3 && t.KieliID == "FI");
             }
             // jos kieli löytyy ja apuMuuttuja on 0 (apuMuuttuja on arvolta 0 kun painaa buttonia)  (R.J)
+                List<int?> EndLista = new List<int?>();
             if (!String.IsNullOrEmpty(setLang) && luokka == 2)
             {
 
                 //Dictionary<int?, string> naviList = new Dictionary<int?, string>(); // Tehdään dictionary johon haetaan linkkipolkujen itemit RJ
-                List<int?> EndLista = new List<int?>();
                 List<LinkkiLista> naviList = new List<LinkkiLista>();
 
                 // Haetaan painetun buttonin tiedot linkkipolku listan ensimmäistä lisäystä varten.
@@ -217,10 +217,23 @@ namespace KirjastoAppScrum.Controllers
             }
 
             // Tulostaa kielen mukaan pääkategoriat. apuMuuttuja on arvoltaan 1 kun painaa pääsivun Tervetuloa,Välkommen,Welcome painikkeita. (R.J)
+            var RefList = from r in db.Kategoria
+                          select
+                          r;
 
-         
-                lista = lista.Where(t => t.KieliID.Contains(setLang) && t.Kategoria.Class<3);
-         
+
+
+            //foreach (var item in lista)
+            //{
+            //    if (EndLista.)
+            //    {
+
+            //    }
+            //}
+
+
+            lista = lista.Where(t => t.KieliID.Contains(setLang) && t.Kategoria.Class<3);
+            lista = lista.Where(t => EndLista.Contains(t.Kategoria.KategoriaID) || t.Kategoria.Koordinaatit.KoordinaattiID>0 || t.Kategoria.Class==1);
 
 
             return View("ABC_Kategoriat", "_Layout_Kategoriat", lista);
