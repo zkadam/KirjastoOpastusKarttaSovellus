@@ -39,7 +39,7 @@ namespace KirjastoAppScrum.Controllers
 
                 var kategoriaTulostus = from n in db.Tekstit.Include(n => n.Kategoria)
                                      .Where(n => n.KieliID == "FI" && n.Kategoria.KategoriaID == kategoriaRefer)
-                                      select n.Kategoria.SN.ToString();
+                                        select n.Kategoria.SN.ToString();
 
                 ViewBag.Title = itemName; // Itemin title
                 ViewBag.kategoriaRefer = kategoriaRefer; // kategorianReferi
@@ -63,7 +63,7 @@ namespace KirjastoAppScrum.Controllers
                 indexAll = true;  // Palautetaan muutokset IndexAll.cshtml sivulle RJ
 
                 //tehdään lista jolla saadaan kategoriat ja niiden ID tiedot referTo nimen tulostusta varten IndexAll sivulle
-                Dictionary<int?, string> referToList = new Dictionary<int?,string>();
+                Dictionary<int?, string> referToList = new Dictionary<int?, string>();
                 foreach (var listaItem in db.Kategoria.Include(c => c.Tekstit))
                     referToList.Add(listaItem.KategoriaID, listaItem.Tekstit.Where(t => t.KieliID == "FI").SingleOrDefault().Teksti);
                 ViewBag.referToData = referToList; // listaData porautumisen tarkastukseen RJ
@@ -618,7 +618,7 @@ namespace KirjastoAppScrum.Controllers
             return View();
         }
 
-        public ActionResult AddKategCoords(string sn, int? referTo,int? luokka, string teksti)
+        public ActionResult AddKategCoords(string sn, int? referTo, int? luokka, string teksti)
         {
             var kategoria = new Kategoria // Lisätään ensiksi uuden kategorian tiedot ja luodaan tietokantaan tämä
             {
@@ -672,7 +672,8 @@ namespace KirjastoAppScrum.Controllers
                     return RedirectToAction("IndexAll");
                 }
 
-            } else
+            }
+            else
             {
                 // Tehdään tarkastus palautetaanko Index vai IndexAll sivu
                 if (indexAll == false)
@@ -718,8 +719,8 @@ namespace KirjastoAppScrum.Controllers
                         Text = userrole.RooliID.ToString()
                     });
                 }
-                
-                ViewBag.Rooli = new SelectList(userrolelista, "Value", "Text",  "PerusAdmin");
+
+                ViewBag.Rooli = new SelectList(userrolelista, "Value", "Text", "PerusAdmin");
                 return View();
             }
         }
@@ -735,7 +736,7 @@ namespace KirjastoAppScrum.Controllers
             }
             else
             {
-                
+
                 if (ModelState.IsValid)
                 {
                     if (db.Logins.Where(u => u.Nimi == logins.Nimi).Any())
@@ -750,14 +751,15 @@ namespace KirjastoAppScrum.Controllers
                             });
                         }
 
-                        logins.LoginErrorMessage="Käyttäjä nimi on otettu!";
+                        logins.LoginErrorMessage = "Käyttäjä nimi on otettu!";
                         ViewBag.Rooli = new SelectList(userrolelista, "Value", "Text", "PerusAdmin");
                         return View("LisaaKayttaja", logins);
                     }
-                    else { 
-                    db.Logins.Add(logins);
-                    db.SaveChanges();
-                    return RedirectToAction("IndexUsers");
+                    else
+                    {
+                        db.Logins.Add(logins);
+                        db.SaveChanges();
+                        return RedirectToAction("IndexUsers");
                     }
                 }
                 return View(logins);
