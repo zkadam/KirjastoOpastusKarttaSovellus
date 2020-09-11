@@ -119,6 +119,115 @@ namespace KirjastoAppScrum.Controllers
                 lista = lista.Where(t => t.KieliID.Contains(setLang) && t.Kategoria.Class == 1 && t.Kategoria.ReferTo == null);
             }
             return View("Kategoriat", "_Layout_Kategoriat", lista);
+        } 
+        //-------------------------------------------------ABC järjestyksessä kategoriat
+        public ActionResult ABC_Kategoriat(string kieli, int? referi, int? id, int? koordinaatit, int? luokka, int? dublikaatti)
+        {
+
+            var lista = from t in db.Tekstit.Include(t => t.Kategoria).Include(t => t.Kategoria.Koordinaatit).OrderBy(t => t.Teksti)
+                        select t;
+
+            string setLang = "";
+
+            //setting apumuuttuja if it is null (eg you start the page from somewhere else then index) 
+            //----------------------------------- - this was just necessary coz the code only had options for0 and 1ZK
+
+            if (luokka == 1 && referi == null)
+            {
+                luokka = 2;
+            }
+
+            Session["koordinaatiPolku"] = koordinaatit;
+            Session["linkkiPolkku"] = referi;
+            Session["luokkaPolku"] = luokka;
+            //Session["koordinaattiPolku"] = referi;
+            //setiing the language for session and filtering results ZK
+            //if there is no session nor kieli parameter, we set them both to FI -zk
+            if ((Session["setLangTemp"] == null) && string.IsNullOrEmpty(kieli))
+            {
+                setLang = "FI";
+                Session["setLangTemp"] = "FI";
+            }
+            //if came kieli parameter, we set them both to kieli parameter ZK
+            else if (!string.IsNullOrEmpty(kieli))
+            {
+                setLang = kieli;
+                Session["setLangTemp"] = kieli;
+            }
+            //if there in no kieli parameter but there is session, we set filtering to session value ZK
+            else
+            {
+                setLang = Session["setLangTemp"].ToString();
+            }
+
+            //Tulostaa pääkategoriat kielellä FI jos kieli = empty OR null (R.J)
+
+            if (String.IsNullOrEmpty(setLang))
+            {
+                lista = lista.Where(t => t.Kategoria.Class<3 && t.KieliID == "FI");
+            }
+            // jos kieli löytyy ja apuMuuttuja on 0 (apuMuuttuja on arvolta 0 kun painaa buttonia)  (R.J)
+                List<int?> EndLista = new List<int?>();
+           
+
+                //Dictionary<int?, string> naviList = new Dictionary<int?, string>(); // Tehdään dictionary johon haetaan linkkipolkujen itemit RJ
+                List<LinkkiLista> naviList = new List<LinkkiLista>();
+
+                // Haetaan painetun buttonin tiedot linkkipolku listan ensimmäistä lisäystä varten.
+                var listaNimi = from a in db.Tekstit.Where(a => a.KieliID == setLang && a.ReferTo == koordinaatit) select a.Teksti;
+
+                // Tekee listan kaikista kategorian itemeistä ja ottaa talteen ReferTo arvon (R.J)
+                foreach (Kategoria loppu in db.Kategoria.Include(t => t.Tekstit))
+                    EndLista.Add(loppu.ReferTo);
+
+                // checkReferi muuttujaksi asetetaan painetun buttonin referi, tämä muuttuu foreach loopissa kun poraudutaan syvemmälle RJ
+                var checkRefer = referi;
+                naviList.Add(new LinkkiLista { Refer = referi, Koordinaatti = koordinaatit, Id = id, Luokka = luokka, Teksti = listaNimi.SingleOrDefault() }); // lisätään painetun buttonin linkkitiedot naviList - listaan RJ
+                while (checkRefer != null || checkRefer == 0) // while looppi kunnes referi on null niin linkkipolku on valmis dictionaryssa RJ
+                {
+                    foreach (var listaItem in db.Kategoria.Include(c => c.Tekstit))
+                    {
+                        if (listaItem.KategoriaID == checkRefer)
+                        {
+                            naviList.Add(new LinkkiLista { Refer = listaItem.ReferTo, Koordinaatti = listaItem.KategoriaID, Id = listaItem.KategoriaID, Luokka = listaItem.Class, kieliID = kieli, Teksti = listaItem.Tekstit.Where(t => t.KieliID == setLang).SingleOrDefault().Teksti }); // lisätään painetun buttonin master linkkipolkuun RJ
+                            checkRefer = listaItem.ReferTo; //jos masterilla on oma master niin tehdään sille lisäys myös, looppii loppuu jos checkReferiksi tulee null (eli pääkategoria) RJ
+                        }
+                    }
+                }
+
+                // tekee foreach tsekkauksen löytyykö painetun buttonin KategoriaID arvo Kategorian.ReferTo arvolistasta (R.J)
+                if (EndLista.Contains(id) && dublikaatti == 1)
+                {
+                    ViewBag.naviListToData = naviList.ToArray().Reverse(); // listaData navigaatio polkuun Reverse metodilla niin tulostaa polun oikein RJ
+                    // Jos löytyy niin tulostaa kaikki jotka referöivät siihen (R.J)
+                    return RedirectToAction("NaytaKartta", new { referi, koordinaatit, luokka, id, dublikaatti });
+                }
+                else if (EndLista.Contains(id))
+                {
+                    ViewBag.naviListToData = naviList.ToArray().Reverse(); // listaData navigaatio polkuun Reverse metodilla niin tulostaa polun oikein RJ
+                    // Jos löytyy niin tulostaa kaikki jotka referöivät siihen (R.J)
+                    //lista = lista.Where(t => t.KieliID.Contains(setLang) && t.Kategoria.ReferTo == id && t.Kategoria.KategoriaID != id);
+                }
+                else
+                {
+                    return RedirectToAction("NaytaKartta", new { referi, koordinaatit, luokka, id });
+                    // refer välittää parametrit NaytaKartta Actioniin RJ
+                }
+           
+
+            // Tulostaa kielen mukaan pääkategoriat. apuMuuttuja on arvoltaan 1 kun painaa pääsivun Tervetuloa,Välkommen,Welcome painikkeita. (R.J)
+            var RefList = from r in db.Kategoria
+                          select
+                          r;
+
+
+
+            //listasta otetaan pois pelkestään koordinaatit(monitulostus) ja kategoriat jotka ei viittaa mihinkään
+            lista = lista.Where(t => EndLista.Contains(t.Kategoria.KategoriaID) || t.Kategoria.Koordinaatit.KoordinaattiID > 0 || t.Kategoria.Class == 1);
+            lista = lista.Where(t => t.KieliID.Contains(setLang) && t.Kategoria.Class < 3);
+
+
+            return View("ABC_Kategoriat", "_Layout_Kategoriat", lista);
         }
 
         //-----------------------------------------------action result karttan näyttämisen porautumisen jälkeen-ZK----------------------------------------------------------------

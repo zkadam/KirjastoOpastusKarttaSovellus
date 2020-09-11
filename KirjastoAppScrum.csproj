@@ -193,6 +193,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Icons\a-z.svg" />
     <Content Include="Icons\arrow-counterclockwise.svg" />
     <Content Include="Icons\arrow-down-circle.svg" />
     <Content Include="Icons\arrow-left-square.svg" />
@@ -388,6 +389,7 @@
     <Content Include="Views\Admin\MuokkaaKayttaja.cshtml" />
     <Content Include="Views\Admin\IndexUsers.cshtml" />
     <Content Include="Views\Admin\PoistaKayttaja.cshtml" />
+    <Content Include="Views\User\ABC_Kategoriat.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
