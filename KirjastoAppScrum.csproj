@@ -193,6 +193,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Icons\a-z.svg" />
     <Content Include="Icons\arrow-counterclockwise.svg" />
     <Content Include="Icons\arrow-down-circle.svg" />
     <Content Include="Icons\arrow-left-square.svg" />

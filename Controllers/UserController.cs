@@ -222,16 +222,7 @@ namespace KirjastoAppScrum.Controllers
 
 
 
-            //foreach (var item in lista)
-            //{
-            //    if (EndLista.)
-            //    {
-
-            //    }
-            //}
-            //lista = lista.Where(t => EndLista.Contains(t.Kategoria.KategoriaID));
-
-
+            //listasta otetaan pois pelkestään koordinaatit(monitulostus) ja kategoriat jotka ei viittaa mihinkään
             lista = lista.Where(t => EndLista.Contains(t.Kategoria.KategoriaID) || t.Kategoria.Koordinaatit.KoordinaattiID > 0 || t.Kategoria.Class == 1);
             lista = lista.Where(t => t.KieliID.Contains(setLang) && t.Kategoria.Class < 3);
 
