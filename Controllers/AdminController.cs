@@ -293,6 +293,7 @@ namespace KirjastoAppScrum.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult AddKategoria(AddKategoriaViewModel model)
         {
             var kategoria = new Kategoria // Lisätään ensiksi uuden kategorian tiedot ja luodaan tietokantaan tämä
@@ -362,7 +363,7 @@ namespace KirjastoAppScrum.Controllers
             }
         }
 
-        // Kategorian Muokkaus by RJ
+        // Kategorian Muokkaus by RJ111
 
         // Viedään Kategorian muokkaus sivulle - edit 27.5 Toimii RJ
         public ActionResult EditKategoria(string itemName, int? id)
@@ -455,6 +456,7 @@ namespace KirjastoAppScrum.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult EditKategoria(AddKategoriaViewModel model)
         {
             var kategoria = new Kategoria // lisätään Kategoria taulun muutetut tiedot
