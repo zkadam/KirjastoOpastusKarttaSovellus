@@ -12,15 +12,11 @@ namespace KirjastoAppScrum.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Tekstit
+    public partial class InfoTekstit
     {
-        public int TekstiID { get; set; }
-        public string KieliID { get; set; }
-        public string Teksti { get; set; }
-        public Nullable<int> ReferTo { get; set; }
+        public int Infotext_ID { get; set; }
+        public string InfotextContent { get; set; }
     
-        public virtual Kategoria Kategoria { get; set; }
-        public virtual Kieli Kieli { get; set; }
-        public virtual InfoTekstit InfoTekstit { get; set; }
+        public virtual Tekstit Tekstit { get; set; }
     }
 }

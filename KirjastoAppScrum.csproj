@@ -144,6 +144,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AddKategoriaViewModel.cs" />
+    <Compile Include="Models\InfoTekstit.cs">
+      <DependentUpon>KirjastoDBEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Kategoria.cs">
       <DependentUpon>KirjastoDBEntities.tt</DependentUpon>
     </Compile>

@@ -20,7 +20,7 @@ namespace KirjastoAppScrum.Models
         public Nullable<int> width { get; set; }
         public Nullable<int> height { get; set; }
         public Nullable<int> radius { get; set; }
-        public Nullable<int> kerros { get; set; }
+        public int kerros { get; set; }
     
         public virtual Kategoria Kategoria { get; set; }
     }

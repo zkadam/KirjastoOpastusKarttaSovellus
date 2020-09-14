@@ -15,6 +15,8 @@
         <AssociationConnector Association="KirjastoProjektiModel.FK_TekstiToKategoria" ManuallyRouted="false" />
         <AssociationConnector Association="KirjastoProjektiModel.FK_TekstiToKieli" ManuallyRouted="false" />
         <AssociationConnector Association="KirjastoProjektiModel.FK_RooliToUserRoles" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="KirjastoProjektiModel.InfoTekstit" Width="1.5" PointX="8.25" PointY="3.875" />
+        <AssociationConnector Association="KirjastoProjektiModel.FK_InfoTekstit_Tekstit" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

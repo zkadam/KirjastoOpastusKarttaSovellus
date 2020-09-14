@@ -4,7 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="KirjastoProjektiModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="KirjastoProjektiModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="InfoTekstit">
+          <Key>
+            <PropertyRef Name="Infotext_ID" />
+          </Key>
+          <Property Name="Infotext_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InfotextContent" Type="nvarchar" MaxLength="550" />
+        </EntityType>
         <EntityType Name="Kategoria">
           <Key>
             <PropertyRef Name="KategoriaID" />
@@ -31,7 +38,7 @@
           <Property Name="width" Type="int" />
           <Property Name="height" Type="int" />
           <Property Name="radius" Type="int" />
-          <Property Name="kerros" Type="int" />
+          <Property Name="kerros" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Logins">
           <Key>
@@ -57,8 +64,18 @@
           </Key>
           <Property Name="RooliID" Type="nvarchar" MaxLength="20" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'KirjastoProjekti.dbo.kategoriatNimetJaViittaukset' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <Association Name="FK_InfoTekstit_Tekstit">
+          <End Role="Tekstit" Type="Self.Tekstit" Multiplicity="1" />
+          <End Role="InfoTekstit" Type="Self.InfoTekstit" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Tekstit">
+              <PropertyRef Name="TekstiID" />
+            </Principal>
+            <Dependent Role="InfoTekstit">
+              <PropertyRef Name="Infotext_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_KoordinaattiToKategoria">
           <End Role="Kategoria" Type="Self.Kategoria" Multiplicity="1" />
           <End Role="Koordinaatit" Type="Self.Koordinaatit" Multiplicity="0..1" />
@@ -68,18 +85,6 @@ warning 6002: The table/view 'KirjastoProjekti.dbo.kategoriatNimetJaViittaukset'
             </Principal>
             <Dependent Role="Koordinaatit">
               <PropertyRef Name="KoordinaattiID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_RooliToUserRoles">
-          <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="0..1" />
-          <End Role="Logins" Type="Self.Logins" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserRoles">
-              <PropertyRef Name="RooliID" />
-            </Principal>
-            <Dependent Role="Logins">
-              <PropertyRef Name="Rooli" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -107,26 +112,24 @@ warning 6002: The table/view 'KirjastoProjekti.dbo.kategoriatNimetJaViittaukset'
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="PROC_Lis___Koordinaatit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" StoreFunctionName="PROC_Lis��_Koordinaatit">
-          <Parameter Name="ID" Type="int" Mode="In" />
-        </Function>
         <Function Name="PROC_Poista_Ja_Siirra_Sub" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ID" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="KirjastoProjektiModelStoreContainer">
+          <EntitySet Name="InfoTekstit" EntityType="Self.InfoTekstit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Kategoria" EntityType="Self.Kategoria" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Kieli" EntityType="Self.Kieli" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Koordinaatit" EntityType="Self.Koordinaatit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Logins" EntityType="Self.Logins" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tekstit" EntityType="Self.Tekstit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_InfoTekstit_Tekstit" Association="Self.FK_InfoTekstit_Tekstit">
+            <End Role="Tekstit" EntitySet="Tekstit" />
+            <End Role="InfoTekstit" EntitySet="InfoTekstit" />
+          </AssociationSet>
           <AssociationSet Name="FK_KoordinaattiToKategoria" Association="Self.FK_KoordinaattiToKategoria">
             <End Role="Kategoria" EntitySet="Kategoria" />
             <End Role="Koordinaatit" EntitySet="Koordinaatit" />
-          </AssociationSet>
-          <AssociationSet Name="FK_RooliToUserRoles" Association="Self.FK_RooliToUserRoles">
-            <End Role="UserRoles" EntitySet="UserRoles" />
-            <End Role="Logins" EntitySet="Logins" />
           </AssociationSet>
           <AssociationSet Name="FK_TekstiToKategoria" Association="Self.FK_TekstiToKategoria">
             <End Role="Kategoria" EntitySet="Kategoria" />
@@ -137,8 +140,7 @@ warning 6002: The table/view 'KirjastoProjekti.dbo.kategoriatNimetJaViittaukset'
             <End Role="Tekstit" EntitySet="Tekstit" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="KirjastoProjektiModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -171,7 +173,7 @@ warning 6002: The table/view 'KirjastoProjekti.dbo.kategoriatNimetJaViittaukset'
           <Property Name="width" Type="Int32" />
           <Property Name="height" Type="Int32" />
           <Property Name="radius" Type="Int32" />
-          <Property Name="kerros" Type="Int32" />
+          <Property Name="kerros" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Kategoria" Relationship="Self.FK_KoordinaattiToKategoria" FromRole="Koordinaatit" ToRole="Kategoria" />
         </EntityType>
         <EntityType Name="Logins">
@@ -194,6 +196,7 @@ warning 6002: The table/view 'KirjastoProjekti.dbo.kategoriatNimetJaViittaukset'
           <Property Name="ReferTo" Type="Int32" />
           <NavigationProperty Name="Kategoria" Relationship="Self.FK_TekstiToKategoria" FromRole="Tekstit" ToRole="Kategoria" />
           <NavigationProperty Name="Kieli" Relationship="Self.FK_TekstiToKieli" FromRole="Tekstit" ToRole="Kieli" />
+          <NavigationProperty Name="InfoTekstit" Relationship="KirjastoProjektiModel.FK_InfoTekstit_Tekstit" FromRole="Tekstit" ToRole="InfoTekstit" />
         </EntityType>
         <EntityType Name="UserRoles">
           <Key>
@@ -277,9 +280,34 @@ warning 6002: The table/view 'KirjastoProjekti.dbo.kategoriatNimetJaViittaukset'
             <Parameter Name="ID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PROC_Poista_Ja_Siirra_Sub">
-            <Parameter Name="ID" Mode="In" Type="Int32" />
+          <Parameter Name="ID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="InfoTekstit" EntityType="KirjastoProjektiModel.InfoTekstit" />
+          <AssociationSet Name="FK_InfoTekstit_Tekstit" Association="KirjastoProjektiModel.FK_InfoTekstit_Tekstit">
+            <End Role="Tekstit" EntitySet="Tekstit" />
+            <End Role="InfoTekstit" EntitySet="InfoTekstit" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="InfoTekstit">
+          <Key>
+            <PropertyRef Name="Infotext_ID" />
+          </Key>
+          <Property Name="Infotext_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InfotextContent" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Tekstit" Relationship="KirjastoProjektiModel.FK_InfoTekstit_Tekstit" FromRole="InfoTekstit" ToRole="Tekstit" />
+        </EntityType>
+        <Association Name="FK_InfoTekstit_Tekstit">
+          <End Type="KirjastoProjektiModel.Tekstit" Role="Tekstit" Multiplicity="1" />
+          <End Type="KirjastoProjektiModel.InfoTekstit" Role="InfoTekstit" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Tekstit">
+              <PropertyRef Name="TekstiID" />
+            </Principal>
+            <Dependent Role="InfoTekstit">
+              <PropertyRef Name="Infotext_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -344,8 +372,15 @@ warning 6002: The table/view 'KirjastoProjekti.dbo.kategoriatNimetJaViittaukset'
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="PROC_Lis___Koordinaatit" FunctionName="KirjastoProjektiModel.Store.PROC_Lis___Koordinaatit" />
           <FunctionImportMapping FunctionImportName="PROC_Poista_Ja_Siirra_Sub" FunctionName="KirjastoProjektiModel.Store.PROC_Poista_Ja_Siirra_Sub" />
+          <EntitySetMapping Name="InfoTekstit">
+            <EntityTypeMapping TypeName="KirjastoProjektiModel.InfoTekstit">
+              <MappingFragment StoreEntitySet="InfoTekstit">
+                <ScalarProperty Name="InfotextContent" ColumnName="InfotextContent" />
+                <ScalarProperty Name="Infotext_ID" ColumnName="Infotext_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
