@@ -33,18 +33,30 @@
         //Lasketaan kuinka monta buttonia tulostuu ruudulle. Jos enemmän kuin 6, tulostetaan Loppuun ja Alkuun buttonit skrollausta varten.(LL)
         $(function () {
             var buttons = $('.buttonsDiv button').length;
-            console.log(buttons);
             if (buttons > 6) { // Tätä määrää voi muuttaa halutessa
                 console.log("More than 6 buttons");
                 $('.scrollButton').show();
             }
             else {
-                console.log("Less than 6 buttons");
                 $('.scrollButton').hide();
             }
         });
 
-        $(document).ready(function () {
+
+        //scrip tarkistaa jokaisen kategorian info tekstin(infoKuva class) , ja jos ne löytyy, vaihtaa displayin from none to ""
+                //täällä tavalla ei tule system reference null errors jos ei ole info teksti kategorialle
+        $('.infoKuva').each(function () {
+            var datacont = $(this).attr('data-content');   
+            if (datacont.length > 0) {
+
+                $(this).css("display", "");
+            }
+
+        });
+
+//bs jquery that enables poppers for additional information to categories
+            $(document).ready(function () {
+            
             $('[data-toggle="popover"]').popover();
         });
     </script>
@@ -90,10 +102,11 @@
                 <div class="col-md pt-3 buttonBody">
                     @*muutin koordinaatti parameti item.KategoriaIdksi-sitten kontroller tarkistaa sitä onko koordinaatti taulussa sellasta ZK*@
                     <div style="position:relative">
-                        <button type="button" class="button buttonVäri" style="display:inline-block" onclick="location.href='@Url.Action("Kategoriat", "User", new { referi = item.Kategoria.ReferTo, id = item.ReferTo, koordinaatit = item.Kategoria.KategoriaID, nimi = item.Teksti, luokka = item.Kategoria.Class, dublikaatti = item.Kategoria.SN})'">@Html.DisplayFor(modelItem => item.Teksti)</button>
-                        <a href="#" data-toggle="popover" title=""  data-content="Tänne voi tulla lisää tekstiä vaikka miten paljon. Kysymys vaan se että tulisiko 3lla eri kielellä
-                           pitkä selitystä jokaisella kategorialle, tai miten se hoituis. Sitten niitä tietoja pitää päivittäkin.">
-                        <img src="~/Icons/info-square.svg" style="fill:white; width:30px;height:30px; position:absolute; bottom:4px; float:left; margin-left:1px   " /></a>
+                        <button type="button" class="button buttonVäri" style="display:inline-block" onclick="location.href='@Url.Action("Kategoriat", "User", new { referi = item.Kategoria.ReferTo, id = item.ReferTo, koordinaatit = item.Kategoria.KategoriaID, nimi = item.Teksti, luokka = item.Kategoria.Class, dublikaatti = item.Kategoria.SN })'">@Html.DisplayFor(modelItem => item.Teksti)</button>
+                        <a href="#1" >
+                           
+                        <img class="infoKuva" src="~/Icons/info-square.svg"data-toggle="popover" title=""  data-content="@Html.DisplayFor(modelItem => item.InfoTekstit.InfotextContent)" style="display: none;  width: 25px; height: 25px; position: absolute; bottom: 4px; float: left; margin-left: 1px " />
+                        </a>
                     </div>
                 </div>    
                     }

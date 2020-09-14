@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Services.Description;
 using KirjastoAppScrum.Models;
+using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -20,8 +21,10 @@ namespace KirjastoAppScrum.Controllers
 
         public ActionResult Kategoriat(string kieli, int? referi, int? id, int? koordinaatit, int? luokka, int? dublikaatti)
         {
-            var lista = from t in db.Tekstit.Include(t => t.Kategoria).Include(t => t.Kategoria.Koordinaatit).OrderBy(t => t.Teksti)
+            var lista = from t in db.Tekstit.Include(t => t.Kategoria).Include(t => t.Kategoria.Koordinaatit).Include(t=>t.InfoTekstit).OrderBy(t => t.Teksti)
                         select t;
+
+
 
             string setLang = "";
 
