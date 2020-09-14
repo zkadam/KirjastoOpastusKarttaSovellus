@@ -8,7 +8,7 @@
     display: inline-block;
     font-family: inherit;
     font-size: 25px;
-    margin: 20px 18px;
+    margin: 20px 0px;
     border-radius: 12px;
     font-weight: bold;
     box-shadow: 0 9px #999;
@@ -19,6 +19,7 @@
     background-color: #113c68; /*Tumman merensininen(Näyttö default)*/
     font-weight: bold !important;
     font-size: 25px !important;
+    position:relative;
 }
 .buttonBody .button {
 

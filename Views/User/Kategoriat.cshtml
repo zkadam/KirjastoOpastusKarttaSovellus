@@ -43,6 +43,10 @@
                 $('.scrollButton').hide();
             }
         });
+
+        $(document).ready(function () {
+            $('[data-toggle="popover"]').popover();
+        });
     </script>
 
     @*Smooth scrolling efekti Loppuun ja Alkuun buttoneille.(LL)*@
@@ -85,9 +89,14 @@
             {
                 <div class="col-md pt-3 buttonBody">
                     @*muutin koordinaatti parameti item.KategoriaIdksi-sitten kontroller tarkistaa sitä onko koordinaatti taulussa sellasta ZK*@
-                    <button type="button" class="button buttonVäri" onclick="location.href='@Url.Action("Kategoriat", "User", new { referi = item.Kategoria.ReferTo, id = item.ReferTo, koordinaatit = item.Kategoria.KategoriaID, nimi = item.Teksti, luokka = item.Kategoria.Class, dublikaatti = item.Kategoria.SN})'">@Html.DisplayFor(modelItem => item.Teksti)</button>
-                </div>
-            }
+                    <div style="position:relative">
+                        <button type="button" class="button buttonVäri" style="display:inline-block" onclick="location.href='@Url.Action("Kategoriat", "User", new { referi = item.Kategoria.ReferTo, id = item.ReferTo, koordinaatit = item.Kategoria.KategoriaID, nimi = item.Teksti, luokka = item.Kategoria.Class, dublikaatti = item.Kategoria.SN})'">@Html.DisplayFor(modelItem => item.Teksti)</button>
+                        <a href="#" data-toggle="popover" title=""  data-content="Tänne voi tulla lisää tekstiä vaikka miten paljon. Kysymys vaan se että tulisiko 3lla eri kielellä
+                           pitkä selitystä jokaisella kategorialle, tai miten se hoituis. Sitten niitä tietoja pitää päivittäkin.">
+                        <img src="~/Icons/info-square.svg" style="fill:white; width:30px;height:30px; position:absolute; bottom:4px; float:left; margin-left:1px   " /></a>
+                    </div>
+                </div>    
+                    }
 
         </div>
         <div id="end">
