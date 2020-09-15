@@ -1,0 +1,34 @@
+﻿@model KirjastoAppScrum.Models.InfoTekstit
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>InfoTekstit</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.InfotextContent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InfotextContent)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tekstit.KieliID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tekstit.KieliID)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Infotext_ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -250,7 +250,7 @@ namespace KirjastoAppScrum.Controllers
                 {
                     if (kategoria.Class != 3)
                     {
-                        var lista = from k in db.Tekstit.Include(k => k.Kategoria)
+                        var lista = from k in db.Tekstit.Include(k => k.Kategoria).Include(k=>k.InfoTekstit)
                                     select k;
 
                         lista = lista.Where(k => k.KieliID == kieliKoodi && k.ReferTo == kategoria.KategoriaID);
@@ -397,7 +397,7 @@ namespace KirjastoAppScrum.Controllers
                 var kielet = from k in db.Kieli select k;
                 foreach (var kieli in kielet)
                 {
-                    var tekstit = (from t in db.Tekstit
+                    var tekstit = (from t in db.Tekstit.Include(t=>t.InfoTekstit)
                                    where (t.KieliID == kieli.KieliID) &&
                                    (t.Kategoria.KategoriaID == kateg.KategoriaID)
                                    select t).FirstOrDefault();
@@ -405,17 +405,24 @@ namespace KirjastoAppScrum.Controllers
                     if (kieli.KieliID == "FI")
                     {
                         kategId.TekstiFI = tekstit.Teksti;
+                        kategId.InfoTekstiFI = tekstit.InfoTekstit.InfotextContent;
                     }
 
                     else if (kieli.KieliID == "SE")
                     {
                         kategId.TekstiSE = tekstit.Teksti;
+                        kategId.InfoTekstiSE = tekstit.InfoTekstit.InfotextContent;
+
                     }
 
                     else if (kieli.KieliID == "EN")
                     {
                         kategId.TekstiEN = tekstit.Teksti;
+                        kategId.InfoTekstiEN = tekstit.InfoTekstit.InfotextContent;
+
                     }
+
+
                 }
                 IList<SelectListItem> luokat = new List<SelectListItem>();
                 luokat.Add(new SelectListItem() { Text = "Pääkategoria", Value = 1.ToString() });

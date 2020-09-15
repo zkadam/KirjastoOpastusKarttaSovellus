@@ -239,7 +239,13 @@ a:hover {
 /*background-color: #e6bbb4;*/ /*(Ruusu) Vaaleampipunainen */
 
 
-
+/*---------------------------------------------------INFO TEXT EDITING-------------------------------------*/
+/*.infoTextField {*/
+/*    float: right;
+*/    /*position: relative;
+    top: 0;
+    right: 0;
+}*/
 /*----------------------------------------------scrollit näkyviin androidille jos on tarve*/
 .scrollDiv {
     overflow-y: auto;

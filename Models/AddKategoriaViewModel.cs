@@ -17,5 +17,8 @@ namespace KirjastoAppScrum.Models
         public Nullable<int> ReferTo { get; set; }
         public int Class { get; set; }
 
+        public string InfoTekstiFI { get; set; }
+        public string InfoTekstiSE { get; set; }
+        public string InfoTekstiEN { get; set; }
     }
 }

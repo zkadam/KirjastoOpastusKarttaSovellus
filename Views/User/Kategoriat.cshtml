@@ -32,15 +32,15 @@
     <script type="text/javascript">
         //Lasketaan kuinka monta buttonia tulostuu ruudulle. Jos enemmän kuin 6, tulostetaan Loppuun ja Alkuun buttonit skrollausta varten.(LL)
         $(function () {
-            var buttons = $('.buttonsDiv button').length;
-            if (buttons > 6) { // Tätä määrää voi muuttaa halutessa
-                console.log("More than 6 buttons");
-                $('.scrollButton').show();
-            }
-            else {
-                $('.scrollButton').hide();
-            }
-        });
+                    var buttons = $('.buttonsDiv button').length;
+                    if (buttons > 6) { // Tätä määrää voi muuttaa halutessa
+                        console.log("More than 6 buttons");
+                        $('.scrollButton').show();
+                    }
+                    else {
+                        $('.scrollButton').hide();
+                    }
+                });
 
 
         //scrip tarkistaa jokaisen kategorian info tekstin(infoKuva class) , ja jos ne löytyy, vaihtaa displayin from none to ""
