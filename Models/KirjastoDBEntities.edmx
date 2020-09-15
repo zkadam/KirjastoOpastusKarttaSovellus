@@ -9,7 +9,7 @@
           <Key>
             <PropertyRef Name="Infotext_ID" />
           </Key>
-          <Property Name="Infotext_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Infotext_ID" Type="int" Nullable="false" />
           <Property Name="InfotextContent" Type="nvarchar" MaxLength="550" />
         </EntityType>
         <EntityType Name="Kategoria">
@@ -292,7 +292,7 @@
           <Key>
             <PropertyRef Name="Infotext_ID" />
           </Key>
-          <Property Name="Infotext_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Infotext_ID" Type="Int32" Nullable="false" />
           <Property Name="InfotextContent" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Tekstit" Relationship="KirjastoProjektiModel.FK_InfoTekstit_Tekstit" FromRole="InfoTekstit" ToRole="Tekstit" />
         </EntityType>

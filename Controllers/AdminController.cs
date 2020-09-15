@@ -397,29 +397,55 @@ namespace KirjastoAppScrum.Controllers
                 var kielet = from k in db.Kieli select k;
                 foreach (var kieli in kielet)
                 {
-                    var tekstit = (from t in db.Tekstit.Include(t=>t.InfoTekstit)
+                    var tekstit = (from t in db.Tekstit.Include(t=>t.InfoTekstit).DefaultIfEmpty()
                                    where (t.KieliID == kieli.KieliID) &&
                                    (t.Kategoria.KategoriaID == kateg.KategoriaID)
                                    select t).FirstOrDefault();
 
-                    if (kieli.KieliID == "FI")
+
+                    var infot = db.InfoTekstit.Find(tekstit.TekstiID);
+                    if (infot != null)
                     {
-                        kategId.TekstiFI = tekstit.Teksti;
-                        kategId.InfoTekstiFI = tekstit.InfoTekstit.InfotextContent;
+
+                        if (kieli.KieliID == "FI")
+                        {
+                            kategId.TekstiFI = tekstit.Teksti;
+                            kategId.InfoTekstiFI = tekstit.InfoTekstit.InfotextContent;
+                        }
+
+                        else if (kieli.KieliID == "SE")
+                        {
+                            kategId.TekstiSE = tekstit.Teksti;
+                            kategId.InfoTekstiSE = tekstit.InfoTekstit.InfotextContent;
+
+                        }
+
+                        else if (kieli.KieliID == "EN")
+                        {
+                            kategId.TekstiEN = tekstit.Teksti;
+                            kategId.InfoTekstiEN = tekstit.InfoTekstit.InfotextContent;
+                        }
                     }
-
-                    else if (kieli.KieliID == "SE")
+                    else
                     {
-                        kategId.TekstiSE = tekstit.Teksti;
-                        kategId.InfoTekstiSE = tekstit.InfoTekstit.InfotextContent;
+                        if (kieli.KieliID == "FI")
+                        {
+                            kategId.TekstiFI = tekstit.Teksti;
+                            kategId.InfoTekstiFI = "";
+                        }
 
-                    }
+                        else if (kieli.KieliID == "SE")
+                        {
+                            kategId.TekstiSE = tekstit.Teksti;
+                            kategId.InfoTekstiSE = "";
 
-                    else if (kieli.KieliID == "EN")
-                    {
-                        kategId.TekstiEN = tekstit.Teksti;
-                        kategId.InfoTekstiEN = tekstit.InfoTekstit.InfotextContent;
+                        }
 
+                        else if (kieli.KieliID == "EN")
+                        {
+                            kategId.TekstiEN = tekstit.Teksti;
+                            kategId.InfoTekstiEN = "";
+                        }
                     }
 
 
@@ -485,29 +511,74 @@ namespace KirjastoAppScrum.Controllers
                 var tekstit = (from t in db.Tekstit
                                where (t.KieliID == kieli.KieliID) &&
                                (t.Kategoria.KategoriaID == kategoriaID)
-                               select t).Include(t=>t.InfoTekstit).FirstOrDefault();
-                
+                               select t).FirstOrDefault();
 
+                var infot = db.InfoTekstit.Find(tekstit.TekstiID);
                 if (kieli.KieliID == "FI")
                 {
                     //db.Entry(tekstit).State = EntityState.Modified;
                     tekstit.Teksti = model.TekstiFI;
-                    tekstit.InfoTekstit.InfotextContent = model.InfoTekstiFI;
+                    
                     db.Entry(tekstit).State = EntityState.Modified;
+                    
+                    //jos on  olemassa infoteksti ja edit textfield ei ole tyhjä, tallennetaan muutokset
+                    if (infot !=null && !String.IsNullOrEmpty(model.InfoTekstiFI))
+                    {
+                        infot.InfotextContent = model.InfoTekstiFI;
+                        db.Entry(infot).State = EntityState.Modified;
+                    }
+                    //jos ei ole olemassa infoteksti mutta kirjoitettiin infotexti edit kenttään, tallennetaan uusi infotekstin
+                    else if (infot ==null && !String.IsNullOrEmpty(model.InfoTekstiFI))
+                    {
+                        var infoTekst = new InfoTekstit
+                        {
+                            Infotext_ID=tekstit.TekstiID,
+                            InfotextContent = model.InfoTekstiFI
+                        };
+                        db.InfoTekstit.Add(infoTekst);
+                    }
                 }
 
                 else if (kieli.KieliID == "SE")
                 {
                     tekstit.Teksti = model.TekstiSE;
-                    tekstit.InfoTekstit.InfotextContent = model.InfoTekstiSE;
                     db.Entry(tekstit).State = EntityState.Modified;
+                    if (infot != null && !String.IsNullOrEmpty(model.InfoTekstiSE))
+                    {
+                        infot.InfotextContent = model.InfoTekstiSE;
+                        db.Entry(infot).State = EntityState.Modified;
+                    }
+                    //jos ei ole olemassa infoteksti mutta kirjoitettiin infotexti edit kenttään, tallennetaan uusi infotekstin
+                    else if (infot == null && !String.IsNullOrEmpty(model.InfoTekstiSE))
+                    {
+                        var infoTekst = new InfoTekstit
+                        {
+                            Infotext_ID = tekstit.TekstiID,
+                            InfotextContent = model.InfoTekstiSE
+                        };
+                        db.InfoTekstit.Add(infoTekst);
+                    }
                 }
 
                 else if (kieli.KieliID == "EN")
                 {
                     tekstit.Teksti = model.TekstiEN;
-                    tekstit.InfoTekstit.InfotextContent = model.InfoTekstiEN;
                     db.Entry(tekstit).State = EntityState.Modified;
+                    if (infot != null && !String.IsNullOrEmpty(model.InfoTekstiEN))
+                    {
+                        infot.InfotextContent = model.InfoTekstiEN;
+                        db.Entry(infot).State = EntityState.Modified;
+                    }
+                    //jos ei ole olemassa infoteksti mutta kirjoitettiin infotexti edit kenttään, tallennetaan uusi infotekstin
+                    else if (infot == null && !String.IsNullOrEmpty(model.InfoTekstiEN))
+                    {
+                        var infoTekst = new InfoTekstit
+                        {
+                            Infotext_ID = tekstit.TekstiID,
+                            InfotextContent = model.InfoTekstiEN
+                        };
+                        db.InfoTekstit.Add(infoTekst);
+                    }
                 }
             }
             db.SaveChanges(); // tallennetaan tekstimuutokset tietokantaan
