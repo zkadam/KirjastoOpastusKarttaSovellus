@@ -537,6 +537,11 @@ namespace KirjastoAppScrum.Controllers
                         };
                         db.InfoTekstit.Add(infoTekst);
                     }
+                    //jos löytyy kannasta mutta tekstikenttä on tyjännetty, poistetaan sen tietokannasta
+                    else if (infot != null && String.IsNullOrEmpty(model.InfoTekstiFI))
+                    {
+                        db.InfoTekstit.Remove(infot);
+                    }
                 }
 
                 else if (kieli.KieliID == "SE")
@@ -557,6 +562,11 @@ namespace KirjastoAppScrum.Controllers
                             InfotextContent = model.InfoTekstiSE
                         };
                         db.InfoTekstit.Add(infoTekst);
+                    }
+                    //jos löytyy kannasta mutta tekstikenttä on tyjännetty, poistetaan sen tietokannasta
+                    else if (infot != null && String.IsNullOrEmpty(model.InfoTekstiSE))
+                    {
+                        db.InfoTekstit.Remove(infot);
                     }
                 }
 
@@ -579,7 +589,13 @@ namespace KirjastoAppScrum.Controllers
                         };
                         db.InfoTekstit.Add(infoTekst);
                     }
+                    //jos löytyy kannasta mutta tekstikenttä on tyjännetty, poistetaan sen tietokannasta
+                    else if (infot != null && String.IsNullOrEmpty(model.InfoTekstiEN))
+                    {
+                        db.InfoTekstit.Remove(infot);
+                    }
                 }
+               
             }
             db.SaveChanges(); // tallennetaan tekstimuutokset tietokantaan
 
