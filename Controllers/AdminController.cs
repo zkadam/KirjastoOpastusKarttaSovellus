@@ -485,23 +485,28 @@ namespace KirjastoAppScrum.Controllers
                 var tekstit = (from t in db.Tekstit
                                where (t.KieliID == kieli.KieliID) &&
                                (t.Kategoria.KategoriaID == kategoriaID)
-                               select t).FirstOrDefault();
+                               select t).Include(t=>t.InfoTekstit).FirstOrDefault();
+                
 
                 if (kieli.KieliID == "FI")
                 {
+                    //db.Entry(tekstit).State = EntityState.Modified;
                     tekstit.Teksti = model.TekstiFI;
+                    tekstit.InfoTekstit.InfotextContent = model.InfoTekstiFI;
                     db.Entry(tekstit).State = EntityState.Modified;
                 }
 
                 else if (kieli.KieliID == "SE")
                 {
                     tekstit.Teksti = model.TekstiSE;
+                    tekstit.InfoTekstit.InfotextContent = model.InfoTekstiSE;
                     db.Entry(tekstit).State = EntityState.Modified;
                 }
 
                 else if (kieli.KieliID == "EN")
                 {
                     tekstit.Teksti = model.TekstiEN;
+                    tekstit.InfoTekstit.InfotextContent = model.InfoTekstiEN;
                     db.Entry(tekstit).State = EntityState.Modified;
                 }
             }
