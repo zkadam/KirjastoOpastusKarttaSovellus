@@ -49,7 +49,7 @@
     HUOM2 id="container" - siihen viitataan scriptillä! ZK
     -->
 
-<div id="container" style="text-align:center; ">
+<div id="container" style="position:relative;text-align:center; width:78vw ">
 
     @*putting the library picture to the background , setting the z-index to -1 so that the canvas objects are being drawn over it
         if condition decides if it's first or second floor*@
@@ -57,13 +57,16 @@
     @*TOSI TÄRKEÄ IMAGE JA KANVASRAATIO ASETUKSET canvakselle ja kuville jotka ovat kanvaksen alla:
         MAX-WIDTH 95VW - eli maximissa menää 95% näytön läväyydestä,
         HEIGHT:AUTO - eli kuvan leväytään mukaan joka on 95, automaattisesti muokautu sillä että aspect ratio pysyy hyvänä -ZK*@
-    <img id="KirjastonKarttaKuva1" width="3840" height="1881" style="position: absolute; z-index:-5;display:none; max-width:78vw; height:auto" src="~/Maps/1krs_Tyhja_V5.svg" alt="Ensimmäinen kerros" />
-    <img id="KirjastonKarttaKuva2" width="3840" height="1881" style="position: absolute; z-index:-5; display:none; max-width:78vw; height:auto" src="~/Maps/2krs_Tyhja_V5.svg" alt="Toinen kerros" />
+    <img id="KirjastonKarttaKuva1" width="3840" height="1881" style="position: absolute;top:0;left:0; z-index:-5;display:none;  height:auto" src="~/Maps/1krs_Tyhja_V5.svg" alt="Ensimmäinen kerros" />
+    <img id="KirjastonKarttaKuva2" width="3840" height="1881" style="position: absolute;top:0;left:0; z-index:-5; display:none; height:auto" src="~/Maps/2krs_Tyhja_V5.svg" alt="Toinen kerros" />
+    
+  
     @*defining the canvas, putting z-index to higher so it will be over  background*@
-    <canvas id="myCanvas" width="3840" height="1881" style="position: relative; z-index:10;max-width:78vw; height:auto " onload="drawingRectangle">
-        Your browser does not support the HTML5 canvas tag.
-
-    </canvas>
+<canvas id="myCanvas" width="3840" height="1881" style="position: absolute;top:0;left:0; z-index:10; height:auto " onload="drawingRectangle">
+    Your browser does not support the HTML5 canvas tag.
+</canvas>
+<div id="KirjastonKarttaKuva3" style="width:165px; height:135px; position: absolute;top:1641px;left:2460px; z-index:20; background-color:black">
+</div>
 </div>
 
 @*kerros vaihto buttonien value käytetään js kartta pohjan sekä kordinaattien kerros filteröintiin
