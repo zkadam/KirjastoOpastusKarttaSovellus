@@ -240,12 +240,9 @@ a:hover {
 
 
 /*---------------------------------------------------INFO TEXT EDITING-------------------------------------*/
-/*.infoTextField {*/
-/*    float: right;
-*/    /*position: relative;
-    top: 0;
-    right: 0;
-}*/
+.separator{text-align:left;
+
+}
 /*----------------------------------------------scrollit näkyviin androidille jos on tarve*/
 .scrollDiv {
     overflow-y: auto;

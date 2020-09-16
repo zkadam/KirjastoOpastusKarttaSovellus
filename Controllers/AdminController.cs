@@ -309,17 +309,36 @@ namespace KirjastoAppScrum.Controllers
             var kategoriaID = kategoria.KategoriaID;   // otetaan lisätyn kategorian kategoriaID tietoon
 
             var kielet = from k in db.Kieli select k;   // Muutetaan jokaisen uuden tekstin teksti kenttään uudet kirjoitetut tekstit
+            
             foreach (var kieli in kielet)
             {
                 var tekstit = (from t in db.Tekstit
                                where (t.KieliID == kieli.KieliID) &&
                                (t.Kategoria.KategoriaID == kategoriaID)
                                select t).FirstOrDefault();
-
+                // jokaisen infot  haetan kenttältä -jos ei ole tyhjä ohjelma luo infotekstin
+                   var infot = db.InfoTekstit.Find(tekstit.TekstiID);
+               
                 if (kieli.KieliID == "FI")
                 {
                     tekstit.Teksti = model.TekstiFI;
                     db.Entry(tekstit).State = EntityState.Modified;
+                    //jos on  olemassa infoteksti ja edit textfield ei ole tyhjä, tallennetaan muutokset
+                    if (infot != null && !String.IsNullOrEmpty(model.InfoTekstiFI))
+                    {
+                        infot.InfotextContent = model.InfoTekstiFI;
+                        db.Entry(infot).State = EntityState.Modified;
+                    }
+                    //jos ei ole olemassa infoteksti mutta kirjoitettiin infotexti edit kenttään, tallennetaan uusi infotekstin
+                    else if (infot == null && !String.IsNullOrEmpty(model.InfoTekstiFI))
+                    {
+                        var infoTekst = new InfoTekstit
+                        {
+                            Infotext_ID = tekstit.TekstiID,
+                            InfotextContent = model.InfoTekstiFI
+                        };
+                        db.InfoTekstit.Add(infoTekst);
+                    }
                 }
 
                 else if (kieli.KieliID == "SE")
@@ -334,6 +353,22 @@ namespace KirjastoAppScrum.Controllers
                         tekstit.Teksti = model.TekstiSE;
                         db.Entry(tekstit).State = EntityState.Modified;
                     }
+
+                    if (infot != null && !String.IsNullOrEmpty(model.InfoTekstiSE))
+                    {
+                        infot.InfotextContent = model.InfoTekstiSE;
+                        db.Entry(infot).State = EntityState.Modified;
+                    }
+                    //jos ei ole olemassa infoteksti mutta kirjoitettiin infotexti edit kenttään, tallennetaan uusi infotekstin
+                    else if (infot == null && !String.IsNullOrEmpty(model.InfoTekstiSE))
+                    {
+                        var infoTekst = new InfoTekstit
+                        {
+                            Infotext_ID = tekstit.TekstiID,
+                            InfotextContent = model.InfoTekstiSE
+                        };
+                        db.InfoTekstit.Add(infoTekst);
+                    }
                 }
 
                 else if (kieli.KieliID == "EN")
@@ -347,6 +382,21 @@ namespace KirjastoAppScrum.Controllers
                     {
                         tekstit.Teksti = model.TekstiEN;
                         db.Entry(tekstit).State = EntityState.Modified;
+                    }
+                    if (infot != null && !String.IsNullOrEmpty(model.InfoTekstiEN))
+                    {
+                        infot.InfotextContent = model.InfoTekstiEN;
+                        db.Entry(infot).State = EntityState.Modified;
+                    }
+                    //jos ei ole olemassa infoteksti mutta kirjoitettiin infotexti edit kenttään, tallennetaan uusi infotekstin
+                    else if (infot == null && !String.IsNullOrEmpty(model.InfoTekstiEN))
+                    {
+                        var infoTekst = new InfoTekstit
+                        {
+                            Infotext_ID = tekstit.TekstiID,
+                            InfotextContent = model.InfoTekstiEN
+                        };
+                        db.InfoTekstit.Add(infoTekst);
                     }
                 }
             }
@@ -393,7 +443,7 @@ namespace KirjastoAppScrum.Controllers
                     Class = kateg.Class.GetValueOrDefault()
                 };
 
-                // Muutetaan jokaisen kategorian tekstin teksti kenttään uudet muokatut tekstit
+                // Muutetaan jokaisen kategorian tekstin teksti kenttään uudet muokatut tekstit ja infotekstit
                 var kielet = from k in db.Kieli select k;
                 foreach (var kieli in kielet)
                 {
@@ -513,12 +563,13 @@ namespace KirjastoAppScrum.Controllers
                                (t.Kategoria.KategoriaID == kategoriaID)
                                select t).FirstOrDefault();
 
+                //jokaisen infot-n haetan kenttältä jos ei ole tyhjä ohjelma luo infotekstin
                 var infot = db.InfoTekstit.Find(tekstit.TekstiID);
+             
+     //--------------------------------------------------------SUOMEN KIELISET TEKSTIT
                 if (kieli.KieliID == "FI")
                 {
-                    //db.Entry(tekstit).State = EntityState.Modified;
                     tekstit.Teksti = model.TekstiFI;
-                    
                     db.Entry(tekstit).State = EntityState.Modified;
                     
                     //jos on  olemassa infoteksti ja edit textfield ei ole tyhjä, tallennetaan muutokset
@@ -543,7 +594,7 @@ namespace KirjastoAppScrum.Controllers
                         db.InfoTekstit.Remove(infot);
                     }
                 }
-
+//---------------------------------------------------------RUOTSIN KIELISET TEKSTIT
                 else if (kieli.KieliID == "SE")
                 {
                     tekstit.Teksti = model.TekstiSE;
@@ -569,7 +620,7 @@ namespace KirjastoAppScrum.Controllers
                         db.InfoTekstit.Remove(infot);
                     }
                 }
-
+//-------------------------------------------------------------ENGLANNIN KIELISET TEKSTIT
                 else if (kieli.KieliID == "EN")
                 {
                     tekstit.Teksti = model.TekstiEN;
