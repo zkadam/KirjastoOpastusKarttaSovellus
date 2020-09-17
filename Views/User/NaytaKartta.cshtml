@@ -68,10 +68,9 @@
 
     </canvas>
 </div>
+@* area map johon javascriptille appendataan kaikki koordinaatit *@
 <map name="kuvaKartta" id="kuvaKartta">
-    <area class="placePic" shape="rect" coords="34,44,270,350" alt="Computer" href="computer.htm">
-    <area class="placePic" shape="rect" coords="290,172,333,250" alt="Phone" href="phone.htm">
-    <area class="placePic" shape="circle" coords="337,300,44" alt="Coffee" href="coffee.htm">
+
 </map>
 
 
@@ -111,14 +110,35 @@
 
 <script charset="UTF-8">
 
-
     //kun sivu latautuu kutsutaan canvas piirto funktion, johon välitetään eka kerroksen parametrit ZK
     window.onload = drawTheCanvas("KirjastonKarttaKuva1", 1);
+    window.addEventListener("resize", function clickKerrosButton() {
+        if (document.getElementById("KirjastonKarttaKuva1").style.display != "none") {
+            console.log('we are in if - click first floor');
+            drawTheCanvas("KirjastonKarttaKuva1", 1)
+
+        }
+        else {
+
+            console.log('we are in else- click second floor');
+            drawTheCanvas("KirjastonKarttaKuva2", 2);
+        }
+
+    });
 
     //canvas piirtyy aina kun kerros button on painettu ZK
 
     function drawTheCanvas(imgIdPar, floorPar) {
-        //document.getElementById("myModalBtn").click();
+
+
+        //clearing imagemap everytime so highlights will be clickable
+        var imagemap = document.getElementById('kuvaKartta');
+        while (imagemap.firstChild) {
+            imagemap.removeChild(imagemap.firstChild);
+        }
+
+
+
 
         //sijoitetaan parametrit kuvan id ja kerroksen numero ZK
         let imgId = imgIdPar;
@@ -433,32 +453,31 @@
                     }
                 }
             }
-        }
-     //----------------------------------------------------------FUNCTION FOR RESIZING IMAGE MAP COORDINATES FOR BEING CORRECT--------------------------------------//
-    window.addEventListener("resize", drawTheCanvas);
-    function mapResize(x,y,width,height,radius) {
-        console.log('resized');        //document.getElementById("demo").innerHTML = txt;
-
-        //we check hight and width of canvas
-        var newHeight = document.getElementById('myCanvas').offsetHeight;
-        var newWidth = document.getElementById('myCanvas').offsetWidth;
-        //we get the ratio by dividing the new number with the original number
-        var newHeightRatio = newHeight / 1881;
-        var newWidthRatio = newWidth / 3840
-        console.log(x, y, width, height, radius);
-        console.log(Math.round(x * newWidthRatio),Math.round(y * newHeightRatio),Math.round(width * newWidthRatio),Math.round(height*newHeightRatio), radius);
-        //console.log('height: ' + newHeight + ', width: ' + newWidth     width="3840" height="1881");
-        //<area class="placePic" shape="rect" coords="34,44,270,350" alt="Computer" href="computer.htm">
-        var newCoords = (Math.round(x * newWidthRatio)).toString() + ',' + (Math.round(y * newHeightRatio)).toString() + ',' + (Math.round((x + width) * newWidthRatio)).toString()
-            + ',' + (Math.round((y + height) * newHeightRatio)).toString();
-        var alue = document.createElement("area");
-        alue.shape = "rect";
-        alue.coords = newCoords;
-            alue.alt = "klikkaa tänne jos haluat nähdä kuvan"
-        alue.href = "https://444.hu"
-        console.log(alue);
-        document.getElementById("kuvaKartta").appendChild(alue);
     }
+    
     //-----------------------------------------------------------------------------------------------------------------------//
+        //----------------------------------------------------------FUNCTION FOR RESIZING IMAGE MAP COORDINATES FOR BEING CORRECT--------------------------------------//
+        
+       
+        function mapResize(x, y, width, height, radius) {
+            console.log('resized');        //document.getElementById("demo").innerHTML = txt;
+
+            //we check hight and width of canvas
+            var newHeight = document.getElementById('myCanvas').offsetHeight;
+            var newWidth = document.getElementById('myCanvas').offsetWidth;
+            //we get the ratio by dividing the new number with the original number
+            var newHeightRatio = newHeight / 1881;
+            var newWidthRatio = newWidth / 3840
+            //we count new coordinates by getting the original ones and multipling them with the new height or width ratio
+            var newCoords = (Math.round(x * newWidthRatio)).toString() + ',' + (Math.round(y * newHeightRatio)).toString() + ',' + (Math.round((x + width) * newWidthRatio)).toString()
+                + ',' + (Math.round((y + height) * newHeightRatio)).toString();
+            var alue = document.createElement("area");
+            alue.shape = "rect";
+            alue.coords = newCoords;
+            alue.alt = "klikkaa tänne jos haluat nähdä kuvan"
+            alue.href = "https://444.hu"
+            console.log(alue);
+            document.getElementById("kuvaKartta").appendChild(alue);
+        }
 </script>
 
