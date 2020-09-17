@@ -68,7 +68,7 @@
 
     </canvas>
 </div>
-<map name="kuvaKartta">
+<map name="kuvaKartta" id="kuvaKartta">
     <area class="placePic" shape="rect" coords="34,44,270,350" alt="Computer" href="computer.htm">
     <area class="placePic" shape="rect" coords="290,172,333,250" alt="Phone" href="phone.htm">
     <area class="placePic" shape="circle" coords="337,300,44" alt="Coffee" href="coffee.htm">
@@ -324,6 +324,7 @@
 
                             ctx.fill();
                             ctx.closePath();
+                            
 
                         } else if (shape.width) {
                             // Shadow
@@ -350,6 +351,8 @@
                             //ctx.fill();
                             //ctx.closePath();
                         }
+                        //calling the areamap clickable links resizing function so areamaps correlate with the drawen shapes
+                        mapResize(shape.x*3, shape.y*3, shape.width*3, shape.height*3, shape.radius*3);
                     }
 
                 }
@@ -431,7 +434,31 @@
                 }
             }
         }
+     //----------------------------------------------------------FUNCTION FOR RESIZING IMAGE MAP COORDINATES FOR BEING CORRECT--------------------------------------//
+    window.addEventListener("resize", drawTheCanvas);
+    function mapResize(x,y,width,height,radius) {
+        console.log('resized');        //document.getElementById("demo").innerHTML = txt;
 
+        //we check hight and width of canvas
+        var newHeight = document.getElementById('myCanvas').offsetHeight;
+        var newWidth = document.getElementById('myCanvas').offsetWidth;
+        //we get the ratio by dividing the new number with the original number
+        var newHeightRatio = newHeight / 1881;
+        var newWidthRatio = newWidth / 3840
+        console.log(x, y, width, height, radius);
+        console.log(Math.round(x * newWidthRatio),Math.round(y * newHeightRatio),Math.round(width * newWidthRatio),Math.round(height*newHeightRatio), radius);
+        //console.log('height: ' + newHeight + ', width: ' + newWidth     width="3840" height="1881");
+        //<area class="placePic" shape="rect" coords="34,44,270,350" alt="Computer" href="computer.htm">
+        var newCoords = (Math.round(x * newWidthRatio)).toString() + ',' + (Math.round(y * newHeightRatio)).toString() + ',' + (Math.round((x + width) * newWidthRatio)).toString()
+            + ',' + (Math.round((y + height) * newHeightRatio)).toString();
+        var alue = document.createElement("area");
+        alue.shape = "rect";
+        alue.coords = newCoords;
+            alue.alt = "klikkaa tänne jos haluat nähdä kuvan"
+        alue.href = "https://444.hu"
+        console.log(alue);
+        document.getElementById("kuvaKartta").appendChild(alue);
+    }
     //-----------------------------------------------------------------------------------------------------------------------//
 </script>
 
