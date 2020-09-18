@@ -34,6 +34,7 @@ namespace KirjastoAppScrum.Models
         public virtual DbSet<Tekstit> Tekstit { get; set; }
         public virtual DbSet<UserRoles> UserRoles { get; set; }
         public virtual DbSet<InfoTekstit> InfoTekstit { get; set; }
+        public virtual DbSet<Kuvat> Kuvat { get; set; }
     
         public virtual int PROC_Lis___Koordinaatit(Nullable<int> iD)
         {

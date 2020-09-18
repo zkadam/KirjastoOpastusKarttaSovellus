@@ -17,6 +17,8 @@
         <AssociationConnector Association="KirjastoProjektiModel.FK_RooliToUserRoles" ManuallyRouted="false" />
         <EntityTypeShape EntityType="KirjastoProjektiModel.InfoTekstit" Width="1.5" PointX="8.25" PointY="3.875" />
         <AssociationConnector Association="KirjastoProjektiModel.FK_InfoTekstit_Tekstit" />
+        <EntityTypeShape EntityType="KirjastoProjektiModel.Kuvat" Width="1.5" PointX="2.625" PointY="7.375" />
+        <AssociationConnector Association="KirjastoProjektiModel.Koord_Kuva_Connection" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

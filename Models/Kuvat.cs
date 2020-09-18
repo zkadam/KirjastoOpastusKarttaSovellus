@@ -12,24 +12,20 @@ namespace KirjastoAppScrum.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Koordinaatit
+    public partial class Kuvat
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Koordinaatit()
+        public Kuvat()
         {
-            this.Kuvat = new HashSet<Kuvat>();
+            this.Koordinaatit = new HashSet<Koordinaatit>();
         }
     
-        public int KoordinaattiID { get; set; }
-        public Nullable<int> startX { get; set; }
-        public Nullable<int> startY { get; set; }
-        public Nullable<int> width { get; set; }
-        public Nullable<int> height { get; set; }
-        public Nullable<int> radius { get; set; }
-        public int kerros { get; set; }
+        public int KuvaId { get; set; }
+        public string AltText { get; set; }
+        public string ImagePath { get; set; }
+        public byte[] Image { get; set; }
     
-        public virtual Kategoria Kategoria { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Kuvat> Kuvat { get; set; }
+        public virtual ICollection<Koordinaatit> Koordinaatit { get; set; }
     }
 }

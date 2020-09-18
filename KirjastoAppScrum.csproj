@@ -172,6 +172,9 @@
     <Compile Include="Models\Koordinaatit.cs">
       <DependentUpon>KirjastoDBEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Kuvat.cs">
+      <DependentUpon>KirjastoDBEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\LinkkiLista.cs" />
     <Compile Include="Models\Logins.cs">
       <DependentUpon>KirjastoDBEntities.tt</DependentUpon>

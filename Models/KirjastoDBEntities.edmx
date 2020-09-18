@@ -28,6 +28,14 @@
           <Property Name="KieliID" Type="nvarchar" MaxLength="3" Nullable="false" />
           <Property Name="Nimi" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="Koord_Kuva_Connection">
+          <Key>
+            <PropertyRef Name="KoordId" />
+            <PropertyRef Name="KuvaId" />
+          </Key>
+          <Property Name="KoordId" Type="int" Nullable="false" />
+          <Property Name="KuvaId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Koordinaatit">
           <Key>
             <PropertyRef Name="KoordinaattiID" />
@@ -39,6 +47,15 @@
           <Property Name="height" Type="int" />
           <Property Name="radius" Type="int" />
           <Property Name="kerros" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Kuvat">
+          <Key>
+            <PropertyRef Name="KuvaId" />
+          </Key>
+          <Property Name="KuvaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AltText" Type="nvarchar" MaxLength="50" />
+          <Property Name="ImagePath" Type="nvarchar" MaxLength="255" />
+          <Property Name="Image" Type="image" />
         </EntityType>
         <EntityType Name="Logins">
           <Key>
@@ -65,7 +82,9 @@
           <Property Name="RooliID" Type="nvarchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <Association Name="FK_InfoTekstit_Tekstit">
-          <End Role="Tekstit" Type="Self.Tekstit" Multiplicity="1" />
+          <End Role="Tekstit" Type="Self.Tekstit" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="InfoTekstit" Type="Self.InfoTekstit" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Tekstit">
@@ -73,6 +92,34 @@
             </Principal>
             <Dependent Role="InfoTekstit">
               <PropertyRef Name="Infotext_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Koord_Kuva_Connection">
+          <End Role="Kuvat" Type="Self.Kuvat" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Koord_Kuva_Connection" Type="Self.Koord_Kuva_Connection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kuvat">
+              <PropertyRef Name="KuvaId" />
+            </Principal>
+            <Dependent Role="Koord_Kuva_Connection">
+              <PropertyRef Name="KuvaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Koord_Kuva_Connection_Koordinaatit">
+          <End Role="Koordinaatit" Type="Self.Koordinaatit" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Koord_Kuva_Connection" Type="Self.Koord_Kuva_Connection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Koordinaatit">
+              <PropertyRef Name="KoordinaattiID" />
+            </Principal>
+            <Dependent Role="Koord_Kuva_Connection">
+              <PropertyRef Name="KoordId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -119,13 +166,23 @@
           <EntitySet Name="InfoTekstit" EntityType="Self.InfoTekstit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Kategoria" EntityType="Self.Kategoria" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Kieli" EntityType="Self.Kieli" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Koord_Kuva_Connection" EntityType="Self.Koord_Kuva_Connection" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Koordinaatit" EntityType="Self.Koordinaatit" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kuvat" EntityType="Self.Kuvat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Logins" EntityType="Self.Logins" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tekstit" EntityType="Self.Tekstit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_InfoTekstit_Tekstit" Association="Self.FK_InfoTekstit_Tekstit">
             <End Role="Tekstit" EntitySet="Tekstit" />
             <End Role="InfoTekstit" EntitySet="InfoTekstit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Koord_Kuva_Connection" Association="Self.FK_Koord_Kuva_Connection">
+            <End Role="Kuvat" EntitySet="Kuvat" />
+            <End Role="Koord_Kuva_Connection" EntitySet="Koord_Kuva_Connection" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Koord_Kuva_Connection_Koordinaatit" Association="Self.FK_Koord_Kuva_Connection_Koordinaatit">
+            <End Role="Koordinaatit" EntitySet="Koordinaatit" />
+            <End Role="Koord_Kuva_Connection" EntitySet="Koord_Kuva_Connection" />
           </AssociationSet>
           <AssociationSet Name="FK_KoordinaattiToKategoria" Association="Self.FK_KoordinaattiToKategoria">
             <End Role="Kategoria" EntitySet="Kategoria" />
@@ -175,6 +232,7 @@
           <Property Name="radius" Type="Int32" />
           <Property Name="kerros" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Kategoria" Relationship="Self.FK_KoordinaattiToKategoria" FromRole="Koordinaatit" ToRole="Kategoria" />
+          <NavigationProperty Name="Kuvat" Relationship="KirjastoProjektiModel.Koord_Kuva_Connection" FromRole="Koordinaatit" ToRole="Kuvat" />
         </EntityType>
         <EntityType Name="Logins">
           <Key>
@@ -287,6 +345,11 @@
             <End Role="Tekstit" EntitySet="Tekstit" />
             <End Role="InfoTekstit" EntitySet="InfoTekstit" />
           </AssociationSet>
+          <EntitySet Name="Kuvat" EntityType="KirjastoProjektiModel.Kuvat" />
+          <AssociationSet Name="Koord_Kuva_Connection" Association="KirjastoProjektiModel.Koord_Kuva_Connection">
+            <End Role="Kuvat" EntitySet="Kuvat" />
+            <End Role="Koordinaatit" EntitySet="Koordinaatit" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="InfoTekstit">
           <Key>
@@ -307,6 +370,20 @@
               <PropertyRef Name="Infotext_ID" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Kuvat">
+          <Key>
+            <PropertyRef Name="KuvaId" />
+          </Key>
+          <Property Name="KuvaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AltText" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Koordinaatit" Relationship="KirjastoProjektiModel.Koord_Kuva_Connection" FromRole="Kuvat" ToRole="Koordinaatit" />
+        </EntityType>
+        <Association Name="Koord_Kuva_Connection">
+          <End Type="KirjastoProjektiModel.Kuvat" Role="Kuvat" Multiplicity="*" />
+          <End Type="KirjastoProjektiModel.Koordinaatit" Role="Koordinaatit" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -381,6 +458,24 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Kuvat">
+            <EntityTypeMapping TypeName="KirjastoProjektiModel.Kuvat">
+              <MappingFragment StoreEntitySet="Kuvat">
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="AltText" ColumnName="AltText" />
+                <ScalarProperty Name="KuvaId" ColumnName="KuvaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Koord_Kuva_Connection" TypeName="KirjastoProjektiModel.Koord_Kuva_Connection" StoreEntitySet="Koord_Kuva_Connection">
+            <EndProperty Name="Koordinaatit">
+              <ScalarProperty Name="KoordinaattiID" ColumnName="KoordId" />
+            </EndProperty>
+            <EndProperty Name="Kuvat">
+              <ScalarProperty Name="KuvaId" ColumnName="KuvaId" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
