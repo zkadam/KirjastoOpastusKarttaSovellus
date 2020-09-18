@@ -469,8 +469,8 @@
             var newHeightRatio = newHeight / 1881;
             var newWidthRatio = newWidth / 3840
             //we count new coordinates by getting the original ones and multipling them with the new height or width ratio
-            var newCoords = (Math.round(x * newWidthRatio)).toString() + ',' + (Math.round(y * newHeightRatio)).toString() + ',' + (Math.round((x + width) * newWidthRatio)).toString()
-                + ',' + (Math.round((y + height) * newHeightRatio)).toString();
+            var newCoords = (Math.round((x-18) * newWidthRatio)).toString() + ',' + (Math.round((y-18) * newHeightRatio)).toString() + ',' + (Math.round((x+18) + width) * newWidthRatio).toString()
+                + ',' + (Math.round((y +18+ height) * newHeightRatio)).toString();
             var alue = document.createElement("area");
             alue.shape = "rect";
             alue.coords = newCoords;
