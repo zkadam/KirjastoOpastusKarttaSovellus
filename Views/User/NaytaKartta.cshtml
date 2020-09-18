@@ -469,13 +469,23 @@
             var newHeightRatio = newHeight / 1881;
             var newWidthRatio = newWidth / 3840
             //we count new coordinates by getting the original ones and multipling them with the new height or width ratio
-            var newCoords = (Math.round((x-18) * newWidthRatio)).toString() + ',' + (Math.round((y-18) * newHeightRatio)).toString() + ',' + (Math.round((x+18) + width) * newWidthRatio).toString()
-                + ',' + (Math.round((y +18+ height) * newHeightRatio)).toString();
             var alue = document.createElement("area");
-            alue.shape = "rect";
+            console.log(radius.toString());
+
+            //checking if there is radius- so it is a circle or rectangle(radius null didnt work), then counting coordinates +- 18-the border width
+            if (radius) {
+                alue.shape = "circle";
+                var newCoords = (Math.round(x * newWidthRatio)).toString() + ',' + (Math.round(y * newHeightRatio)).toString() + ',' + (Math.round(radius+18) * newWidthRatio).toString();
+            }
+            else {
+                alue.shape = "rect";
+                var newCoords = (Math.round((x - 18) * newWidthRatio)).toString() + ',' + (Math.round((y - 18) * newHeightRatio)).toString() + ',' + (Math.round(x + 18 + width) * newWidthRatio).toString()
+                + ',' + (Math.round((y +18+ height) * newHeightRatio)).toString();
+            }
+            
             alue.coords = newCoords;
             alue.alt = "klikkaa tänne jos haluat nähdä kuvan"
-            alue.href = "https://444.hu"
+            alue.href = "https://www.porvoo.fi/kirjastot-ja-aukioloajat#paakirjasto"
             console.log(alue);
             document.getElementById("kuvaKartta").appendChild(alue);
         }
