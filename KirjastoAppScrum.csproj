@@ -139,6 +139,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\KuvatController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -396,6 +397,11 @@
     <Content Include="Views\Admin\IndexUsers.cshtml" />
     <Content Include="Views\Admin\PoistaKayttaja.cshtml" />
     <Content Include="Views\User\ABC_Kategoriat.cshtml" />
+    <Content Include="Views\Kuvat\Create.cshtml" />
+    <Content Include="Views\Kuvat\Delete.cshtml" />
+    <Content Include="Views\Kuvat\Details.cshtml" />
+    <Content Include="Views\Kuvat\Edit.cshtml" />
+    <Content Include="Views\Kuvat\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
