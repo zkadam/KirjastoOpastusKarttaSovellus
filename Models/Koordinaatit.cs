@@ -14,12 +14,6 @@ namespace KirjastoAppScrum.Models
     
     public partial class Koordinaatit
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Koordinaatit()
-        {
-            this.Kuvat = new HashSet<Kuvat>();
-        }
-    
         public int KoordinaattiID { get; set; }
         public Nullable<int> startX { get; set; }
         public Nullable<int> startY { get; set; }
@@ -27,9 +21,9 @@ namespace KirjastoAppScrum.Models
         public Nullable<int> height { get; set; }
         public Nullable<int> radius { get; set; }
         public int kerros { get; set; }
+        public Nullable<int> kuvaID { get; set; }
     
         public virtual Kategoria Kategoria { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Kuvat> Kuvat { get; set; }
+        public virtual Kuvat Kuvat { get; set; }
     }
 }

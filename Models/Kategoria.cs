@@ -25,8 +25,8 @@ namespace KirjastoAppScrum.Models
         public Nullable<int> ReferTo { get; set; }
         public Nullable<int> Class { get; set; }
     
-        public virtual Koordinaatit Koordinaatit { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tekstit> Tekstit { get; set; }
+        public virtual Koordinaatit Koordinaatit { get; set; }
     }
 }
