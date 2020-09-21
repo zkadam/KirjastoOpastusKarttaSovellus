@@ -86,11 +86,21 @@ namespace KirjastoAppScrum.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "KuvaId,AltText,ImagePath,Image")] Kuvat kuvat)
+        public ActionResult Edit([Bind(Include = "KuvaId,AltText,ImagePath,Image,kuva")] Kuvat kuvat)
         {
             if (ModelState.IsValid)
             {
+                int count = Request.Files.Count;
+                var file = Request.Files[0];
+                string filename = file.FileName;
+                byte[] buffer = new byte[file.InputStream.Length];
+                file.InputStream.Read(buffer, 0, (int)file.InputStream.Length);
+
+
+
                 db.Entry(kuvat).State = EntityState.Modified;
+                kuvat.Image = buffer;
+                kuvat.ImagePath = filename;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

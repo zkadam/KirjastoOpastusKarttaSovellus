@@ -7,39 +7,53 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Lataa uusi kuva", "Create", null, new {@class = "btn btn-primary text-white" })
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.AltText)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ImagePath)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Image)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.AltText)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ImagePath)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Image)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.KuvaId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.KuvaId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.KuvaId })
-        </td>
-    </tr>
-}
+<div class="container-fluid">
+    @foreach (var item in Model)
+    {
 
-</table>
+
+        <div class="card" style="width:30vw; float:left">
+            @if (item.Image != null)
+            {
+                var base64 = Convert.ToBase64String(item.Image);
+                var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                <img class="card-img-top" style="max-height: 30vh" src="@imgsrc" alt="@item.AltText">
+            }
+            else
+            {
+                <img class="card-img-top"  src="~/Icons/house.svg" alt="Kuva ei latautunut">
+
+            }
+        <div class="card-body">
+            <h4 class="card-title"> @Html.DisplayFor(modelItem => item.AltText)</h4>
+            <p class="card-text">@Html.DisplayFor(modelItem => item.ImagePath)</p>
+
+
+            @Html.ActionLink("Muokkaa", "Edit", new { id = item.KuvaId }, new { @class = "btn btn-success text-white" }) |
+            @Html.ActionLink("Poista", "Delete", new { id = item.KuvaId }, new{@class="btn btn-danger text-white" })
+        </div>
+        </div>
+
+
+        @*<tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AltText)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImagePath)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Image)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.KuvaId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.KuvaId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.KuvaId })
+                </td>
+            </tr>*@
+    }
+
+    </div>
