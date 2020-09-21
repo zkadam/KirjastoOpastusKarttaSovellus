@@ -22,7 +22,7 @@ namespace KirjastoAppScrum.Controllers
             {
                 indexAll = false; // Palautetaan muutokset Index.cshtml sivulle RJ
 
-                var lista = from t in db.Tekstit.Include(t => t.Kategoria).Include(t => t.Kategoria.Koordinaatit)
+                var lista = from t in db.Tekstit.Include(t => t.Kategoria).Include(t => t.Kategoria.Koordinaatit).Include(t=>t.Kategoria.Koordinaatit.Kuvat)
                             select t;
                 //kovakoodattu nyt admin kategorioiden muokkauskieleksi suomi RJ           
                 lista = lista.Where(t => t.KieliID == "FI" && t.Kategoria.ReferTo == kategoriaRefer);
@@ -40,6 +40,31 @@ namespace KirjastoAppScrum.Controllers
                 var kategoriaTulostus = from n in db.Tekstit.Include(n => n.Kategoria)
                                      .Where(n => n.KieliID == "FI" && n.Kategoria.KategoriaID == kategoriaRefer)
                                         select n.Kategoria.SN.ToString();
+
+
+                //--------------------------------------------------kuva lista tarkastukseen
+                var KuvaLista = from kl in db.Koordinaatit
+                                select kl.kuvaID;
+
+                var KoordLista = from ko in db.Koordinaatit
+                                 select ko.KoordinaattiID;
+
+
+                ViewBag.KuvaLista = KuvaLista.ToList();
+                ViewBag.KoordLista = KoordLista.ToList();
+
+                //List<int?> kuvaLista = new List<int?>();
+                //foreach (var item in lista)
+                //{
+                //    if (kuvat.Kuvaid.Contains(item.Kategoria.Koordinaatit.KoordinaattiID))
+                //    {
+
+                //    }
+                //}
+
+
+
+
 
                 ViewBag.Title = itemName; // Itemin title
                 ViewBag.kategoriaRefer = kategoriaRefer; // kategorianReferi

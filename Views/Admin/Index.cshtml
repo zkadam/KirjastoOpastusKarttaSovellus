@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<KirjastoAppScrum.Models.Tekstit>
 
-<h2>Pääkategoriat</h2>
+<h2> @ViewBag.kategoriaReferiNimi</h2>
 <br />
 <div class="container-fluid">
 
@@ -54,7 +54,7 @@
                 Muokkaa / Poista
             </th>
             <th>
-                Kuuluu kategoriaan
+                Kuva
             </th>
             @*<th>
                 Taso
@@ -76,10 +76,28 @@
                     @Html.ActionLink("Muokkaa", "EditKategoria", new { id = item.Kategoria.KategoriaID, itemName = item.Teksti }, new { @class = "btn btn-success", @style = "color:white" })
                     @Html.ActionLink("Poista", "RemoveKategoria", new { id = item.Kategoria.KategoriaID, itemName = item.Teksti }, new { @class = "btn btn-danger", @style = "color:white" })
                 </td>
-                <td>
-                    @* Tulostaa referin nimen numeron sijasta R.J *@
-                    @ViewBag.kategoriaReferiNimi
-                </td>
+
+                @* ViewBag listoilla tarkistetaan onko koordinaatti ja kuva --- tämä tarvitaan NULL reference ongelman takia ZK *@
+
+            <td>
+                @if (ViewBag.KoordLista.Contains(item.Kategoria.KategoriaID))
+                {
+                    if (ViewBag.KuvaLista.Contains(item.Kategoria.Koordinaatit.kuvaID)&& item.Kategoria.Koordinaatit.kuvaID!=null)
+                    {
+                        <button class="btn text-white" style="background-color:#6D1670">Vaihda kuva</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-info">Lisää kuva</button>
+
+                    }
+                }
+                else
+                {
+                    <span>Tänne ei voi liittää kuvia</span>
+                }
+
+            </td>
                 @*<td>
                     @Html.DisplayFor(modelItem => item.Kategoria.Class)
                 </td>*@
@@ -121,6 +139,7 @@
                     else if (item.Kategoria.Koordinaatit != null)
                     {
                         @Html.ActionLink("Muokkaa sijaintia", "EditCoords", new { id = item.Kategoria.KategoriaID, referi = item.Kategoria.ReferTo, itemName = item.Teksti }, new { @class = "btn btn-success", @style = "color:white; margin-right: 25px;" })
+                       
                         @Html.ActionLink("Poista sijainti", "RemoveCoords", new { id = item.Kategoria.Koordinaatit.KoordinaattiID, referi = item.Kategoria.ReferTo, itemName = item.Teksti }, new { @class = "btn btn-danger", @style = "color:white;" })
                     }
                     else
