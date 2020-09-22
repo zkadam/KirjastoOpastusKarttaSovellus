@@ -58,16 +58,16 @@
     <div class="row">
         @loggausInfo   
         <div>
-            @Html.ActionLink("Näytä pääkategoriat", "Index", null, new { @class = "btn btn-warning  m-1" })
+            @Html.ActionLink("Näytä pääkategoriat", "Index", "Admin", null,new { @class = "btn btn-warning  m-1" })
         </div>   
         
         <div>
-            @Html.ActionLink("Näytä pääkategoriat", "Index", null, new { @class = "btn btn-warning  m-1" })
+            @Html.ActionLink("Kuvien hallinta", "Index", "Kuvat", null, new { @class = "btn text-white  m-1", @style = "background-color:#6D1670" })
         </div>
         <div>
             @if (Session["PaaAdmin"] != null)
             {
-                @Html.ActionLink("Käyttäjätilien hallinta", "IndexUsers", null, new { @class = "btn btn-primary text-white  m-1" }) @*Käyttäjien hallinta*@
+                @Html.ActionLink("Käyttäjätilien hallinta", "IndexUsers", "Admin", null, new { @class = "btn btn-primary text-white  m-1" }) @*Käyttäjien hallinta*@
             }
         </div>
         <div>
@@ -86,20 +86,7 @@
         </div>
 
     </div>
-    @*Footer ja home-, back-, info- ja karttaiknoit*@
-    <div class="footerDiv fixed-bottom">
-        <footer class="FooterRow">
-            @*Vasemmanpuolinen ikoneista missä on back-button löytyy*@
-            <div class="FooterLeft">
-                <img src="~/Icons/arrow-left.svg" style="width:70px; height:70px; border-radius:12px; background-color:lightblue" class="FooterIkoni" onclick="history.back()" alt="counterclockwise image" title="counterclockwise" />
-            </div>
-            @*Oikeapuolinen ikoneista missä on home-, info- ja kartta-buttonit löytyy*@
-            <div class="FooterRight">
-
-            </div>
-
-        </footer>
-    </div>
+    
     <script type="text/javascript">
 
         var goHome;

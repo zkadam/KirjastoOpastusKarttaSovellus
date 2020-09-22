@@ -17,7 +17,7 @@ namespace KirjastoAppScrum.Controllers
         // GET: Kuvat
         public ActionResult Index()
         {
-            return View(db.Kuvat.ToList());
+            return View("Index","_Layout_Admin",db.Kuvat.ToList());
         }
 
 
@@ -25,7 +25,7 @@ namespace KirjastoAppScrum.Controllers
         // GET: Kuvat/Create
         public ActionResult Create()
         {
-            return View();
+            return View("Create","_Layout_Admin");
         }
 
         // POST: Kuvat/Create
@@ -50,7 +50,7 @@ namespace KirjastoAppScrum.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(kuvat);
+            return View("Create", "_Layout_Admin",kuvat);
         }
 
         // GET: Kuvat/Edit/5
@@ -65,7 +65,7 @@ namespace KirjastoAppScrum.Controllers
             {
                 return HttpNotFound();
             }
-            return View(kuvat);
+            return View("Edit", "_Layout_Admin",kuvat);
         }
 
         // POST: Kuvat/Edit/5
@@ -91,7 +91,7 @@ namespace KirjastoAppScrum.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(kuvat);
+            return View("Edit", "_Layout_Admin", kuvat);
         }
 
         // GET: Kuvat/Delete/5
@@ -106,7 +106,7 @@ namespace KirjastoAppScrum.Controllers
             {
                 return HttpNotFound();
             }
-            return View(kuvat);
+            return View("Delete", "_Layout_Admin", kuvat);
         }
 
         // POST: Kuvat/Delete/5
@@ -117,21 +117,63 @@ namespace KirjastoAppScrum.Controllers
             Kuvat kuvat = db.Kuvat.Find(id);
             db.Kuvat.Remove(kuvat);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "_Layout_Admin");
         }
 
 
         //lista josta voi valita kuvia koordinaatteihin
         // GET: Kuvat
-        public ActionResult ValitseKuva(int? id, int? kuvaID)
+        public ActionResult ValitseKuva(int? id, int? kuvaID, string kategoria)
         {
-            return View(db.Kuvat.ToList());
+            //laitetaan viewbagin koordinaatti id ja kuva id että viewissä voimme valita joka on tän hetkeinen kuva ja että koord-idn voimme lehettää seuraavaalle actionille
+            if (id!=null)
+            {
+                ViewBag.KoordId = id;
+                ViewBag.Kategoria = kategoria;
+            }
+            else
+            {
+                return RedirectToAction("Index","Admin", "_Layout_Admin");
+            }
+            if (kuvaID!=null)
+            {
+                ViewBag.kuvaID = kuvaID;
+            }
+            else
+            {//kuvaid ei voi olla nulla, tää vain helpottaa koodin kirjoittaminen
+                ViewBag.kuvaID = 0;
+            }
+
+
+            return View("ValitseKuva","_Layout_Admin", db.Kuvat.ToList());
         }
 
-        //actionresult joka asettaa valitun kuvan kordinaattiin
-        public ActionResult AsetaKuva()
+        //actionresult joka asettaa valitun kuvan kordinaattiin - sitten palauttaa indexillä
+        public ActionResult AsetaKuva(int? id, int? kuvaID)
         {
-            return View(db.Kuvat.ToList());
+            if (id!=null&&kuvaID!=null)
+            {
+                try
+                {
+                    Koordinaatit koordinaatti = db.Koordinaatit.Find(id);
+                    var kat = db.Kategoria.Find(id);
+                    koordinaatti.kuvaID = kuvaID;
+                    db.Entry(koordinaatti).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index","Admin", new { kategoriaRefer = kat.ReferTo });
+                }
+                catch (Exception)
+                {
+
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+               
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
         }
 
         protected override void Dispose(bool disposing)

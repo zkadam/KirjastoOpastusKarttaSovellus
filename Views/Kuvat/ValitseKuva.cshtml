@@ -4,18 +4,18 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Valitse kuva: @ViewBag.Kategoria -lle</h2>
 
 <p>
     @Html.ActionLink("Lataa uusi kuva", "Create", null, new { @class = "btn btn-primary text-white" })
 </p>
 
-<div class="container-fluid">
+<div class="justify-content-center">
     @foreach (var item in Model)
     {
 
 
-        <div class="card m-1" style="width:30vw;border-color:blueviolet ;float:left;">
+        <div class="card mt-1 mr-1" style="width:30vw;border-color:blueviolet ;float:left;">
             @if (item.Image != null)
             {
                 var base64 = Convert.ToBase64String(item.Image);
@@ -30,30 +30,21 @@
             <div class="card-body">
                 <h4 class="card-title"> @Html.DisplayFor(modelItem => item.AltText)</h4>
                 <p class="card-text">@Html.DisplayFor(modelItem => item.ImagePath)</p>
-
-
-                @Html.ActionLink("Valitse", "AsetaKuva", new { id = item.KuvaId }, new { @class = "btn btn-success text-white" })
+                
+                    @if (ViewBag.kuvaID != item.KuvaId)
+                    {
+                        @Html.ActionLink("Valitse", "AsetaKuva", new { id = ViewBag.KoordId ,  kuvaID =item.KuvaId }, new { @class = "btn btn-success text-white" })
+                    }
+                    else
+                    {
+                        <a disabled class="btn btn-secondary text-white" style="font-size:small">Tämä on valittu kuva</a>
+                    }
                 
             </div>
         </div>
 
 
-        @*<tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AltText)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ImagePath)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Image)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.KuvaId }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.KuvaId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.KuvaId })
-                </td>
-            </tr>*@
-    }
 
+    }
 </div>
+

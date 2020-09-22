@@ -44,11 +44,11 @@
                 {
                     if (ViewBag.KuvaLista.Contains(item.Kategoria.Koordinaatit.kuvaID) && item.Kategoria.Koordinaatit.kuvaID != null)
                     {
-                        @Html.ActionLink("Vaihda kuva", "ValitseKuva", "Kuvat", new { id = item.ReferTo, kuvaId=item.Kategoria.Koordinaatit.kuvaID }, new { @class = "btn btn-success text-white", @style = "background-color:#6D1670" })
+                        @Html.ActionLink("Vaihda kuva", "ValitseKuva", "Kuvat", new { id = item.ReferTo, kuvaId=item.Kategoria.Koordinaatit.kuvaID, kategoria=item.Teksti }, new { @class = "btn text-white", @style = "background-color:#6D1670" })
                    }
                     else
                     {
-                         @Html.ActionLink("Lisää kuva", "ValitseKuva", "Kuvat", new { id = item.ReferTo }, new { @class = "btn btn-info text-white" })
+                         @Html.ActionLink("Lisää kuva", "ValitseKuva", "Kuvat", new { id = item.ReferTo, kategoria = item.Teksti }, new { @class = "btn btn-info text-white" })
                     }
                 }
                 else
