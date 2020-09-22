@@ -80,7 +80,7 @@
                 @* ViewBag listoilla tarkistetaan onko koordinaatti ja kuva --- tämä tarvitaan NULL reference ongelman takia ZK *@
 
             <td>
-                @if (ViewBag.KoordLista.Contains(item.Kategoria.KategoriaID))
+                @if (ViewBag.KoordLista.Contains(item.Kategoria.KategoriaID) && !ViewBag.listaData.Contains(item.ReferTo))
                 {
                     if (ViewBag.KuvaLista.Contains(item.Kategoria.Koordinaatit.kuvaID)&& item.Kategoria.Koordinaatit.kuvaID!=null)
                     {
