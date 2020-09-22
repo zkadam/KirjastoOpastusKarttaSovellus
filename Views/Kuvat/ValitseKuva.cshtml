@@ -7,7 +7,7 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Lataa uusi kuva", "Create", null, new {@class = "btn btn-primary text-white" })
+    @Html.ActionLink("Lataa uusi kuva", "Create", null, new { @class = "btn btn-primary text-white" })
 </p>
 
 <div class="container-fluid">
@@ -15,7 +15,7 @@
     {
 
 
-        <div class="card m-1" style="width:30vw; float:left">
+        <div class="card m-1" style="width:30vw;border-color:blueviolet ;float:left;">
             @if (item.Image != null)
             {
                 var base64 = Convert.ToBase64String(item.Image);
@@ -24,17 +24,17 @@
             }
             else
             {
-                <img class="card-img-top"  src="~/Icons/house.svg" alt="Kuva ei latautunut">
+                <img class="card-img-top" src="~/Icons/house.svg" alt="Kuva ei latautunut">
 
             }
-        <div class="card-body">
-            <h4 class="card-title"> @Html.DisplayFor(modelItem => item.AltText)</h4>
-            <p class="card-text">@Html.DisplayFor(modelItem => item.ImagePath)</p>
+            <div class="card-body">
+                <h4 class="card-title"> @Html.DisplayFor(modelItem => item.AltText)</h4>
+                <p class="card-text">@Html.DisplayFor(modelItem => item.ImagePath)</p>
 
 
-            @Html.ActionLink("Muokkaa", "Edit", new { id = item.KuvaId }, new { @class = "btn btn-success text-white" }) |
-            @Html.ActionLink("Poista", "Delete", new { id = item.KuvaId }, new{@class="btn btn-danger text-white" })
-        </div>
+                @Html.ActionLink("Valitse", "AsetaKuva", new { id = item.KuvaId }, new { @class = "btn btn-success text-white" })
+                
+            </div>
         </div>
 
 
@@ -56,4 +56,4 @@
             </tr>*@
     }
 
-    </div>
+</div>

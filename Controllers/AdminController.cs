@@ -72,7 +72,7 @@ namespace KirjastoAppScrum.Controllers
                 ViewBag.listaData = kategLista; // listaData porautumisen tarkastukseen RJ
                 ViewBag.kategoriaTulostus = kategoriaTulostus.FirstOrDefault(); ; // otetaan kategorian Luokka välitykseen RJ
 
-                return View(lista);
+                return View("Index", "_Layout_Admin", lista);
             }
             else
             {

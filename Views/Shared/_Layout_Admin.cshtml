@@ -1,0 +1,128 @@
+﻿
+    @*Rivi missä löytyy uloskirjautuminen ja informaatio käyttäjälle kuka on sisäänkirjautunut -FW*@
+
+    @using System.Globalization
+    @{
+        string loggausInfo = ""; /*Tarkistaa käyttäjän session ja tulostaa näytölle käyttäjän nimen ja oikeudet/rooli -FW*/
+        if (Session["PaaAdmin"] != null)
+        {
+            loggausInfo = "Olet kirjautunut käyttäjätunnuksella: " + @Session["PaaAdmin"];
+        }
+        else if (Session["PerusAdmin"] != null)
+        {
+            loggausInfo = "Olet kirjautunut käyttäjätunnuksella: " + Session["PerusAdmin"];
+        }
+        else if (Session["PerusUser"] != null)
+        {
+            loggausInfo = "Olet kirjautunut käyttäjätunnuksella: " + Session["PerusUser"];
+        }
+        else
+        {
+            Session.Abandon();
+        }
+    }
+
+
+   
+
+
+
+
+@*Aloitus-sivun (Index) navbar*@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    @*<meta charset="utf-8" />*@
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opastussovellus</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/popper")
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</head>
+<body style="padding-top:0">
+    @* Kielitoiminnon testauksessa käytetty Navbar-koodi. Kategoriat viewssa Navbar sisältää kielivalintabuttonit. (LL) *@
+    <nav class="navbar navbar-fixed-top container-fluid">
+        <div class="navbar-header" id="home">
+            <a href="~/Home/">
+                <img id="homeLogo" class="navbar-brand" src="~/Pics/PorvooLogo_orig.png" style="width:80px;height:80px" alt="Porvoo/Borgå" title="Alkuun">
+            </a>
+            <a href="~/Home/Index"><img src="~/Icons/house.svg" class="FooterIkoni" style="padding-right: 5%;width:60px; height:60px;" alt="Alkuun" title="Alkuun" /></a>
+            <a data-toggle="modal" href="#infoModal"><img src="~/Icons/info-square.svg" class="FooterIkoni" style="padding-left: 0%; padding-right: 5%;width:60px; height:60px;" alt="Lisätietoa" title="Lisätietoa" /></a>
+            <a href="~/User/Map"><img src="~/Icons/map.svg" class="FooterIkoni" style="padding-left: 0%;padding-right: 5%;width:60px; height:60px;" alt="Pohjakartta" title="Pohjakartta" /></a>
+            <a href="~/User/ABC_Kategoriat"><img src="~/Icons/a-z.svg" class="FooterIkoni" style="padding-left: 0%;padding-right: 5%;width:60px; height:60px;" alt="Pohjakartta" title="Aakkos järjestys" /></a>
+        </div>
+
+
+        @* Kielivalintapainikkeet (LL) *@
+
+        @*tempdata changed to session , first condition checks if session has a string value-ZK*@
+        @*action linkeihin tulee parametrinä nykyinen action ja controller, kielet, ja parametrit liityän mikä kategoria/koordinaatti olimme katsomassa näin onnistuu kielen lennosta vaihto ZK*@
+     
+            <div class="row">
+
+                <div class="col-6" style="text-align:start">
+                    <p class="loginInfoParagraph">@loggausInfo</p> @*Tähän tulostuu käyttäjän nimen näytölle ja oikeudet/rooli -FW*@
+                </div>
+
+                <div class="col-6" style="text-align:end">
+                    @if (Session["PaaAdmin"] != null)
+                    {
+                        @Html.ActionLink("Käyttäjätilien hallinta", "IndexUsers", null, new { @class = "btn btn-primary text-white" }) @*Käyttäjien hallinta*@
+                    }
+
+                    <a id="logOut" href="~/Admin/Uloskirjautuminen" class="btn btn-danger" style="color:white">Kirjaudu ulos</a> @*Kirjaudu ulos painike*@
+                </div>
+            </div>
+        
+
+    </nav>
+    <div class="container-fluid" style="text-align:center">
+        <div class="bodyRender">
+            @RenderBody()
+        </div>
+
+    </div>
+    @*Footer ja home-, back-, info- ja karttaiknoit*@
+    <div class="footerDiv fixed-bottom">
+        <footer class="FooterRow">
+            @*Vasemmanpuolinen ikoneista missä on back-button löytyy*@
+            <div class="FooterLeft">
+                <img src="~/Icons/arrow-left.svg" style="width:70px; height:70px; border-radius:12px; background-color:lightblue" class="FooterIkoni" onclick="history.back()" alt="counterclockwise image" title="counterclockwise" />
+            </div>
+            @*Oikeapuolinen ikoneista missä on home-, info- ja kartta-buttonit löytyy*@
+            <div class="FooterRight">
+
+            </div>
+
+        </footer>
+    </div>
+    <script type="text/javascript">
+
+        var goHome;
+        //aina kun sivu latautuu aloitetaan laskemista , laskemisen lopulta funktio vie aloitus sivulle - ZK
+        window.onload = function myFunction() {
+            //sovellus autoclikkaa kirjsudu ulos 10 min jälkeen jos ei tulee clikkausta ennen -
+            goHome = setTimeout(function () { document.getElementById("logOut").click(); }, 600000);
+
+            //jos klikkaataan kutsutaan funktio joka resetoi laskemista - ZK
+            window.addEventListener("click", function () {
+                myStopFunction();
+            });
+        }
+        //funktio joka resetoi laskemista ZK
+        function myStopFunction() {
+            clearTimeout(goHome);
+            goHome = setTimeout(function () { document.getElementById("logOut").click(); }, 600000);
+        }
+    </script>
+</body>
+@RenderSection("scripts", required: false)
+
+
+</html>

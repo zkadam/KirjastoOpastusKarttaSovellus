@@ -399,9 +399,10 @@
     <Content Include="Views\User\ABC_Kategoriat.cshtml" />
     <Content Include="Views\Kuvat\Create.cshtml" />
     <Content Include="Views\Kuvat\Delete.cshtml" />
-    <Content Include="Views\Kuvat\Details.cshtml" />
     <Content Include="Views\Kuvat\Edit.cshtml" />
     <Content Include="Views\Kuvat\Index.cshtml" />
+    <Content Include="Views\Kuvat\ValitseKuva.cshtml" />
+    <Content Include="Views\Shared\_Layout_Admin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

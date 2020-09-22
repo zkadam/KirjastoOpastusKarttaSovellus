@@ -20,20 +20,7 @@ namespace KirjastoAppScrum.Controllers
             return View(db.Kuvat.ToList());
         }
 
-        // GET: Kuvat/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Kuvat kuvat = db.Kuvat.Find(id);
-            if (kuvat == null)
-            {
-                return HttpNotFound();
-            }
-            return View(kuvat);
-        }
+
 
         // GET: Kuvat/Create
         public ActionResult Create()
@@ -131,6 +118,20 @@ namespace KirjastoAppScrum.Controllers
             db.Kuvat.Remove(kuvat);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+
+        //lista josta voi valita kuvia koordinaatteihin
+        // GET: Kuvat
+        public ActionResult ValitseKuva(int? id, int? kuvaID)
+        {
+            return View(db.Kuvat.ToList());
+        }
+
+        //actionresult joka asettaa valitun kuvan kordinaattiin
+        public ActionResult AsetaKuva()
+        {
+            return View(db.Kuvat.ToList());
         }
 
         protected override void Dispose(bool disposing)

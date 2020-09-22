@@ -2,47 +2,7 @@
 
 <h2> @ViewBag.kategoriaReferiNimi</h2>
 <br />
-<div class="container-fluid">
 
-    @*Rivi missä löytyy uloskirjautuminen ja informaatio käyttäjälle kuka on sisäänkirjautunut -FW*@
-
-    @using System.Globalization
-    @{
-        string loggausInfo = ""; /*Tarkistaa käyttäjän session ja tulostaa näytölle käyttäjän nimen ja oikeudet/rooli -FW*/
-        if (Session["PaaAdmin"] != null)
-        {
-            loggausInfo = "Olet kirjautunut käyttäjätunnuksella: " + @Session["PaaAdmin"];
-        }
-        else if (Session["PerusAdmin"] != null)
-        {
-            loggausInfo = "Olet kirjautunut käyttäjätunnuksella: " + Session["PerusAdmin"];
-        }
-        else if (Session["PerusUser"] != null)
-        {
-            loggausInfo = "Olet kirjautunut käyttäjätunnuksella: " + Session["PerusUser"];
-        }
-        else
-        {
-            Session.Abandon();
-        }
-    }
-
- 
-   <div class="row">
-
-       <div class="col-6" style="text-align:start">
-           <p class="loginInfoParagraph">@loggausInfo</p> @*Tähän tulostuu käyttäjän nimen näytölle ja oikeudet/rooli -FW*@
-       </div>
-
-       <div class="col-6" style="text-align:end">
-           @if (Session["PaaAdmin"] != null) {
-           @Html.ActionLink("Käyttäjätilien hallinta", "IndexUsers", null, new { @class = "btn btn-primary" }) @*Käyttäjien hallinta*@
-           }
-
-           <a id="logOut" href="~/Admin/Uloskirjautuminen" class="btn btn-danger" style="color:white">Kirjaudu ulos</a> @*Kirjaudu ulos painike*@
-       </div>
-   </div>
-</div>
 
 <div class="container-fluid">
     <table class="table table-striped">
@@ -82,14 +42,13 @@
             <td>
                 @if (ViewBag.KoordLista.Contains(item.Kategoria.KategoriaID) && !ViewBag.listaData.Contains(item.ReferTo))
                 {
-                    if (ViewBag.KuvaLista.Contains(item.Kategoria.Koordinaatit.kuvaID)&& item.Kategoria.Koordinaatit.kuvaID!=null)
+                    if (ViewBag.KuvaLista.Contains(item.Kategoria.Koordinaatit.kuvaID) && item.Kategoria.Koordinaatit.kuvaID != null)
                     {
-                        <button class="btn text-white" style="background-color:#6D1670">Vaihda kuva</button>
-                    }
+                        @Html.ActionLink("Vaihda kuva", "ValitseKuva", "Kuvat", new { id = item.ReferTo, kuvaId=item.Kategoria.Koordinaatit.kuvaID }, new { @class = "btn btn-success text-white", @style = "background-color:#6D1670" })
+                   }
                     else
                     {
-                        <button class="btn btn-info">Lisää kuva</button>
-
+                         @Html.ActionLink("Lisää kuva", "ValitseKuva", "Kuvat", new { id = item.ReferTo }, new { @class = "btn btn-info text-white" })
                     }
                 }
                 else
@@ -182,7 +141,7 @@
                 }
                 else
                 {
-                    @Html.ActionLink("Lisää uusi", "AddKategoria", new { id = @ViewBag.kategoriaRefer }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Lisää uusi", "AddKategoria", new { id = @ViewBag.kategoriaRefer }, new { @class = "btn btn-primary text-white" })
                 }
                 @* Tämä edelliseen palautuminen ei vielä toimi *@
                 @Html.ActionLink("Takaisin", "Index", new { kategoriaRefer = @ViewBag.master }, new { @class = "btn btn-warning" })
