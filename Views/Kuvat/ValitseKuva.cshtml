@@ -27,20 +27,22 @@
                 <img class="card-img-top" src="~/Icons/house.svg" alt="Kuva ei latautunut">
 
             }
-            <div class="card-body">
-                <h4 class="card-title"> @Html.DisplayFor(modelItem => item.AltText)</h4>
-                <p class="card-text">@Html.DisplayFor(modelItem => item.ImagePath)</p>
-                
-                    @if (ViewBag.kuvaID != item.KuvaId)
-                    {
-                        @Html.ActionLink("Valitse", "AsetaKuva", new { id = ViewBag.KoordId ,  kuvaID =item.KuvaId }, new { @class = "btn btn-success text-white" })
-                    }
-                    else
-                    {
-                        <a disabled class="btn btn-secondary text-white" style="font-size:small">Tämä on valittu kuva</a>
-                    }
-                
-            </div>
+        <div class="card-body">
+            <h4 class="card-title"> @Html.DisplayFor(modelItem => item.AltText)</h4>
+            <p class="card-text">@Html.DisplayFor(modelItem => item.ImagePath)</p>
+
+            @if (ViewBag.kuvaID != item.KuvaId)
+            {
+                @Html.ActionLink("Valitse", "AsetaKuva", new { id = ViewBag.KoordId, kuvaID = item.KuvaId }, new { @class = "btn btn-success text-white" })
+            }
+            else
+            {
+                @Html.ActionLink("Poista kuva valinta", "PoistaKuva", "Kuvat", new { id = ViewBag.KoordId, kategoria=ViewBag.Kategoria }, new { @class = "btn btn-secondary text-white" })
+
+                @*<a disabled class="btn btn-secondary text-white" style="font-size:small">Tämä on valittu kuva</a>*@
+            }
+
+        </div>
         </div>
 
 

@@ -149,6 +149,8 @@ namespace KirjastoAppScrum.Controllers
         }
 
         //actionresult joka asettaa valitun kuvan kordinaattiin - sitten palauttaa indexillä
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult AsetaKuva(int? id, int? kuvaID)
         {
             if (id!=null&&kuvaID!=null)
@@ -176,6 +178,34 @@ namespace KirjastoAppScrum.Controllers
             }
         }
 
+        //Action result joka poista valitun kuvan linkki Koordinaateista
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PoistaKuva(int? id,  string kategoria)
+        {
+            if (id != null)
+            {
+                try
+                {
+                    Koordinaatit koordinaatti = db.Koordinaatit.Find(id);
+                    koordinaatti.kuvaID = null;
+                    db.Entry(koordinaatti).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return RedirectToAction("AsetaKuva", "Kuvat", new { id=koordinaatti.KoordinaattiID, kategoria=kategoria });
+                }
+                catch (Exception)
+                {
+
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
