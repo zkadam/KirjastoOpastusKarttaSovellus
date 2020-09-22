@@ -48,7 +48,7 @@
           <Property Name="KuvaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AltText" Type="nvarchar" MaxLength="50" />
           <Property Name="ImagePath" Type="nvarchar" MaxLength="255" />
-          <Property Name="Image" Type="image" />
+          <Property Name="Image" Type="image" Nullable="false" />
         </EntityType>
         <EntityType Name="Logins">
           <Key>
@@ -286,8 +286,8 @@
             <End Role="Tekstit" EntitySet="Tekstit" />
             <End Role="InfoTekstit" EntitySet="InfoTekstit" />
           </AssociationSet>
-          <EntitySet Name="Koordinaatit" EntityType="KirjastoProjektiModel.Koordinaatit" />
           <EntitySet Name="Kuvat" EntityType="KirjastoProjektiModel.Kuvat" />
+          <EntitySet Name="Koordinaatit" EntityType="KirjastoProjektiModel.Koordinaatit" />
           <AssociationSet Name="FK_KoordinaattiToKategoria" Association="KirjastoProjektiModel.FK_KoordinaattiToKategoria">
             <End Role="Kategoria" EntitySet="Kategoria" />
             <End Role="Koordinaatit" EntitySet="Koordinaatit" />
@@ -296,7 +296,7 @@
             <End Role="Kuvat" EntitySet="Kuvat" />
             <End Role="Koordinaatit" EntitySet="Koordinaatit" />
           </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
         <EntityType Name="InfoTekstit">
           <Key>
             <PropertyRef Name="Infotext_ID" />
@@ -317,6 +317,16 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Kuvat">
+          <Key>
+            <PropertyRef Name="KuvaId" />
+          </Key>
+          <Property Name="KuvaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AltText" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <NavigationProperty Name="Koordinaatit" Relationship="KirjastoProjektiModel.FK_Koordinaatit_Kuvat" FromRole="Kuvat" ToRole="Koordinaatit" />
+        </EntityType>
         <EntityType Name="Koordinaatit">
           <Key>
             <PropertyRef Name="KoordinaattiID" />
@@ -331,16 +341,6 @@
           <Property Name="kuvaID" Type="Int32" />
           <NavigationProperty Name="Kategoria" Relationship="KirjastoProjektiModel.FK_KoordinaattiToKategoria" FromRole="Koordinaatit" ToRole="Kategoria" />
           <NavigationProperty Name="Kuvat" Relationship="KirjastoProjektiModel.FK_Koordinaatit_Kuvat" FromRole="Koordinaatit" ToRole="Kuvat" />
-        </EntityType>
-        <EntityType Name="Kuvat">
-          <Key>
-            <PropertyRef Name="KuvaId" />
-          </Key>
-          <Property Name="KuvaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AltText" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ImagePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <NavigationProperty Name="Koordinaatit" Relationship="KirjastoProjektiModel.FK_Koordinaatit_Kuvat" FromRole="Kuvat" ToRole="Koordinaatit" />
         </EntityType>
         <Association Name="FK_KoordinaattiToKategoria">
           <End Type="KirjastoProjektiModel.Kategoria" Role="Kategoria" Multiplicity="1" />
@@ -366,7 +366,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -426,6 +426,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Kuvat">
+            <EntityTypeMapping TypeName="KirjastoProjektiModel.Kuvat">
+              <MappingFragment StoreEntitySet="Kuvat">
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="AltText" ColumnName="AltText" />
+                <ScalarProperty Name="KuvaId" ColumnName="KuvaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Koordinaatit">
             <EntityTypeMapping TypeName="KirjastoProjektiModel.Koordinaatit">
               <MappingFragment StoreEntitySet="Koordinaatit">
@@ -437,16 +447,6 @@
                 <ScalarProperty Name="startY" ColumnName="startY" />
                 <ScalarProperty Name="startX" ColumnName="startX" />
                 <ScalarProperty Name="KoordinaattiID" ColumnName="KoordinaattiID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Kuvat">
-            <EntityTypeMapping TypeName="KirjastoProjektiModel.Kuvat">
-              <MappingFragment StoreEntitySet="Kuvat">
-                <ScalarProperty Name="Image" ColumnName="Image" />
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-                <ScalarProperty Name="AltText" ColumnName="AltText" />
-                <ScalarProperty Name="KuvaId" ColumnName="KuvaId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
