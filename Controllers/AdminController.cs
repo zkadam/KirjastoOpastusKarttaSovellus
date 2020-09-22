@@ -99,7 +99,7 @@ namespace KirjastoAppScrum.Controllers
                 lista = lista.Where(t => t.KieliID == "FI");
 
                 ViewBag.Title = itemName; // Itemin title
-                return View(lista);
+                return View("IndexAll", "_Layout_Admin", lista);
             }
             else
             {
@@ -121,7 +121,7 @@ namespace KirjastoAppScrum.Controllers
                 ViewBag.KoordinaattiID = id;
                 //välitetään itemin nimi viewbagin kautta että admin näkee mitä hän on lisäämässä ZK
                 ViewBag.itemName = itemName;
-                return View();
+                return View("AddCoords", "_Layout_Admin");
             }
             else if (Session["PerusUser"] != null)
             {
@@ -157,7 +157,7 @@ namespace KirjastoAppScrum.Controllers
             }
 
             ViewBag.KoordinaattiID = new SelectList(db.Kategoria, "KategoriaID", "SN", koordinaatit.KoordinaattiID);
-            return View(koordinaatit);
+            return View("AddCoords", "_Layout_Admin",koordinaatit);
         }
 
         // Koordinaattien muokkausta RJ
@@ -177,7 +177,7 @@ namespace KirjastoAppScrum.Controllers
                 // välitetään itemin nimi viewbagin kautta että admin näkee mitä hän on lisäämässä/muokkamassa/poistamassa ZK
                 ViewBag.itemName = itemName;
 
-                return View(koords);
+                return View("EditCoords","_Layout_Admin", koords);
             }
             else
             {
@@ -204,7 +204,7 @@ namespace KirjastoAppScrum.Controllers
                     return RedirectToAction("IndexAll");
                 }
             }
-            return View(koords);
+            return View("EditCoords", "_Layout_Admin", koords);
         }
         // Koordinaattien Poisto
         public ActionResult RemoveCoords(string itemName, int? id)
@@ -222,7 +222,7 @@ namespace KirjastoAppScrum.Controllers
                 }
                 // välitetään itemin nimi viewbagin kautta että admin näkee mitä hän on lisäämässä/muokkamassa/poistamassa ZK
                 ViewBag.itemName = itemName;
-                return View(koords);
+                return View("RemoveCoords", "_Layout_Admin", koords);
             }
             else
             {
@@ -308,7 +308,7 @@ namespace KirjastoAppScrum.Controllers
 
                 ViewBag.id = id;
 
-                return View();
+                return View("AddKategoria", "_Layout_Admin");
             }
             else
 
@@ -555,7 +555,7 @@ namespace KirjastoAppScrum.Controllers
                 ViewBag.KategoriaLista = new SelectList(kategoriat, "Value", "Text", kateg.Tekstit.Where(t => t.KieliID == kieliKoodi));
                 // välitetään itemin nimi viewbagin kautta että admin näkee mitä hän on lisäämässä/muokkamassa/poistamassa ZK
                 ViewBag.itemName = itemName;
-                return View(kategId); // palautetaan AddKategoriaViewModeli muuttoja varten
+                return View("EditKategoria","_Layout_Admin",kategId); // palautetaan AddKategoriaViewModeli muuttoja varten
             }
             else
             {
@@ -678,7 +678,7 @@ namespace KirjastoAppScrum.Controllers
             // Tehdään tarkastus palautetaanko Index vai IndexAll sivu
             if (indexAll == false)
             {
-                return RedirectToAction("Index", new { kategoriaRefer = model.ReferTo });
+                return RedirectToAction("Index",new { kategoriaRefer = model.ReferTo });
             }
             else
             {
@@ -710,7 +710,7 @@ namespace KirjastoAppScrum.Controllers
                 }
                 // välitetään itemin nimi viewbagin kautta että admin näkee mitä hän on lisäämässä/muokkamassa/poistamassa ZK
                 ViewBag.itemName = itemName;
-                return View(kategoriat);
+                return View("RemoveKategoria", "_Layout_Admin",kategoriat);
             }
             else
             {
@@ -729,7 +729,7 @@ namespace KirjastoAppScrum.Controllers
             // Tehdään tarkastus palautetaanko Index vai IndexAll sivu
             if (indexAll == false)
             {
-                return RedirectToAction("Index", new { kategoriaRefer = kategoriat.ReferTo });
+                return RedirectToAction("Index",new { kategoriaRefer = kategoriat.ReferTo });
             }
             else
             {
@@ -874,7 +874,7 @@ namespace KirjastoAppScrum.Controllers
             }
             else
             {
-                return View(db.Logins.ToList());
+                return View("IndexUsers","_Layout_Admin",db.Logins.ToList());
             }
         }
 
@@ -898,7 +898,7 @@ namespace KirjastoAppScrum.Controllers
                 }
 
                 ViewBag.Rooli = new SelectList(userrolelista, "Value", "Text", "PerusAdmin");
-                return View();
+                return View("LisaaKayttaja", "_Layout_Admin");
             }
         }
 
@@ -930,7 +930,7 @@ namespace KirjastoAppScrum.Controllers
 
                         logins.LoginErrorMessage = "Käyttäjä nimi on otettu!";
                         ViewBag.Rooli = new SelectList(userrolelista, "Value", "Text", "PerusAdmin");
-                        return View("LisaaKayttaja", logins);
+                        return View("LisaaKayttaja", "_Layout_Admin", logins);
                     }
                     else
                     {
@@ -939,7 +939,7 @@ namespace KirjastoAppScrum.Controllers
                         return RedirectToAction("IndexUsers");
                     }
                 }
-                return View(logins);
+                return View("LisaaKayttaja", "_Layout_Admin",logins);
             }
         }
 
@@ -977,7 +977,7 @@ namespace KirjastoAppScrum.Controllers
                 ViewBag.Rooli = new SelectList(userrolelista, "Value", "Text", logins.Rooli);
 
 
-                return View(logins);
+                return View("MuokkaaKayttaja", "_Layout_Admin", logins);
             }
         }
         // POST: Logins/Muokkaa
@@ -997,7 +997,7 @@ namespace KirjastoAppScrum.Controllers
                     db.SaveChanges();
                     return RedirectToAction("IndexUsers");
                 }
-                return View(logins);
+                return View("MuokkaaKayttaja", "_Layout_Admin", logins);
             }
         }
 
@@ -1019,7 +1019,7 @@ namespace KirjastoAppScrum.Controllers
                 {
                     return HttpNotFound();
                 }
-                return View(logins);
+                return View("PoistaKayttaja", "_Layout_Admin", logins);
             }
         }
 

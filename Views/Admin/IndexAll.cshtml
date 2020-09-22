@@ -4,43 +4,10 @@
     ViewBag.Title = "Index";
 }
 
-<div class="container-fluid">
 
-    @*Rivi missä löytyy uloskirjautuminen ja informaatio käyttäjälle kuka on sisäänkirjautunut -FW*@
-
-    @using System.Globalization
-    @{
-        string loggausInfo = ""; /*Tarkistaa käyttäjän session ja tulostaa näytölle käyttäjän nimen ja oikeudet/rooli -FW*/
-        if (Session["PaaAdmin"] != null)
-        {
-            loggausInfo = "Olet kirjautunut käyttäjätunnuksella: " + @Session["PaaAdmin"];
-        }
-        else if (Session["PerusAdmin"] != null)
-        {
-            loggausInfo = "Olet kirjautunut käyttäjätunnuksella: " + Session["PerusAdmin"];
-        }
-        else if (Session["PerusUser"] != null)
-        {
-            loggausInfo = "Olet kirjautunut käyttäjätunnuksella: " + Session["PerusUser"];
-        }
-        else
-        {
-            Session.Abandon();
-        }
-    }
-
-</div>
 
 <h2>Kaikki kategoriat</h2>
-<div class="row">
-    <div class="col-6" style="text-align:start">
-        <p class="loginInfoParagraph">@loggausInfo</p> @*Tähän tulostuu käyttäjän nimen näytölle ja oikeudet/rooli -FW*@
-    </div>
 
-    <div class="col-6" style="text-align:end">
-        <a id="logOut" href="~/Admin/Uloskirjautuminen" class="btn btn-danger" style="color:white">Kirjaudu ulos</a> @*Kirjaudu ulos painike*@
-    </div>
-</div>
 <hr />
 <p>
     @Html.ActionLink("Lisää uusi kategoria", "AddKategoria", null, new { @class = "btn btn-info" })

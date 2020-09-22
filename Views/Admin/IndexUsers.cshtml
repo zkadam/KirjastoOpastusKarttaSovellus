@@ -4,30 +4,7 @@
     ViewBag.Title = "Käyttäjätilien hallinta";
 }
 
-@using System.Globalization
-@{
-    string loggausInfo = ""; /*Tarkistaa käyttäjän session ja tulostaa näytölle käyttäjän nimen ja oikeudet/rooli -FW*/
-    if (Session["PaaAdmin"] != null)
-    {
-        loggausInfo = "Olet kirjautunut käyttäjätunnuksella: " + @Session["PaaAdmin"];
-    }
-    else
-    {
-        Session.Abandon();
-    }
-}
 
-<h2>Käyttäjätilien hallinta</h2>
-<br />
-<div class="row">
-    <div class="col-6" style="text-align:start">
-        <p class="loginInfoParagraph">@loggausInfo</p> @*Tähän tulostuu käyttäjän nimen näytölle ja oikeudet/rooli -FW*@
-    </div>
-
-    <div class="col-6" style="text-align:end">
-        <a id="logOut" href="~/Admin/Uloskirjautuminen" class="btn btn-danger" style="color:white">Kirjaudu ulos</a> @*Kirjaudu ulos painike*@
-    </div>
-</div>
 <div class="container-fluid">
     <table class="table table-striped">
         <tr>

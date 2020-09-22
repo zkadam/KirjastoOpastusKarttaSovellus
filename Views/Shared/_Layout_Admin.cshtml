@@ -22,12 +22,6 @@
         }
     }
 
-
-   
-
-
-
-
 @*Aloitus-sivun (Index) navbar*@
 
 <!DOCTYPE html>
@@ -52,10 +46,7 @@
             <a href="~/Home/">
                 <img id="homeLogo" class="navbar-brand" src="~/Pics/PorvooLogo_orig.png" style="width:80px;height:80px" alt="Porvoo/Borgå" title="Alkuun">
             </a>
-            <a href="~/Home/Index"><img src="~/Icons/house.svg" class="FooterIkoni" style="padding-right: 5%;width:60px; height:60px;" alt="Alkuun" title="Alkuun" /></a>
-            <a data-toggle="modal" href="#infoModal"><img src="~/Icons/info-square.svg" class="FooterIkoni" style="padding-left: 0%; padding-right: 5%;width:60px; height:60px;" alt="Lisätietoa" title="Lisätietoa" /></a>
-            <a href="~/User/Map"><img src="~/Icons/map.svg" class="FooterIkoni" style="padding-left: 0%;padding-right: 5%;width:60px; height:60px;" alt="Pohjakartta" title="Pohjakartta" /></a>
-            <a href="~/User/ABC_Kategoriat"><img src="~/Icons/a-z.svg" class="FooterIkoni" style="padding-left: 0%;padding-right: 5%;width:60px; height:60px;" alt="Pohjakartta" title="Aakkos järjestys" /></a>
+          
         </div>
 
 
@@ -64,25 +55,32 @@
         @*tempdata changed to session , first condition checks if session has a string value-ZK*@
         @*action linkeihin tulee parametrinä nykyinen action ja controller, kielet, ja parametrit liityän mikä kategoria/koordinaatti olimme katsomassa näin onnistuu kielen lennosta vaihto ZK*@
      
-            <div class="row">
+    <div class="row">
+        @loggausInfo   
+        <div>
+            @Html.ActionLink("Näytä pääkategoriat", "Index", null, new { @class = "btn btn-warning  m-1" })
+        </div>   
+        
+        <div>
+            @Html.ActionLink("Näytä pääkategoriat", "Index", null, new { @class = "btn btn-warning  m-1" })
+        </div>
+        <div>
+            @if (Session["PaaAdmin"] != null)
+            {
+                @Html.ActionLink("Käyttäjätilien hallinta", "IndexUsers", null, new { @class = "btn btn-primary text-white  m-1" }) @*Käyttäjien hallinta*@
+            }
+        </div>
+        <div>
 
-                <div class="col-6" style="text-align:start">
-                    <p class="loginInfoParagraph">@loggausInfo</p> @*Tähän tulostuu käyttäjän nimen näytölle ja oikeudet/rooli -FW*@
-                </div>
+            <a id="logOut" href="~/Admin/Uloskirjautuminen" class="btn btn-danger  m-1" style="color:white">Kirjaudu ulos</a> @*Kirjaudu ulos painike*@
 
-                <div class="col-6" style="text-align:end">
-                    @if (Session["PaaAdmin"] != null)
-                    {
-                        @Html.ActionLink("Käyttäjätilien hallinta", "IndexUsers", null, new { @class = "btn btn-primary text-white" }) @*Käyttäjien hallinta*@
-                    }
-
-                    <a id="logOut" href="~/Admin/Uloskirjautuminen" class="btn btn-danger" style="color:white">Kirjaudu ulos</a> @*Kirjaudu ulos painike*@
-                </div>
-            </div>
+        </div>
+    </div>
         
 
     </nav>
-    <div class="container-fluid" style="text-align:center">
+    <div class="container-fluid" style="text-align:left">
+      
         <div class="bodyRender">
             @RenderBody()
         </div>
