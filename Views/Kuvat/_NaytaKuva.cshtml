@@ -1,0 +1,13 @@
+﻿@model KirjastoAppScrum.Models.Kuvat
+
+@if (Model.Image != null)
+{
+    var base64 = Convert.ToBase64String(Model.Image);
+    var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+    <img class="card-img-top" style="max-width: 50vw;height:auto" src="@imgsrc" alt="@Model.AltText">
+}
+else
+{
+    <img class="card-img-top" src="~/Icons/house.svg" alt="Kuva ei latautunut">
+
+}

@@ -403,6 +403,7 @@
     <Content Include="Views\Kuvat\Index.cshtml" />
     <Content Include="Views\Kuvat\ValitseKuva.cshtml" />
     <Content Include="Views\Shared\_Layout_Admin.cshtml" />
+    <Content Include="Views\Kuvat\_NaytaKuva.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

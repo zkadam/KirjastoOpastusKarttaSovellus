@@ -208,6 +208,23 @@ namespace KirjastoAppScrum.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
         }
+
+        //------------------------------------------------------PARTIAL VIEW KUVIEN NÄYTTÄMISEN VARTEN
+
+        // GET
+        public ActionResult _NaytaKuva(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Kuvat kuvat = db.Kuvat.Find(id);
+            if (kuvat == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView();
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
