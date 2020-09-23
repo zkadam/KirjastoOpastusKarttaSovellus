@@ -26,11 +26,11 @@
     string thisKoordinate = "";
     if (item.radius.HasValue)
     {
-        thisKoordinate = "{\"x\":" + item.startX + ", \"y\":" + item.startY + " ,\"radius\":" + item.radius + ", \"kerros\":" + item.kerros + ", \"color\":\"red\"}";
+        thisKoordinate = "{\"x\":" + item.startX + ", \"y\":" + item.startY + " ,\"radius\":" + item.radius + ", \"kerros\":" + item.kerros + ", \"color\":\"red\",\"kuvaID\":"+item.kuvaID+"}";
     }
     else
     {
-        thisKoordinate = "{\"x\":" + item.startX + ", \"y\":" + item.startY + ", \"width\":" + item.width + " ,\"height\":" + item.height + ", \"kerros\":" + item.kerros + ", \"color\":\"red\"}";
+        thisKoordinate = "{\"x\":" + item.startX + ", \"y\":" + item.startY + ", \"width\":" + item.width + " ,\"height\":" + item.height + ", \"kerros\":" + item.kerros + ", \"color\":\"red\",\"kuvaID\":" + item.kuvaID+"}";
     }
 
     //tänne sitten tulee kaikki koordinaatit listattu paragrapheiksi samaalla classilla että script pystyy niitä näppärästi hakea-ZK
@@ -97,6 +97,27 @@
         <div class="modal-content">
             <div class="modal-body" id="modaal" style="text-align:left">
                 <p id="changeModal">@ViewBag.KoordsToisessa</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+    
+    
+    <!--Kuva Modal -->
+<div id="kuvaModal" class="modal fade " role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body" id="modaal" style="text-align:left">
+                <div id="changeKuvaModal">
+
+
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
@@ -372,7 +393,10 @@
                             //ctx.closePath();
                         }
                         //calling the areamap clickable links resizing function so areamaps correlate with the drawen shapes
-                        mapResize(shape.x*3, shape.y*3, shape.width*3, shape.height*3, shape.radius*3);
+                        if (shape.kuvaID) {
+
+                        mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
+                        }
                     }
 
                 }
@@ -457,9 +481,9 @@
     
     //-----------------------------------------------------------------------------------------------------------------------//
         //----------------------------------------------------------FUNCTION FOR RESIZING IMAGE MAP COORDINATES FOR BEING CORRECT--------------------------------------//
-        
+
        
-        function mapResize(x, y, width, height, radius) {
+        function mapResize(x, y, width, height, radius, kuvaID) {
             console.log('resized');        //document.getElementById("demo").innerHTML = txt;
 
             //we check hight and width of canvas
@@ -484,10 +508,22 @@
             }
             
             alue.coords = newCoords;
-            alue.alt = "klikkaa tänne jos haluat nähdä kuvan"
-            alue.href = "https://www.porvoo.fi/kirjastot-ja-aukioloajat#paakirjasto"
+            alue.alt = "klikkaa tänne jos haluat nähdä kuvan";
+            
+            //alue.onclick = 'avaaKuvan(kuvaID)';
+            var onclickStr = "avaaKuvan(" + kuvaID.toString() + ")";
+            console.log(onclickStr)
+            alue.onclick = onclickStr;
+            //alue.onclick = function () { avaaKuvan(kuvaID); }
+            //alue.onclick = avaaKuvan(kuvaID); 
+            //element.setAttribute(onclick, avaaKuvan(kuvaID))
             console.log(alue);
             document.getElementById("kuvaKartta").appendChild(alue);
         }
+
+    function avaaKuvan(kuvaID) {
+
+        console.log('avataan kuva' + kuvaID);
+    }
 </script>
 
