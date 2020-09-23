@@ -140,7 +140,9 @@ namespace KirjastoAppScrum.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddCoords([Bind(Include = "KoordinaattiID,startX,startY,width,height,radius,kerros")] Koordinaatit koordinaatit, int? referi)
         {
-            if (ModelState.IsValid)
+            if (Session["PaaAdmin"] != null || Session["PerusAdmin"] != null)
+            {
+                if (ModelState.IsValid)
             {
                 db.Koordinaatit.Add(koordinaatit);
                 db.SaveChanges();
@@ -158,6 +160,16 @@ namespace KirjastoAppScrum.Controllers
 
             ViewBag.KoordinaattiID = new SelectList(db.Kategoria, "KategoriaID", "SN", koordinaatit.KoordinaattiID);
             return View("AddCoords", "_Layout_Admin",koordinaatit);
+        }
+            else if (Session["PerusUser"] != null)
+            {
+                return RedirectToAction("AccessDenied", "Admin");
+    }
+            else
+            {
+                Session.Abandon();
+                return RedirectToAction("Sisaankirjautuminen", "Admin");
+}
         }
 
         // Koordinaattien muokkausta RJ
@@ -189,7 +201,9 @@ namespace KirjastoAppScrum.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditCoords([Bind(Include = "KoordinaattiID,startX,startY,width,height,radius,kerros")] Koordinaatit koords, int? referi)
         {
-            if (ModelState.IsValid)
+            if (Session["PaaAdmin"] != null || Session["PerusAdmin"] != null)
+            {
+                if (ModelState.IsValid)
             {
                 db.Entry(koords).State = EntityState.Modified;
                 db.SaveChanges();
@@ -205,6 +219,16 @@ namespace KirjastoAppScrum.Controllers
                 }
             }
             return View("EditCoords", "_Layout_Admin", koords);
+            }
+            else if (Session["PerusUser"] != null)
+            {
+                return RedirectToAction("AccessDenied", "Admin");
+            }
+            else
+            {
+                Session.Abandon();
+                return RedirectToAction("Sisaankirjautuminen", "Admin");
+            }
         }
         // Koordinaattien Poisto
         public ActionResult RemoveCoords(string itemName, int? id)
@@ -234,7 +258,10 @@ namespace KirjastoAppScrum.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult RemoveCoordsConfirmed(int id, int? referi)
         {
-            Koordinaatit koords = db.Koordinaatit.Find(id);
+            if (Session["PaaAdmin"] != null || Session["PerusAdmin"] != null)
+            {
+
+             Koordinaatit koords = db.Koordinaatit.Find(id);
             db.Koordinaatit.Remove(koords);
             db.SaveChanges();
 
@@ -247,6 +274,17 @@ namespace KirjastoAppScrum.Controllers
             {
                 return RedirectToAction("IndexAll");
             }
+
+        }
+            else if (Session["PerusUser"] != null)
+            {
+                return RedirectToAction("AccessDenied", "Admin");
+    }
+            else
+            {
+                Session.Abandon();
+                return RedirectToAction("Sisaankirjautuminen", "Admin");
+}
         }
 
         //--------------------- KATEGORIAT JA ITEMIT ------------------------
@@ -321,7 +359,10 @@ namespace KirjastoAppScrum.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddKategoria(AddKategoriaViewModel model)
         {
-            var kategoria = new Kategoria // Lisätään ensiksi uuden kategorian tiedot ja luodaan tietokantaan tämä
+            if (Session["PaaAdmin"] != null || Session["PerusAdmin"] != null)
+            {
+
+                var kategoria = new Kategoria // Lisätään ensiksi uuden kategorian tiedot ja luodaan tietokantaan tämä
             {
                 SN = model.SN,
                 ReferTo = model.ReferTo,
@@ -436,6 +477,16 @@ namespace KirjastoAppScrum.Controllers
             {
                 return RedirectToAction("IndexAll");
             }
+        }
+        else if (Session["PerusUser"] != null)
+        {
+            return RedirectToAction("AccessDenied", "Admin");
+        }
+        else
+        {
+            Session.Abandon();
+            return RedirectToAction("Sisaankirjautuminen", "Admin");
+        }
         }
 
         // Kategorian Muokkaus by RJ111
@@ -567,7 +618,9 @@ namespace KirjastoAppScrum.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditKategoria(AddKategoriaViewModel model)
         {
-            var kategoria = new Kategoria // lisätään Kategoria taulun muutetut tiedot
+            if (Session["PaaAdmin"] != null || Session["PerusAdmin"] != null)
+            {
+                var kategoria = new Kategoria // lisätään Kategoria taulun muutetut tiedot
             {
                 KategoriaID = model.KategoriaID,
                 SN = model.SN,
@@ -684,6 +737,16 @@ namespace KirjastoAppScrum.Controllers
             {
                 return RedirectToAction("IndexAll");
             }
+            }
+            else if (Session["PerusUser"] != null)
+            {
+                return RedirectToAction("AccessDenied", "Admin");
+            }
+            else
+            {
+                Session.Abandon();
+                return RedirectToAction("Sisaankirjautuminen", "Admin");
+            }
         }
 
         // Kategorian Poisto RJ
@@ -722,7 +785,9 @@ namespace KirjastoAppScrum.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult RemoveKategoriaConfirmed(int id)
         {
-            Kategoria kategoriat = db.Kategoria.Find(id);
+        if (Session["PaaAdmin"] != null || Session["PerusAdmin"] != null)
+        {
+                Kategoria kategoriat = db.Kategoria.Find(id);
             db.Kategoria.Remove(kategoriat);
             db.SaveChanges();
 
@@ -735,6 +800,16 @@ namespace KirjastoAppScrum.Controllers
             {
                 return RedirectToAction("IndexAll");
             }
+        }
+        else if (Session["PerusUser"] != null)
+        {
+            return RedirectToAction("AccessDenied", "Admin");
+        }
+        else
+        {
+            Session.Abandon();
+            return RedirectToAction("Sisaankirjautuminen", "Admin");
+        }
         }
 
         // --------------------- LOGIN TOIMINNOT --------------------------//
@@ -799,7 +874,10 @@ namespace KirjastoAppScrum.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddKategCoords(string sn, int? referTo, int? luokka, string teksti)
         {
-            var kategoria = new Kategoria // Lisätään ensiksi uuden kategorian tiedot ja luodaan tietokantaan tämä
+            if (Session["PaaAdmin"] != null || Session["PerusAdmin"] != null)
+            {
+
+                var kategoria = new Kategoria // Lisätään ensiksi uuden kategorian tiedot ja luodaan tietokantaan tämä
             {
                 SN = sn,
                 ReferTo = referTo,
@@ -863,6 +941,16 @@ namespace KirjastoAppScrum.Controllers
                 {
                     return RedirectToAction("IndexAll");
                 }
+            }
+            }
+            else if (Session["PerusUser"] != null)
+            {
+                return RedirectToAction("AccessDenied", "Admin");
+            }
+            else
+            {
+                Session.Abandon();
+                return RedirectToAction("Sisaankirjautuminen", "Admin");
             }
         }
         //------- Kayttäjätilien hallinta -------//
