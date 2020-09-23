@@ -223,7 +223,7 @@ namespace KirjastoAppScrum.Controllers
             {
                 return HttpNotFound();
             }
-            return PartialView();
+            return PartialView(kuvat);
         }
         protected override void Dispose(bool disposing)
         {

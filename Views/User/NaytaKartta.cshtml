@@ -108,14 +108,15 @@
     
     
     <!--Kuva Modal -->
-<div id="kuvaModal" class="modal fade " role="dialog">
+<div id="kuvaModal" class="modal fade modal-lg" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
 
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-body" id="modaal" style="text-align:left">
+                <div>
                 <div id="changeKuvaModal">
-
+                </div>
 
                 </div>
             </div>
@@ -509,11 +510,31 @@
             
             alue.coords = newCoords;
             alue.alt = "klikkaa tänne jos haluat nähdä kuvan";
-            
-            //alue.onclick = 'avaaKuvan(kuvaID)';
-            var onclickStr = "avaaKuvan(" + kuvaID.toString() + ")";
-            console.log(onclickStr)
-            alue.onclick = onclickStr;
+            alue.id = kuvaID;
+
+
+            //funtion jolla kutsutan partial viewin kautta kuvan
+            alue.onclick = function avaaKuvan(kuvaID) {
+                id = this.id;
+                console.log('avataan kuva' + id);
+
+                var url = "/Kuvat/_NaytaKuva/?id=" + id;           /*luodaan kontrollerin url viittaus*/
+                $.get(url, function (data) {                                /*kutsutaan kontrollerin */
+                    $("#changeKuvaModal").replaceWith(data);                               /*korvataan $detailDiv - muuttujan elementin sisältö kontrollerin palauttamalla partial view:llä*/
+                });
+
+                $("#kuvaModal").modal("toggle");
+                setTimeout(closeModal2, 180000);
+
+                //modal piiloutuu automaattisesti ZK
+                function closeModal2() {
+                    $("#kuvaModal").modal("hide");
+                }
+
+
+
+
+            }
             //alue.onclick = function () { avaaKuvan(kuvaID); }
             //alue.onclick = avaaKuvan(kuvaID); 
             //element.setAttribute(onclick, avaaKuvan(kuvaID))
@@ -521,9 +542,9 @@
             document.getElementById("kuvaKartta").appendChild(alue);
         }
 
-    function avaaKuvan(kuvaID) {
+    //function avaaKuvan(kuvaID) {
 
-        console.log('avataan kuva' + kuvaID);
-    }
+    //    console.log('avataan kuva' + kuvaID);
+    //}
 </script>
 
