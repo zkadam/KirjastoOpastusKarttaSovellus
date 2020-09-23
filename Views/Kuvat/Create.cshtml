@@ -32,8 +32,8 @@
     </div>
     @*<button class="btn btn-success" onclick="document.getElementById('kuvaUpload').click()">Lataa uusi kuva</button>*@
 
-    <input type="file" id="kuvaUpload" name="kuva"  />
-    
+    <input type="file" id="kuvaUpload" name="kuva" />
+    <img style="max-width: 50vw; height: auto" id="changePic" src="#" alt="uusi kuva" />
     <p></p>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
@@ -50,3 +50,23 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+<script type="text/javascript">
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#changePic').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#kuvaUpload").change(function () {
+        readURL(this);
+    });
+
+
+</script>
