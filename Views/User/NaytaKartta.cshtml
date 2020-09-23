@@ -21,17 +21,36 @@
 @foreach (var item in Model)
 {
     //bringing all the coordinates to a same classed name element - which JavaScr will collect ZK
-    //first checking if it is circle by checking if it has radius ZK
+    //first checking if it has picturw
+    //then checking if it is circle by checking if it has radius ZK
     //json apperanetly needs double quotes so they need to be marked with \"
     string thisKoordinate = "";
-    if (item.radius.HasValue)
+
+    if (item.kuvaID!=null)
     {
-        thisKoordinate = "{\"x\":" + item.startX + ", \"y\":" + item.startY + " ,\"radius\":" + item.radius + ", \"kerros\":" + item.kerros + ", \"color\":\"red\",\"kuvaID\":"+item.kuvaID+"}";
+
+        if (item.radius.HasValue)
+        {
+            thisKoordinate = "{\"x\":" + item.startX + ", \"y\":" + item.startY + " ,\"radius\":" + item.radius + ", \"kerros\":" + item.kerros + ", \"color\":\"red\",\"kuvaID\":"+item.kuvaID+"}";
+        }
+        else
+        {
+            thisKoordinate = "{\"x\":" + item.startX + ", \"y\":" + item.startY + ", \"width\":" + item.width + " ,\"height\":" + item.height + ", \"kerros\":" + item.kerros + ", \"color\":\"red\",\"kuvaID\":" + item.kuvaID+"}";
+        }
+
     }
     else
     {
-        thisKoordinate = "{\"x\":" + item.startX + ", \"y\":" + item.startY + ", \"width\":" + item.width + " ,\"height\":" + item.height + ", \"kerros\":" + item.kerros + ", \"color\":\"red\",\"kuvaID\":" + item.kuvaID+"}";
+        if (item.radius.HasValue)
+        {
+            thisKoordinate = "{\"x\":" + item.startX + ", \"y\":" + item.startY + " ,\"radius\":" + item.radius + ", \"kerros\":" + item.kerros + ", \"color\":\"red\"}";
+        }
+        else
+        {
+            thisKoordinate = "{\"x\":" + item.startX + ", \"y\":" + item.startY + ", \"width\":" + item.width + " ,\"height\":" + item.height + ", \"kerros\":" + item.kerros + ", \"color\":\"red\"}";
+        }
     }
+
 
     //tänne sitten tulee kaikki koordinaatit listattu paragrapheiksi samaalla classilla että script pystyy niitä näppärästi hakea-ZK
     <p class="koordinaatit" style="display:none">@thisKoordinate</p>
@@ -108,8 +127,8 @@
     
     
     <!--Kuva Modal -->
-<div id="kuvaModal" class="modal fade modal-lg" role="dialog">
-    <div class="modal-dialog modal-dialog-centered">
+<div id="kuvaModal" class="modal fade " role="dialog">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
 
         <!-- Modal content-->
         <div class="modal-content">
