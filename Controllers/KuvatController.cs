@@ -148,6 +148,8 @@ namespace KirjastoAppScrum.Controllers
             return View("ValitseKuva","_Layout_Admin", db.Kuvat.ToList());
         }
 
+
+
         //actionresult joka asettaa valitun kuvan kordinaattiin - sitten palauttaa indexillä
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -192,7 +194,7 @@ namespace KirjastoAppScrum.Controllers
                     db.Entry(koordinaatti).State = EntityState.Modified;
                     db.SaveChanges();
 
-                    return RedirectToAction("AsetaKuva", "Kuvat", new { id=koordinaatti.KoordinaattiID, kategoria=kategoria });
+                    return RedirectToAction("ValitseKuva", "Kuvat", new { id=koordinaatti.KoordinaattiID, kategoria=kategoria });
                 }
                 catch (Exception)
                 {

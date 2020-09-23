@@ -14,7 +14,7 @@
     @foreach (var item in Model)
     {
 
-
+        //convertoidan kuva
         <div class="card mt-1 mr-1" style="width:30vw;border-color:blueviolet ;float:left;">
             @if (item.Image != null)
             {
@@ -31,13 +31,14 @@
                 <h4 class="card-title"> @Html.DisplayFor(modelItem => item.AltText)</h4>
                 <p class="card-text">@Html.DisplayFor(modelItem => item.ImagePath)</p>
 
+          @* tänne tulee begin form jolla asetetaan/poistetaan valitun kuvan -tarvitse formin post ja antiforgeryn takia *@
                 @if (ViewBag.kuvaID != item.KuvaId)
                 {
                     using (Html.BeginForm("AsetaKuva", "Kuvat", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
                      
-                        @Html.ActionLink("Valitse", "AsetaKuva", new { id = ViewBag.KoordId, kuvaID = item.KuvaId }, new { @class = "btn btn-success text-white" })
+                      
 
                         <div class="form-group">
                             <div class="col-md-offset-2 col-md-10">
@@ -47,10 +48,23 @@
                             </div>
                         </div>
                         }
-                    }
+                }
                     else
                     {
-                        @Html.ActionLink("Poista kuva valinta", "PoistaKuva", "Kuvat", new { id = ViewBag.KoordId, kategoria = ViewBag.Kategoria }, new { @class = "btn btn-secondary text-white" })
+                     using (Html.BeginForm("PoistaKuva", "Kuvat", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                     
+                       <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="hidden" id="id" name="id" value="@ViewBag.KoordId" />
+                                <input type="hidden" id="kuvaID" name="kuvaID" value="@ViewBag.kategoria" />
+
+                                <input type="submit" value="Poista kuva valinta" class="btn btn-secondary text-white" />
+                            </div>
+                        </div>
+                        }
+
                          }
 
             </div>
