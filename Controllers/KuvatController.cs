@@ -17,7 +17,22 @@ namespace KirjastoAppScrum.Controllers
         // GET: Kuvat
         public ActionResult Index()
         {
-            return View("Index","_Layout_Admin",db.Kuvat.ToList());
+            if (Session["PaaAdmin"] != null || Session["PerusAdmin"] != null)
+            {
+
+
+                return View("Index","_Layout_Admin",db.Kuvat.ToList());
+
+            }
+            else if (Session["PerusUser"] != null)
+            {
+                return RedirectToAction("AccessDenied", "Admin");
+            }
+            else
+            {
+                Session.Abandon();
+                return RedirectToAction("Sisaankirjautuminen", "Admin");
+            }
         }
 
 
@@ -25,7 +40,22 @@ namespace KirjastoAppScrum.Controllers
         // GET: Kuvat/Create
         public ActionResult Create()
         {
-            return View("Create","_Layout_Admin");
+            if (Session["PaaAdmin"] != null || Session["PerusAdmin"] != null)
+            {
+
+                return View("Create","_Layout_Admin");
+
+
+            }
+            else if (Session["PerusUser"] != null)
+            {
+                return RedirectToAction("AccessDenied", "Admin");
+            }
+            else
+            {
+                Session.Abandon();
+                return RedirectToAction("Sisaankirjautuminen", "Admin");
+            }
         }
 
         // POST: Kuvat/Create
@@ -35,28 +65,43 @@ namespace KirjastoAppScrum.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "KuvaId,AltText,ImagePath,Image,kuva")] Kuvat kuvat)
         {
-            if (ModelState.IsValid)
+            if (Session["PaaAdmin"] != null || Session["PerusAdmin"] != null)
             {
-                int count = Request.Files.Count;
-                var file = Request.Files[0];
-                string filename = file.FileName;
-                byte[] buffer = new byte[file.InputStream.Length];
-                file.InputStream.Read(buffer, 0, (int)file.InputStream.Length);
+                if (ModelState.IsValid)
+                {
+                    int count = Request.Files.Count;
+                    var file = Request.Files[0];
+                    string filename = file.FileName;
+                    byte[] buffer = new byte[file.InputStream.Length];
+                    file.InputStream.Read(buffer, 0, (int)file.InputStream.Length);
 
-                db.Entry(kuvat).State = EntityState.Added;
-                kuvat.Image = buffer;
-                kuvat.ImagePath = filename;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                    db.Entry(kuvat).State = EntityState.Added;
+                    kuvat.Image = buffer;
+                    kuvat.ImagePath = filename;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
+                return View("Create", "_Layout_Admin",kuvat);
             }
-
-            return View("Create", "_Layout_Admin",kuvat);
+            else if (Session["PerusUser"] != null)
+            {
+                return RedirectToAction("AccessDenied", "Admin");
+            }
+            else
+            {
+                Session.Abandon();
+                return RedirectToAction("Sisaankirjautuminen", "Admin");
+            }
         }
 
         // GET: Kuvat/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            if (Session["PaaAdmin"] != null || Session["PerusAdmin"] != null)
+            {
+
+                if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -66,6 +111,17 @@ namespace KirjastoAppScrum.Controllers
                 return HttpNotFound();
             }
             return View("Edit", "_Layout_Admin",kuvat);
+
+            }
+            else if (Session["PerusUser"] != null)
+            {
+                return RedirectToAction("AccessDenied", "Admin");
+            }
+            else
+            {
+                Session.Abandon();
+                return RedirectToAction("Sisaankirjautuminen", "Admin");
+            }
         }
 
         // POST: Kuvat/Edit/5
@@ -75,38 +131,63 @@ namespace KirjastoAppScrum.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "KuvaId,AltText,ImagePath,Image,kuva")] Kuvat kuvat)
         {
-            if (ModelState.IsValid)
+            if (Session["PaaAdmin"] != null || Session["PerusAdmin"] != null)
             {
-                int count = Request.Files.Count;
-                var file = Request.Files[0];
-                string filename = file.FileName;
-                byte[] buffer = new byte[file.InputStream.Length];
-                file.InputStream.Read(buffer, 0, (int)file.InputStream.Length);
+                if (ModelState.IsValid)
+                {
+                    int count = Request.Files.Count;
+                    var file = Request.Files[0];
+                    string filename = file.FileName;
+                    byte[] buffer = new byte[file.InputStream.Length];
+                    file.InputStream.Read(buffer, 0, (int)file.InputStream.Length);
 
 
 
-                db.Entry(kuvat).State = EntityState.Modified;
-                kuvat.Image = buffer;
-                kuvat.ImagePath = filename;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                    db.Entry(kuvat).State = EntityState.Modified;
+                    kuvat.Image = buffer;
+                    kuvat.ImagePath = filename;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                return View("Edit", "_Layout_Admin", kuvat);
+                }
+            else if (Session["PerusUser"] != null)
+            {
+                return RedirectToAction("AccessDenied", "Admin");
             }
-            return View("Edit", "_Layout_Admin", kuvat);
+            else
+            {
+                Session.Abandon();
+                return RedirectToAction("Sisaankirjautuminen", "Admin");
+            }
         }
 
         // GET: Kuvat/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            if (Session["PaaAdmin"] != null || Session["PerusAdmin"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Kuvat kuvat = db.Kuvat.Find(id);
-            if (kuvat == null)
+
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Kuvat kuvat = db.Kuvat.Find(id);
+                if (kuvat == null)
+                {
+                    return HttpNotFound();
+                }
+                return View("Delete", "_Layout_Admin", kuvat);
+                }
+            else if (Session["PerusUser"] != null)
             {
-                return HttpNotFound();
+                return RedirectToAction("AccessDenied", "Admin");
             }
-            return View("Delete", "_Layout_Admin", kuvat);
+            else
+            {
+                Session.Abandon();
+                return RedirectToAction("Sisaankirjautuminen", "Admin");
+            }
         }
 
         // POST: Kuvat/Delete/5
@@ -114,10 +195,22 @@ namespace KirjastoAppScrum.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Kuvat kuvat = db.Kuvat.Find(id);
-            db.Kuvat.Remove(kuvat);
-            db.SaveChanges();
-            return RedirectToAction("Index", "_Layout_Admin");
+            if (Session["PaaAdmin"] != null || Session["PerusAdmin"] != null)
+            {
+                Kuvat kuvat = db.Kuvat.Find(id);
+                db.Kuvat.Remove(kuvat);
+                db.SaveChanges();
+                return RedirectToAction("Index", "_Layout_Admin");
+            }
+            else if (Session["PerusUser"] != null)
+            {
+                return RedirectToAction("AccessDenied", "Admin");
+            }
+            else
+            {
+                Session.Abandon();
+                return RedirectToAction("Sisaankirjautuminen", "Admin");
+            }
         }
 
 
