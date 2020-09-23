@@ -91,14 +91,33 @@
 
                         if (lisaaKoords == true)
                         {
-                            @Html.ActionLink("Lisää koordinaatteja", "AddKategCoords", new { sn = 0.ToString(), referTo = item.Kategoria.KategoriaID, luokka = 3, teksti = item.Teksti }, new { @class = "btn btn-info", @style = "color:white;" })
+                            //Actionlinkki vaihdettu formin post methodin takia ja antiforgerytokenin takia
+                            @*@Html.ActionLink("Lisää koordinaatteja", "AddKategCoords", new { sn = 0.ToString(), referTo = item.Kategoria.KategoriaID, luokka = 3, teksti = item.Teksti }, new { @class = "btn btn-info", @style = "color:white;" })*@
+                            using (Html.BeginForm("AddKategCoords", "Admin", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+
+
+
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <input type="hidden" id="sn" name="sn" value="0" />
+                                        <input type="hidden" id="referTo" name="referTo" value=@item.Kategoria.KategoriaID />
+                                        <input type="hidden" id="luokka" name="luokka" value=3 />
+                                        <input type="hidden" id="teksti" name="teksti" value="@item.Teksti" />
+                                        <input type="submit" value="Lisää koordinaatteja" class="btn btn-info text-white" />
+                                    </div>
+                                </div>
+                            }
+
+
                         }
                     }
 
                     else if (item.Kategoria.Koordinaatit != null)
                     {
                         @Html.ActionLink("Muokkaa sijaintia", "EditCoords", new { id = item.Kategoria.KategoriaID, referi = item.Kategoria.ReferTo, itemName = item.Teksti }, new { @class = "btn btn-success", @style = "color:white; margin-right: 25px;" })
-                       
+
                         @Html.ActionLink("Poista sijainti", "RemoveCoords", new { id = item.Kategoria.Koordinaatit.KoordinaattiID, referi = item.Kategoria.ReferTo, itemName = item.Teksti }, new { @class = "btn btn-danger", @style = "color:white;" })
                     }
                     else
@@ -132,21 +151,40 @@
                 </td>
             </tr>
             }
-        <tr>
-
-            <td>
-                @if (@ViewBag.kategoriaTulostus == 1.ToString())
-                {
-                    @Html.ActionLink("Lisää koordinaatti", "AddKategCoords", new { sn = 0.ToString(), referTo = @ViewBag.kategoriaRefer, luokka = 3, teksti = @ViewBag.Title }, new { @class = "btn btn-primary" })
-                }
-                else
-                {
-                    @Html.ActionLink("Lisää uusi", "AddKategoria", new { id = @ViewBag.kategoriaRefer }, new { @class = "btn btn-primary text-white" })
-                }
-                @* Tämä edelliseen palautuminen ei vielä toimi *@
-                @Html.ActionLink("Takaisin", "Index", new { kategoriaRefer = @ViewBag.master }, new { @class = "btn btn-warning" })
-                @Html.ActionLink("Näytä kaikki", "IndexAll", null, new { @class = "btn btn-warning" })
-            </td>
-        </tr>        
+     
     </table>
+    <div class="row">
+        @if (@ViewBag.kategoriaTulostus == 1.ToString())
+        {
+            @*@Html.ActionLink("Lisää koordinaatti", "AddKategCoords", new { sn = 0.ToString(), referTo = @ViewBag.kategoriaRefer, luokka = 3, teksti = @ViewBag.Title }, new { @class = "btn btn-primary" })*@
+            using (Html.BeginForm("AddKategCoords", "Admin", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="hidden" id="sn" name="sn" value="0" />
+                        <input type="hidden" id="referTo" name="referTo" value=@ViewBag.kategoriaRefer />
+                        <input type="hidden" id="luokka" name="luokka" value=3 />
+                        <input type="hidden" id="teksti" name="teksti" value="@ViewBag.Title" />
+                        <input type="submit" value="Lisää koordinaatti" class="btn btn-primary" />
+            
+                    </div>
+                </div>
+            }
+
+
+        }
+        else
+        {
+            @Html.ActionLink("Lisää uusi", "AddKategoria", new { id = @ViewBag.kategoriaRefer }, new { @class = "btn btn-primary text-white" })
+        }
+        
 </div>
+    @* Tämä edelliseen palautuminen ei vielä toimi *@
+    <div class="col-md-offset-2 col-md-10 mt-2">
+        @Html.ActionLink("Takaisin", "Index", new { kategoriaRefer = @ViewBag.master }, new { @class = "btn btn-warning" })
+        @Html.ActionLink("Näytä kaikki", "IndexAll", null, new { @class = "btn btn-warning" })
+    </div>

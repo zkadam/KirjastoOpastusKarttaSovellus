@@ -795,6 +795,8 @@ namespace KirjastoAppScrum.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult AddKategCoords(string sn, int? referTo, int? luokka, string teksti)
         {
             var kategoria = new Kategoria // Lisätään ensiksi uuden kategorian tiedot ja luodaan tietokantaan tämä
