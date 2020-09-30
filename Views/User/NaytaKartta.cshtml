@@ -169,7 +169,7 @@
 
     };
 
-    window.addEventListener("resize",  clickKerrosButton());
+    window.addEventListener("resize",  clickKerrosButton);
     //canvas piirtyy aina kun kerros button on painettu ZK
 
     function drawTheCanvas(imgIdPar, floorPar) {
@@ -435,14 +435,14 @@
 
                                 ctx.drawImage(ikoni, (shape.x * 3) + 20, (shape.y * 3) + 20, shape.width*2, shape.height*2);
                                 ctx.stroke();
-                                mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
+                                //mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
                             }
                         }
                         //calling the areamap clickable links resizing function so areamaps correlate with the drawen shapes
-                        //if (shape.kuvaID) {
+                        if (shape.kuvaID) {
 
-                        //mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
-                        //}
+                        mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
+                        }
                     }
 
                 }
@@ -560,6 +560,11 @@
 
             //funtion jolla kutsutan partial viewin kautta kuvan
             alue.onclick = function avaaKuvan(kuvaID) {
+                var divi = document.createElement("div");
+                divi.id = "changeKuvaModal";
+                divi.innerHTML = "<p>Ladataan kuva...</p>";
+                $("#changeKuvaModal").replaceWith(divi);                               /*korvataan $detailDiv - muuttujan elementin latausviestillä
+
                 id = this.id;
                 console.log('avataan kuva' + id);
 
