@@ -26,16 +26,16 @@
     //json apperanetly needs double quotes so they need to be marked with \"
     string thisKoordinate = "";
 
-    if (item.kuvaID!=null)
+    if (item.kuvaID != null)
     {
 
         if (item.radius.HasValue)
         {
-            thisKoordinate = "{\"x\":" + item.startX + ", \"y\":" + item.startY + " ,\"radius\":" + item.radius + ", \"kerros\":" + item.kerros + ", \"color\":\"red\",\"kuvaID\":"+item.kuvaID+"}";
+            thisKoordinate = "{\"x\":" + item.startX + ", \"y\":" + item.startY + " ,\"radius\":" + item.radius + ", \"kerros\":" + item.kerros + ", \"color\":\"red\",\"kuvaID\":" + item.kuvaID + "}";
         }
         else
         {
-            thisKoordinate = "{\"x\":" + item.startX + ", \"y\":" + item.startY + ", \"width\":" + item.width + " ,\"height\":" + item.height + ", \"kerros\":" + item.kerros + ", \"color\":\"red\",\"kuvaID\":" + item.kuvaID+"}";
+            thisKoordinate = "{\"x\":" + item.startX + ", \"y\":" + item.startY + ", \"width\":" + item.width + " ,\"height\":" + item.height + ", \"kerros\":" + item.kerros + ", \"color\":\"red\",\"kuvaID\":" + item.kuvaID + "}";
         }
 
     }
@@ -68,6 +68,7 @@
     HUOM2 id="container" - siihen viitataan scriptillä! ZK
     -->
 
+<img src="~/Icons/image.svg" id="kuvaIkoni" style="display:none; width:40px; height:40px;" alt="Katso kuvat" title="Katso kuvat" onload="clickKerrosButton()" />
 <div id="container" style="text-align:center; ">
 
     @*putting the library picture to the background , setting the z-index to -1 so that the canvas objects are being drawn over it
@@ -79,8 +80,8 @@
     <img id="KirjastonKarttaKuva1" width="3840" height="1881" style="position: absolute; z-index:-5;display:none; max-width:78vw; height:auto" src="~/Maps/1krs_Tyhja_V5.svg" alt="Ensimmäinen kerros" />
     <img id="KirjastonKarttaKuva2" width="3840" height="1881" style="position: absolute; z-index:-5; display:none; max-width:78vw; height:auto" src="~/Maps/2krs_Tyhja_V5.svg" alt="Toinen kerros" />
     @* phantom kuva kuvakarttan takia, opacity piilottaa sen mutta linkit toimii, z index canvaksen ja muiden elementtien yllä *@
-    <img id="KuvaKartta" usemap="#kuvaKartta"  width="3840" height="1881" style="position: absolute; z-index:20; opacity:0 ; max-width:78vw; height:auto" src="~/Maps/2krs_Tyhja_V5.svg" alt="Toinen kerros" />
- 
+    <img id="KuvaKartta" usemap="#kuvaKartta" width="3840" height="1881" style="position: absolute; z-index:20; opacity:0 ; max-width:78vw; height:auto" src="~/Maps/2krs_Tyhja_V5.svg" alt="Toinen kerros" />
+
     @*defining the canvas, putting z-index to higher so it will be over  background*@
     <canvas id="myCanvas" width="3840" height="1881" style="position: relative; z-index:10;max-width:78vw; height:auto " onload="drawingRectangle">
         Your browser does not support the HTML5 canvas tag.
@@ -89,7 +90,6 @@
 </div>
 @* area map johon javascriptille appendataan kaikki koordinaatit *@
 <map name="kuvaKartta" id="kuvaKartta">
-
 </map>
 
 
@@ -124,9 +124,9 @@
 
     </div>
 </div>
-    
-    
-    <!--Kuva Modal -->
+
+
+<!--Kuva Modal -->
 <div id="kuvaModal" class="modal fade " role="dialog">
     <div class="modal-dialog modal-xl modal-dialog-centered">
 
@@ -134,8 +134,8 @@
         <div class="modal-content">
             <div class="modal-body" id="modaal" style="text-align:left">
                 <div>
-                <div id="changeKuvaModal">
-                </div>
+                    <div id="changeKuvaModal">
+                    </div>
 
                 </div>
             </div>
@@ -147,13 +147,15 @@
     </div>
 </div>
 
+
 @*here starts the javascript ZK*@
 
 <script charset="UTF-8">
 
     //kun sivu latautuu kutsutaan canvas piirto funktion, johon välitetään eka kerroksen parametrit ZK
     window.onload = drawTheCanvas("KirjastonKarttaKuva1", 1);
-    window.addEventListener("resize", function clickKerrosButton() {
+
+    function clickKerrosButton(){
         if (document.getElementById("KirjastonKarttaKuva1").style.display != "none") {
             console.log('we are in if - click first floor');
             drawTheCanvas("KirjastonKarttaKuva1", 1)
@@ -165,8 +167,9 @@
             drawTheCanvas("KirjastonKarttaKuva2", 2);
         }
 
-    });
+    };
 
+    window.addEventListener("resize",  clickKerrosButton());
     //canvas piirtyy aina kun kerros button on painettu ZK
 
     function drawTheCanvas(imgIdPar, floorPar) {
@@ -256,10 +259,10 @@
 
                         //buttonien näkymä vaihtoo sen mukaan kummassa kerroksessa ollaan -ZK
 
-                     
+
 
                         let currentFloor = 1;
-                        
+
 
                         let imgId = "KirjastonKarttaKuva1"
                         drawAll(imgId, currentFloor);
@@ -288,7 +291,7 @@
                     else {
 
                         //buttonien näkymä vaihtoo sen mukaan kummassa kerroksessa ollaan -ZK
-                
+
                         let currentFloor = 1;
 
                         let imgId = "KirjastonKarttaKuva1";
@@ -343,14 +346,14 @@
                     document.getElementById("changeFloor1").classList.add("active");
 
                 }
-                           
-             //------------------------------------------------kerros kirjoitus canvakselle              
+
+             //------------------------------------------------kerros kirjoitus canvakselle
                 ctx.globalAlpha = 1;
                 ctx.font = "700 80px Arial ";
                 ctx.fillStyle = "black";
                 ctx.textAlign = "center";
                 //kerros texti tulee kontrollerin kautta, monikielinen sovelluksen takia
-                ctx.fillText(currentFloorPar + ". @Html.Raw(ViewBag.Kerros)", 700, 80); 
+                ctx.fillText(currentFloorPar + ". @Html.Raw(ViewBag.Kerros)", 700, 80);
                 ctx.globalAlpha = 0.8; //sets the transparency
                 ctx.lineWidth = "18";
 
@@ -385,7 +388,7 @@
 
                             ctx.fill();
                             ctx.closePath();
-                            
+
 
                         } else if (shape.width) {
                             // Shadow
@@ -409,14 +412,37 @@
                             ctx.beginPath();
                             ctx.rect(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3);
                             ctx.stroke();
+                            ctx.closePath();
                             //ctx.fill();
                             //ctx.closePath();
+                            if (shape.kuvaID) {
+
+
+                                var ikoni = document.getElementById("kuvaIkoni");
+                                //var ikoni = document.createElement("img");
+                                //ikoni.src = "~/Icons/map.svg";
+                                //ikoni.width = "10px";
+                                //ikoni.height = "10px";
+                                
+                                
+                                //ctx.globalCompositeOperation = 'source-over';
+                                ctx.color = "white";
+                                ctx.globalAlpha = 1; //sets the transparency ZK
+                                ctx.shadowColor = "transparent";
+                                ctx.beginPath();
+                                ctx.fillStyle = "white";
+                                ctx.fillRect((shape.x * 3) + 20, (shape.y * 3) + 20, shape.width * 2, shape.height * 2);
+
+                                ctx.drawImage(ikoni, (shape.x * 3) + 20, (shape.y * 3) + 20, shape.width*2, shape.height*2);
+                                ctx.stroke();
+                                mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
+                            }
                         }
                         //calling the areamap clickable links resizing function so areamaps correlate with the drawen shapes
-                        if (shape.kuvaID) {
+                        //if (shape.kuvaID) {
 
-                        mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
-                        }
+                        //mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
+                        //}
                     }
 
                 }
@@ -498,11 +524,11 @@
                 }
             }
     }
-    
+
     //-----------------------------------------------------------------------------------------------------------------------//
         //----------------------------------------------------------FUNCTION FOR RESIZING IMAGE MAP COORDINATES FOR BEING CORRECT--------------------------------------//
 
-       
+
         function mapResize(x, y, width, height, radius, kuvaID) {
             console.log('resized');        //document.getElementById("demo").innerHTML = txt;
 
@@ -526,7 +552,7 @@
                 var newCoords = (Math.round((x - 18) * newWidthRatio)).toString() + ',' + (Math.round((y - 18) * newHeightRatio)).toString() + ',' + (Math.round(x + 18 + width) * newWidthRatio).toString()
                 + ',' + (Math.round((y +18+ height) * newHeightRatio)).toString();
             }
-            
+
             alue.coords = newCoords;
             alue.alt = "klikkaa tänne jos haluat nähdä kuvan";
             alue.id = kuvaID;
@@ -555,7 +581,7 @@
 
             }
             //alue.onclick = function () { avaaKuvan(kuvaID); }
-            //alue.onclick = avaaKuvan(kuvaID); 
+            //alue.onclick = avaaKuvan(kuvaID);
             //element.setAttribute(onclick, avaaKuvan(kuvaID))
             console.log(alue);
             document.getElementById("kuvaKartta").appendChild(alue);
