@@ -68,7 +68,7 @@
     HUOM2 id="container" - siihen viitataan scriptillä! ZK
     -->
 
-<img src="~/Icons/image.svg" id="kuvaIkoni" style="display:none; width:40px; height:40px;" alt="Katso kuvat" title="Katso kuvat" onload="clickKerrosButton()" />
+<img src="~/Icons/image.svg" id="kuvaIkoni" style="color:blue;fill:blue;display:none; width:40px; height:40px;" alt="Katso kuvat" title="Katso kuvat" onload="clickKerrosButton()" />
 <div id="container" style="text-align:center; ">
 
     @*putting the library picture to the background , setting the z-index to -1 so that the canvas objects are being drawn over it
@@ -128,7 +128,7 @@
 
 <!--Kuva Modal -->
 <div id="kuvaModal" class="modal fade " role="dialog">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
 
         <!-- Modal content-->
         <div class="modal-content">
@@ -388,6 +388,24 @@
 
                             ctx.fill();
                             ctx.closePath();
+                //iconin piirto jos on kuva
+                            if (shape.kuvaID) {
+
+
+                                var ikoni = document.getElementById("kuvaIkoni");
+                               
+                                //ctx.globalCompositeOperation = 'source-over';
+                                ctx.color = "white";
+                                ctx.globalAlpha = 1; //sets the transparency ZK
+                                ctx.shadowColor = "transparent";
+                                ctx.beginPath();
+                                ctx.fillStyle = "white";
+                                ctx.fillRect(shape.x * 3 - 45, shape.y * 3-40, 85,80 );
+                                ctx.fill();
+                                ctx.drawImage(ikoni, (shape.x * 3)-50, (shape.y * 3)-50 , 100, 100);
+                                ctx.stroke();
+                                //mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
+                            }
 
 
                         } else if (shape.width) {
@@ -413,8 +431,8 @@
                             ctx.rect(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3);
                             ctx.stroke();
                             ctx.closePath();
-                            //ctx.fill();
-                            //ctx.closePath();
+                         
+                //iconin piirto jos on kuva
                             if (shape.kuvaID) {
 
 
@@ -431,9 +449,12 @@
                                 ctx.shadowColor = "transparent";
                                 ctx.beginPath();
                                 ctx.fillStyle = "white";
-                                ctx.fillRect((shape.x * 3) + 20, (shape.y * 3) + 20, shape.width * 2, shape.height * 2);
+                                
+                                //piirrätään iconi ja sen taustaväriks valkoinen - lasketaan mikä on motin keski ja otetaan pois iconin pituuden puolen
+                                
 
-                                ctx.drawImage(ikoni, (shape.x * 3) + 20, (shape.y * 3) + 20, shape.width*2, shape.height*2);
+                                ctx.fillRect(((shape.x * 3) + (shape.width * 3) / 2) - 50, (shape.y * 3) + 20, 100, 100);
+                                ctx.drawImage(ikoni, ((shape.x * 3) + (shape.width*3)/2)-50, (shape.y * 3) + 20, 100, 100);
                                 ctx.stroke();
                                 //mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
                             }
@@ -530,7 +551,7 @@
 
 
         function mapResize(x, y, width, height, radius, kuvaID) {
-            console.log('resized');        //document.getElementById("demo").innerHTML = txt;
+            console.log('resized');       
 
             //we check hight and width of canvas
             var newHeight = document.getElementById('myCanvas').offsetHeight;
@@ -563,14 +584,20 @@
                 var divi = document.createElement("div");
                 divi.id = "changeKuvaModal";
                 divi.innerHTML = "<p>Ladataan kuva...</p>";
-                $("#changeKuvaModal").replaceWith(divi);                               /*korvataan $detailDiv - muuttujan elementin latausviestillä
+                //korvataan $detailDiv - muuttujan elementin latausviestillä
+                $("#changeKuvaModal").replaceWith(divi);
 
                 id = this.id;
                 console.log('avataan kuva' + id);
 
-                var url = "/Kuvat/_NaytaKuva/?id=" + id;           /*luodaan kontrollerin url viittaus*/
-                $.get(url, function (data) {                                /*kutsutaan kontrollerin */
-                    $("#changeKuvaModal").replaceWith(data);                               /*korvataan $detailDiv - muuttujan elementin sisältö kontrollerin palauttamalla partial view:llä*/
+                /*luodaan kontrollerin url viittaus
+               
+               
+                   /*korvataan $detailDiv - muuttujan elementin sisältö kontrollerin palauttamalla partial view:llä*/
+               var url = "/kuvat/_naytakuva/?id=" + id;  
+               /*kutsutaan kontrollerin */
+                $.get(url, function (data) {                                
+                    $("#changeKuvaModal").replaceWith(data);                           
                 });
 
                 $("#kuvaModal").modal("toggle");
