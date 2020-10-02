@@ -10,39 +10,57 @@
 <div>
     <h4>Kuvat</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.AltText)
-        </dt>
+   
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.AltText)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.AltText)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.AltText)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ImagePath)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.ImagePath)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.ImagePath)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.ImagePath)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Image)
-        </dt>
+                <dt>
+                    @Html.HiddenFor(model => model.Image)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Image)
-        </dd>
+                <dd>
+                    @Html.HiddenFor(model => model.Image)
+                </dd>
 
-    </dl>
+            </dl>
+ 
+        <div class="col">
+            @if (Model.Image != null)
+            {
+                var base64 = Convert.ToBase64String(Model.Image);
+                var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                <img class="card-img-top pb-4" style="height: 30vh; width:auto" src="@imgsrc" alt="@Model.AltText">
+            }
+            else
+            {
+                <img class="card-img-top" src="~/Icons/house.svg" alt="Kuva ei latautunut">
 
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            }
         </div>
-    }
+    </div>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+        <input type="submit" value="Poista" class="btn btn-danger" /> |
+        @Html.ActionLink("Takaisin", "Index")
+    </div>
+}
 </div>
