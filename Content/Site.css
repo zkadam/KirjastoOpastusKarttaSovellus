@@ -277,3 +277,13 @@ a:hover {
     border-radius: 10px;
     background-color: #8abfdb;
 }
+
+.popover-body {
+    font-size: 25px !important;
+    
+}
+
+.popover {
+    max-width: 800px !important;
+    
+}

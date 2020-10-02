@@ -57,7 +57,7 @@
 //bs jquery that enables poppers for additional information to categories
             $(document).ready(function () {
             
-            $('[data-toggle="popover"]').popover();
+                $('[data-toggle="popover"]').popover();
         });
     </script>
 
@@ -103,9 +103,9 @@
                     @*muutin koordinaatti parameti item.KategoriaIdksi-sitten kontroller tarkistaa sitä onko koordinaatti taulussa sellasta ZK*@
                     <div style="position:relative">
                         <button type="button" class="button buttonVäri" style="display:inline-block" onclick="location.href='@Url.Action("Kategoriat", "User", new { referi = item.Kategoria.ReferTo, id = item.ReferTo, koordinaatit = item.Kategoria.KategoriaID, nimi = item.Teksti, luokka = item.Kategoria.Class, dublikaatti = item.Kategoria.SN })'">@Html.DisplayFor(modelItem => item.Teksti)</button>
-                        <a href="#1" >
+                        <a  href="#1" >
                            
-                        <img class="infoKuva" src="~/Icons/info-circle.svg"data-toggle="popover" title=""  data-content="@Html.DisplayFor(modelItem => item.InfoTekstit.InfotextContent)" style="display: none;  width: 25px; height: 25px; position: absolute; bottom: 4px; float: left; margin-left: 1px " />
+                        <img class="infoKuva" src="~/Icons/info-circle.svg"data-toggle="popover" title=""  data-content="@Html.DisplayFor(modelItem => item.InfoTekstit.InfotextContent)" style="display: none;  width: 30px; height: 30px; position: absolute; bottom: 4px; float: left; margin-left: 1px " />
                         </a>
                     </div>
                 </div>    
