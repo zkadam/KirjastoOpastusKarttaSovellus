@@ -11,6 +11,8 @@ using KirjastoAppScrum.Models;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Globalization;
+using System.Threading;
 
 namespace KirjastoAppScrum.Controllers
 {
@@ -18,7 +20,14 @@ namespace KirjastoAppScrum.Controllers
     {
         // Luodaan DB olio
         KirjastoProjektiEntities1 db = new KirjastoProjektiEntities1();
-
+        protected override void OnActionExecuting(
+            ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+            var cultureInfo = CultureInfo.GetCultureInfo("fi-FI");
+            Thread.CurrentThread.CurrentCulture = cultureInfo;
+            Thread.CurrentThread.CurrentUICulture = cultureInfo;
+        }
         public ActionResult Kategoriat(string kieli, int? referi, int? id, int? koordinaatit, int? luokka, int? dublikaatti)
         {
             var lista = from t in db.Tekstit.Include(t => t.Kategoria).Include(t => t.Kategoria.Koordinaatit).Include(t=>t.InfoTekstit).OrderBy(t => t.Teksti)
@@ -126,9 +135,14 @@ namespace KirjastoAppScrum.Controllers
         //-------------------------------------------------ABC järjestyksessä kategoriat
         public ActionResult ABC_Kategoriat(string kieli, int? referi, int? id, int? koordinaatit, int? luokka, int? dublikaatti)
         {
+            //CultureInfo culture = new CultureInfo("fi-FI");
+            //Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("fi-FI");
+            //Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(("fi-FI"));
+
 
             var lista = from t in db.Tekstit.Include(t => t.Kategoria).Include(t => t.Kategoria.Koordinaatit).OrderBy(t => t.Teksti)
                         select t;
+
 
             string setLang = "";
 
