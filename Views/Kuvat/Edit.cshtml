@@ -17,6 +17,7 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.KuvaId)
 
+
     <div class="form-group">
         <label>Kuvan nimi:</label>
         <div class="col-md-10">
@@ -32,65 +33,72 @@
             @Html.ValidationMessageFor(model => model.ImagePath, "", new { @class = "text-danger" })
         </div>
     </div>
-
-    <div class="col-md-10">
-        <label>Vaihda kuvan:</label>
-        <input type="file" id="kuvaUpload" name="kuva" />
-
-    </div>
-    <div class="row">
-        <div class="col">
-            @if (Model.Image != null)
-            {
-                var base64 = Convert.ToBase64String(Model.Image);
-                var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
-                <img class="card-img-top" style="max-width: 50vw;height:auto" src="@imgsrc" alt="@Model.AltText">
-            }
-            else
-            {
-                <img class="card-img-top" src="~/Icons/house.svg" alt="Kuva ei latautunut">
-
-            }
+    <div class="form-group"  style="display:none">
+        @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.HiddenFor(model => model.Image, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
         </div>
-        <div class="col">
-            <label>Uusi kuva:</label>
-            <img style="max-width: 50vw; height: auto" id="changePic" src="#" alt="uusi kuva" />
+        </div>
+
+        <div class="col-md-10">
+            <label>Vaihda kuvan:</label>
+            <input type="file" id="kuvaUpload" name="kuva" />
+
+        </div>
+        <div class="row">
+            <div class="col">
+                @if (Model.Image != null)
+                {
+                    var base64 = Convert.ToBase64String(Model.Image);
+                    var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                    <img class="card-img-top" style="max-height: 30vh; width: auto" src="@imgsrc" alt="@Model.AltText">
+                }
+                else
+                {
+                    <img class="card-img-top" src="~/Icons/house.svg" alt="Kuva ei latautunut">
+
+                }
+            </div>
+            <div class="col">
+                <label>Uusi kuva:</label>
+                <img style="max-height: 30vh; width: auto" id="changePic" src="#" alt="uusi kuva" />
+            </div>
+        </div>
+        <p></p>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-success" />
+            </div>
         </div>
     </div>
-    <p></p>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-success" />
-        </div>
-    </div>
-</div>
 
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
-
-<script type="text/javascript">
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('#changePic').attr('src', e.target.result);
-            }
-
-            reader.readAsDataURL(input.files[0]);
-        }
     }
 
-    $("#kuvaUpload").change(function () {
-        readURL(this);
-    });
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+
+    <script type="text/javascript">
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#changePic').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#kuvaUpload").change(function () {
+            readURL(this);
+        });
 
 
-</script>
+    </script>

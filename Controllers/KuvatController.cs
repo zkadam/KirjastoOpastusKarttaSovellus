@@ -144,8 +144,13 @@ namespace KirjastoAppScrum.Controllers
 
 
                     db.Entry(kuvat).State = EntityState.Modified;
-                    kuvat.Image = buffer;
-                    kuvat.ImagePath = filename;
+                   //tarkistetaan tuliko uusi kuva, muuten pidetään vanhan kuvan talteen
+                    if (file.ContentLength>0)
+                        {
+                        kuvat.Image = buffer;
+                        kuvat.ImagePath = filename;
+
+                        }
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -200,7 +205,7 @@ namespace KirjastoAppScrum.Controllers
                 Kuvat kuvat = db.Kuvat.Find(id);
                 db.Kuvat.Remove(kuvat);
                 db.SaveChanges();
-                return RedirectToAction("Index", "_Layout_Admin");
+                return RedirectToAction("Index","Kuvat","_Layout_Admin");
             }
             else if (Session["PerusUser"] != null)
             {
