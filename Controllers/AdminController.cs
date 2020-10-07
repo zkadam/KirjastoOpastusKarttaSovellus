@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -13,6 +14,9 @@ namespace KirjastoAppScrum.Controllers
 {
     public class AdminController : Controller
     {
+
+        //generating cultureinfo for ABC ordering in finnish
+        CultureInfo culture = new CultureInfo("fi-FI");
         KirjastoProjektiEntities1 db = new KirjastoProjektiEntities1();
 
         public static bool indexAll; // tehdään staattinen muuttuja jolla kerrotaan kummalle indexille palautetaan RJ
@@ -42,7 +46,7 @@ namespace KirjastoAppScrum.Controllers
                                         select n.Kategoria.SN.ToString();
 
 
-                //--------------------------------------------------kuva lista tarkastukseen
+                //--------------------------------------------------kuva lista tarkastukseen että ei tulisi null reference
                 var KuvaLista = from kl in db.Koordinaatit
                                 select kl.kuvaID;
 
@@ -53,14 +57,10 @@ namespace KirjastoAppScrum.Controllers
                 ViewBag.KuvaLista = KuvaLista.ToList();
                 ViewBag.KoordLista = KoordLista.ToList();
 
-                //List<int?> kuvaLista = new List<int?>();
-                //foreach (var item in lista)
-                //{
-                //    if (kuvat.Kuvaid.Contains(item.Kategoria.Koordinaatit.KoordinaattiID))
-                //    {
 
-                //    }
-                //}
+                //aakkosjärjestykseen
+                var lista2 = lista.ToList().OrderBy(t => t.Teksti, StringComparer.Create(culture, false));
+       
 
 
 
@@ -72,7 +72,7 @@ namespace KirjastoAppScrum.Controllers
                 ViewBag.listaData = kategLista; // listaData porautumisen tarkastukseen RJ
                 ViewBag.kategoriaTulostus = kategoriaTulostus.FirstOrDefault(); ; // otetaan kategorian Luokka välitykseen RJ
 
-                return View("Index", "_Layout_Admin", lista);
+                return View("Index", "_Layout_Admin", lista2);
             }
             else
             {
@@ -99,7 +99,9 @@ namespace KirjastoAppScrum.Controllers
                 lista = lista.Where(t => t.KieliID == "FI");
 
                 ViewBag.Title = itemName; // Itemin title
-                return View("IndexAll", "_Layout_Admin", lista);
+                                          //lopulta tuodaan elementit listalle ja järjestetään niitä suomen aakkosen mukaan
+                var lista2 = lista.ToList().OrderBy(t => t.Teksti, StringComparer.Create(culture, false));
+                return View("IndexAll", "_Layout_Admin", lista2);
             }
             else
             {
