@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Services.Description;
@@ -16,6 +18,8 @@ namespace KirjastoAppScrum.Controllers
 {
     public class UserController : Controller
     {
+        //generating cultureinfo for ABC ordering in finnish
+            CultureInfo culture = new CultureInfo("fi-FI");
         // Luodaan DB olio
         KirjastoProjektiEntities1 db = new KirjastoProjektiEntities1();
 
@@ -121,14 +125,19 @@ namespace KirjastoAppScrum.Controllers
             {
                 lista = lista.Where(t => t.KieliID.Contains(setLang) && t.Kategoria.Class == 1 && t.Kategoria.ReferTo == null);
             }
-            return View("Kategoriat", "_Layout_Kategoriat", lista);
+
+            //lopulta tuodaan elementit listalle ja järjestetään niitä suomen aakkosen mukaan
+            var lista2 = lista.ToList().OrderBy(t => t.Teksti, StringComparer.Create(culture, false));
+
+            return View("Kategoriat", "_Layout_Kategoriat", lista2);
         } 
         //-------------------------------------------------ABC järjestyksessä kategoriat
         public ActionResult ABC_Kategoriat(string kieli, int? referi, int? id, int? koordinaatit, int? luokka, int? dublikaatti)
         {
-
+        
             var lista = from t in db.Tekstit.Include(t => t.Kategoria).Include(t => t.Kategoria.Koordinaatit).OrderBy(t => t.Teksti)
                         select t;
+
 
             string setLang = "";
 
@@ -228,9 +237,12 @@ namespace KirjastoAppScrum.Controllers
             //listasta otetaan pois pelkestään koordinaatit(monitulostus) ja kategoriat jotka ei viittaa mihinkään
             lista = lista.Where(t => EndLista.Contains(t.Kategoria.KategoriaID) || t.Kategoria.Koordinaatit.KoordinaattiID > 0 || t.Kategoria.Class == 1);
             lista = lista.Where(t => t.KieliID.Contains(setLang) && t.Kategoria.Class < 3);
+            
+            //lopulta tuodaan elementit listalle ja järjestetään niitä suomen aakkosen mukaan
+            var lista2 = lista.ToList().OrderBy(t => t.Teksti, StringComparer.Create(culture, false));
 
 
-            return View("ABC_Kategoriat", "_Layout_Kategoriat", lista);
+            return View("ABC_Kategoriat", "_Layout_Kategoriat", lista2);
         }
 
         //-----------------------------------------------action result karttan näyttämisen porautumisen jälkeen-ZK----------------------------------------------------------------
