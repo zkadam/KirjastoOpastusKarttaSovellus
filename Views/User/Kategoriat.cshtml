@@ -58,7 +58,31 @@
             $(document).ready(function () {
             
                 $('[data-toggle="popover"]').popover();
-        });
+
+            });
+
+ //popover closing script- if somewhere is clicked, the opened popover gets closed       
+        var Clicked = 1;
+        function closePopover(id) {
+
+            console.log('close popover: ' + id);
+
+            document.addEventListener("click", function closeThis () {
+
+
+                console.log('closing')
+                if (Clicked>1) {
+                $('#' + id).popover('hide')
+                    document.removeEventListener('click', closeThis);
+                    Clicked = 0;
+                }
+                Clicked++;
+
+               
+             
+            });
+
+        }
     </script>
 
     @*Smooth scrolling efekti Loppuun ja Alkuun buttoneille.(LL)*@
@@ -105,7 +129,7 @@
                         <button type="button" class="button buttonVäri" style="display:inline-block" onclick="location.href='@Url.Action("Kategoriat", "User", new { referi = item.Kategoria.ReferTo, id = item.ReferTo, koordinaatit = item.Kategoria.KategoriaID, nimi = item.Teksti, luokka = item.Kategoria.Class, dublikaatti = item.Kategoria.SN })'">@Html.DisplayFor(modelItem => item.Teksti)</button>
                         <a  href="#1" >
                            
-                        <img class="infoKuva" src="~/Icons/info-circle.svg"data-toggle="popover" title=""  data-content="@Html.DisplayFor(modelItem => item.InfoTekstit.InfotextContent)" style="display: none;  width: 30px; height: 30px; position: absolute; bottom: 4px; float: left; margin-left: 1px " />
+                        <img onclick="closePopover(this.id)" id="@Html.DisplayFor(modelItem => item.InfoTekstit.Infotext_ID)" class="infoKuva" src="~/Icons/info-circle.svg"data-toggle="popover" title=""  data-content="@Html.DisplayFor(modelItem => item.InfoTekstit.InfotextContent)" style="display: none;  width: 30px; height: 30px; position: absolute; bottom: 4px; float: left; margin-left: 1px " />
                         </a>
                     </div>
                 </div>    
