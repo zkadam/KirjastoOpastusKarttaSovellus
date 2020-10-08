@@ -153,8 +153,10 @@
 <script charset="UTF-8">
 
     //kun sivu latautuu kutsutaan canvas piirto funktion, johon välitetään eka kerroksen parametrit ZK
+    var firstTime = true;
+    var drawIcon = true;
     window.onload = drawTheCanvas("KirjastonKarttaKuva1", 1);
-
+    
     function clickKerrosButton(){
         if (document.getElementById("KirjastonKarttaKuva1").style.display != "none") {
             console.log('we are in if - click first floor');
@@ -311,8 +313,10 @@
             let imgId = imgIdPar;
             drawAll(imgId, currentFloor)
         }
-
-
+        if (firstTime == true) {
+            firstTime = false;
+        var RedrawCanvasIcons = setInterval(drawAll, 1500, imgId, currentFloor);
+        }
 
         //------------------------------------the actual drawing function------------------------
             function drawAll(imgIdPar, currentFloorPar) {
@@ -389,7 +393,7 @@
                             ctx.fill();
                             ctx.closePath();
                 //iconin piirto jos on kuva
-                            if (shape.kuvaID) {
+                            if (shape.kuvaID && drawIcon == true) {
 
 
                                 var ikoni = document.getElementById("kuvaIkoni");
@@ -433,7 +437,7 @@
                             ctx.closePath();
                          
                 //iconin piirto jos on kuva
-                            if (shape.kuvaID) {
+                            if (shape.kuvaID && drawIcon==true) {
 
 
                                 var ikoni = document.getElementById("kuvaIkoni");
@@ -457,7 +461,7 @@
                             }
                         }
                         //calling the areamap clickable links resizing function so areamaps correlate with the drawen shapes
-                        if (shape.kuvaID) {
+                        if (shape.kuvaID ) {
 
                         mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
                         }
@@ -471,13 +475,13 @@
                         ctx.fillStyle = 'red';
                         ctx.globalAlpha = 0.6; //sets the transparency ZK
 
+                        ctx.shadowColor = "transparent";
                         //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
                         ctx.arc(1750, 1340, 30, 0, Math.PI * 2, );//drawing circle by given koords the math.pi*2 is to make a full circle ZK
                         ctx.fill();
                         ctx.strokeStyle = 'red'; //setting shape color ZK
                         //ctx.stroke();
                         ctx.closePath();
-                        ctx.shadowColor = 'white';
 
                         ctx.fillStyle = "white";
                         //piirretään valkoinen neliön textin ympäri koska muuten mustat seinät antaisivat huonon kntrastin
@@ -540,6 +544,13 @@
                         }
                     }
                 }
+
+                        if (drawIcon == true) {
+                            drawIcon = false;
+                        }
+                        else {
+                            drawIcon = true;
+                        }
             }
     }
 
