@@ -155,10 +155,14 @@
     //kun sivu latautuu kutsutaan canvas piirto funktion, johon välitetään eka kerroksen parametrit ZK
     var firstTime = true;
     var drawIcon = true;
+    var RedrawCanvasIcons;
     window.onload = drawTheCanvas("KirjastonKarttaKuva1", 1);
     
-    function clickKerrosButton(){
+    function clickKerrosButton() {
+        
+
         if (document.getElementById("KirjastonKarttaKuva1").style.display != "none") {
+
             console.log('we are in if - click first floor');
             drawTheCanvas("KirjastonKarttaKuva1", 1)
 
@@ -175,8 +179,6 @@
     //canvas piirtyy aina kun kerros button on painettu ZK
 
     function drawTheCanvas(imgIdPar, floorPar) {
-
-
         //clearing imagemap everytime so highlights will be clickable
         var imagemap = document.getElementById('kuvaKartta');
         while (imagemap.firstChild) {
@@ -315,7 +317,7 @@
         }
         if (firstTime == true) {
             firstTime = false;
-        var RedrawCanvasIcons = setInterval(drawAll, 1500, imgId, currentFloor);
+       RedrawCanvasIcons = setInterval(drawAll, 1500, imgId, currentFloor);
         }
 
         //------------------------------------the actual drawing function------------------------
@@ -377,18 +379,25 @@
                             ctx.globalAlpha = 1; //sets the transparency ZK
                             // Shadow
 
-                            ctx.shadowColor = 'black';
-                            ctx.shadowBlur = 30;
-                            ctx.shadowOffsetX = 20;
-                            ctx.shadowOffsetY = 20;
+                           
                             ctx.beginPath();
                             ctx.fillStyle = shape.color;
+                            if (shape.kuvaID && drawIcon == true) {
+                                ctx.shadowColor = 'black';
+                                ctx.shadowBlur = 30;
+                                ctx.shadowOffsetX = 20;
+                                ctx.shadowOffsetY = 20;
+                            }
+                            else {
+                                ctx.shadowColor = 'transparent';
+
+                            }
 
                             ctx.strokeStyle = shape.color; //setting shape color ZK
                             //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
                             ctx.arc(shape.x * 3, shape.y * 3, shape.radius * 3, 0, Math.PI * 2);//drawing circle by given koords the math.pi*2 is to make a full circle ZK
                             ctx.stroke();
-                            ctx.globalAlpha = 0.4; //sets the transparency ZK
+                                ctx.globalAlpha = 0.4; //sets the transparency ZK
 
                             ctx.fill();
                             ctx.closePath();
@@ -415,16 +424,26 @@
                         } else if (shape.width) {
                             // Shadow
 
-                            ctx.shadowColor = 'black';
-                            ctx.shadowBlur = 30;
-                            ctx.shadowOffsetX = 20;
-                            ctx.shadowOffsetY = 20;
+                         
                             ctx.beginPath();
                             ctx.fillStyle = shape.color;
                             // it's a rectangle ZK
                             ctx.strokeStyle = shape.color;
+                                ctx.globalAlpha = 0.4; //sets the transparency ZK
                             //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
-                            ctx.globalAlpha = 0.4; //sets the transparency ZK
+                            if (shape.kuvaID && drawIcon == true) {
+                                ctx.shadowColor = 'black';
+                                ctx.shadowBlur = 30;
+                                ctx.shadowOffsetX = 20;
+                                ctx.shadowOffsetY = 20;
+                                ctx.globalAlpha = 0.2; //sets the transparency ZK
+
+                            }
+                            else {
+                                ctx.shadowColor = 'transparent';
+
+
+                            }
 
                             ctx.fillRect(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3);
                             ctx.closePath();
