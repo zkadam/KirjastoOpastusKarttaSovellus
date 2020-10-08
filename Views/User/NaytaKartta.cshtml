@@ -437,24 +437,21 @@
 
 
                                 var ikoni = document.getElementById("kuvaIkoni");
-                                //var ikoni = document.createElement("img");
-                                //ikoni.src = "~/Icons/map.svg";
-                                //ikoni.width = "10px";
-                                //ikoni.height = "10px";
-                                
-                                
+
                                 //ctx.globalCompositeOperation = 'source-over';
                                 ctx.color = "white";
                                 ctx.globalAlpha = 1; //sets the transparency ZK
                                 ctx.shadowColor = "transparent";
                                 ctx.beginPath();
                                 ctx.fillStyle = "white";
-                                
-                                //piirrätään iconi ja sen taustaväriks valkoinen - lasketaan mikä on motin keski ja otetaan pois iconin pituuden puolen
-                                
+                                //ctx.fillRect(shape.x * 3 - 45, shape.y * 3 - 40, 85, 80);
+                                ctx.fill();
+                                //ctx.drawImage(ikoni, (shape.x * 3) - 50, (shape.y * 3) - 50, 100, 100);
+                                ctx.stroke();
+                                //mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
 
-                                ctx.fillRect(((shape.x * 3) + (shape.width * 3) / 2) - 50, (shape.y * 3) + 20, 100, 100);
-                                ctx.drawImage(ikoni, ((shape.x * 3) + (shape.width*3)/2)-50, (shape.y * 3) + 20, 100, 100);
+                                ctx.fillRect(((shape.x * 3) + (shape.width * 3) / 2) - 45, (shape.y * 3) + (shape.height * 3) / 2-40, 85, 80);
+                                ctx.drawImage(ikoni, ((shape.x * 3) + (shape.width * 3) / 2) - 50, (shape.y * 3) + (shape.height*3)/2-50, 100, 100);
                                 ctx.stroke();
                                 //mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
                             }
@@ -577,6 +574,7 @@
             alue.coords = newCoords;
             alue.alt = "klikkaa tänne jos haluat nähdä kuvan";
             alue.id = kuvaID;
+            alue.href = '#1';
 
 
             //funtion jolla kutsutan partial viewin kautta kuvan
