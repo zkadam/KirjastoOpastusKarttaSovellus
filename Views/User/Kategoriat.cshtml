@@ -55,34 +55,26 @@
         });
 
 //bs jquery that enables poppers for additional information to categories
-            $(document).ready(function () {
+ //funktio sulje popupit kun clickataan, ja jos clickattiin popupiconin, avaa sen- näin aina vain yks popup on auki
+
+        $(document).ready(function () {document.addEventListener("click", function closeThis(e) {
+
+            $('.popover').popover('hide')            //        var SavedId = id;
+            $('.infoKuva').removeClass('opened')
+
+            if ($(event.target).hasClass('infoKuva') && $(event.target).hasClass('opened')) {
+                //$('.popover').popover('hide')
+                $(event.target).removeClass("opened")
+           
+            }
+            else if ($(event.target).hasClass('infoKuva'))
+            {
+                $(event.target).addClass("opened")
+                $(event.target).popover('show')
+            }
             
-                $('[data-toggle="popover"]').popover();
-
-            });
-
- //popover closing script- if somewhere is clicked, the opened popover gets closed       
-        var Clicked = 1;
-        function closePopover(id) {
-
-            console.log('close popover: ' + id);
-
-            document.addEventListener("click", function closeThis () {
-
-
-                console.log('closing')
-                if (Clicked>1) {
-                $('#' + id).popover('hide')
-                    document.removeEventListener('click', closeThis);
-                    Clicked = 0;
-                }
-                Clicked++;
-
-               
-             
-            });
-
-        }
+        });
+        });
     </script>
 
     @*Smooth scrolling efekti Loppuun ja Alkuun buttoneille.(LL)*@
@@ -127,9 +119,9 @@
                     @*muutin koordinaatti parameti item.KategoriaIdksi-sitten kontroller tarkistaa sitä onko koordinaatti taulussa sellasta ZK*@
                     <div style="position:relative">
                         <button type="button" class="button buttonVäri" style="display:inline-block" onclick="location.href='@Url.Action("Kategoriat", "User", new { referi = item.Kategoria.ReferTo, id = item.ReferTo, koordinaatit = item.Kategoria.KategoriaID, nimi = item.Teksti, luokka = item.Kategoria.Class, dublikaatti = item.Kategoria.SN })'">@Html.DisplayFor(modelItem => item.Teksti)</button>
-                        <a  href="#1" >
+                        <a  href="#1" class="infoLink" >
                            
-                        <img onclick="closePopover(this.id)" id="@Html.DisplayFor(modelItem => item.InfoTekstit.Infotext_ID)" class="infoKuva" src="~/Icons/info-circle.svg"data-toggle="popover" title=""  data-content="@Html.DisplayFor(modelItem => item.InfoTekstit.InfotextContent)" style="display: none;  width: 30px; height: 30px; position: absolute; bottom: 4px; float: left; margin-left: 1px " />
+                        <img id="@Html.DisplayFor(modelItem => item.InfoTekstit.Infotext_ID)" class="infoKuva" src="~/Icons/info-circle.svg"data-toggle="popover" title=""  data-content="@Html.DisplayFor(modelItem => item.InfoTekstit.InfotextContent)" style="display: none;  width: 30px; height: 30px; position: absolute; bottom: 4px; float: left; margin-left: 1px " />
                         </a>
                     </div>
                 </div>    
