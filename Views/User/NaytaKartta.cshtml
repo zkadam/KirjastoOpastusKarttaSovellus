@@ -317,7 +317,7 @@
         }
         if (firstTime == true) {
             firstTime = false;
-       RedrawCanvasIcons = setInterval(drawAll, 1500, imgId, currentFloor);
+            RedrawCanvasIcons = setInterval(clickKerrosButton, 1500);
         }
 
         //------------------------------------the actual drawing function------------------------
@@ -476,7 +476,6 @@
                                 ctx.fillRect(((shape.x * 3) + (shape.width * 3) / 2) - 45, (shape.y * 3) + (shape.height * 3) / 2-40, 85, 80);
                                 ctx.drawImage(ikoni, ((shape.x * 3) + (shape.width * 3) / 2) - 50, (shape.y * 3) + (shape.height*3)/2-50, 100, 100);
                                 ctx.stroke();
-                                //mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
                             }
                         }
                         //calling the areamap clickable links resizing function so areamaps correlate with the drawen shapes
