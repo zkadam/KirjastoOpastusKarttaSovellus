@@ -347,6 +347,7 @@ namespace KirjastoAppScrum.Controllers
                 {
 
                     coordName = coordName.Where(c => c.ReferTo == koordinaatit && c.KieliID == "FI");
+
                     name = coordName.SingleOrDefault().Teksti;
                     // jos ei löydy referiä niin noCoords stringiin tulee kielen mukainen EiKoordinaatteja-teksti RJ
                     noCoords = "Ei sijaintitietoja";

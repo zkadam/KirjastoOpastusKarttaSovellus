@@ -315,6 +315,9 @@
             let imgId = imgIdPar;
             drawAll(imgId, currentFloor)
         }
+
+
+        //vain eka kertaa kutsutaan rutiini joka joka 1,5s piirtää kanvaksen uudestaan
         if (firstTime == true) {
             firstTime = false;
             RedrawCanvasIcons = setInterval(clickKerrosButton, 1500);
@@ -383,26 +386,33 @@
                             ctx.beginPath();
                             ctx.fillStyle = shape.color;
                             if (shape.kuvaID && drawIcon == true) {
+                                ctx.arc(shape.x * 3, shape.y * 3, shape.radius * 3, 0, Math.PI * 2);//drawing circle by given koords the math.pi*2 is to make a full circle ZK
+
+                            }
+                            else {
+                                ctx.arc(shape.x * 3, shape.y * 3, shape.radius * 3-30, 0, Math.PI * 2);//drawing circle by given koords the math.pi*2 is to make a full circle ZK
+                            }
+                            ctx.stroke();
+                            //if (shape.kuvaID && drawIcon == true) {
                                 ctx.shadowColor = 'black';
                                 ctx.shadowBlur = 30;
                                 ctx.shadowOffsetX = 20;
-                                ctx.shadowOffsetY = 20;
-                            }
-                            else {
-                                ctx.shadowColor = 'transparent';
+                            ctx.shadowOffsetY = 20;
+                            //}
+                            //else {
+                            //    ctx.shadowColor = 'transparent';
 
-                            }
+                            //}
+                            ctx.stroke();
 
                             ctx.strokeStyle = shape.color; //setting shape color ZK
                             //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
-                            ctx.arc(shape.x * 3, shape.y * 3, shape.radius * 3, 0, Math.PI * 2);//drawing circle by given koords the math.pi*2 is to make a full circle ZK
-                            ctx.stroke();
-                                ctx.globalAlpha = 0.4; //sets the transparency ZK
-
+                                ctx.globalAlpha = 0.2; //sets the transparency ZK
                             ctx.fill();
+
                             ctx.closePath();
                 //iconin piirto jos on kuva
-                            if (shape.kuvaID && drawIcon == true) {
+                            if (shape.kuvaID) {
 
 
                                 var ikoni = document.getElementById("kuvaIkoni");
@@ -425,25 +435,25 @@
                             // Shadow
 
                          
-                            ctx.beginPath();
                             ctx.fillStyle = shape.color;
                             // it's a rectangle ZK
                             ctx.strokeStyle = shape.color;
                                 ctx.globalAlpha = 0.4; //sets the transparency ZK
+                            ctx.beginPath();
                             //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
-                            if (shape.kuvaID && drawIcon == true) {
+                            //if (shape.kuvaID && drawIcon == true) {
                                 ctx.shadowColor = 'black';
                                 ctx.shadowBlur = 30;
                                 ctx.shadowOffsetX = 20;
                                 ctx.shadowOffsetY = 20;
                                 ctx.globalAlpha = 0.2; //sets the transparency ZK
 
-                            }
-                            else {
-                                ctx.shadowColor = 'transparent';
+                            //}
+                            //else {
+                                //ctx.shadowColor = 'transparent';
 
 
-                            }
+                            //}
 
                             ctx.fillRect(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3);
                             ctx.closePath();
@@ -456,7 +466,7 @@
                             ctx.closePath();
                          
                 //iconin piirto jos on kuva
-                            if (shape.kuvaID && drawIcon==true) {
+                            if (shape.kuvaID) {
 
 
                                 var ikoni = document.getElementById("kuvaIkoni");
