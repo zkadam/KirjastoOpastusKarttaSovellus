@@ -31,7 +31,7 @@
             <th>
                 Monitulostus
             </th>
-            <th>Sijainti</th>
+           
         </tr>
 
         @foreach (var item in Model)
@@ -68,21 +68,7 @@
                 <p>Ei</p>
             }
         </td>
-        <td>
-            @*Tähän koodaan vielä että tekee tarkastuksen että onko itemillä koordinaatteja, jos ei niin muokkauslinkki on disabled, jos on niin lisäys linkki on disabled. RJ  *@
-            @*lisäsin tarkistuksen -----vois lisätä vielä erilaisia class marityksiä että tulisi eri värisäks esim. ---ZK*@
-            @if (item.Kategoria.Koordinaatit != null)
-            {
 
-                @Html.ActionLink("Muokkaa sijaintia", "EditCoords", new { id = item.Kategoria.KategoriaID, itemName = item.Teksti }, new { @class = "btn btn-success", @style = "color:white; padding-right: 25px" })
-                @Html.ActionLink("Poista sijainti", "RemoveCoords", new { id = item.Kategoria.Koordinaatit.KoordinaattiID, itemName = item.Teksti }, new { @class = "btn btn-danger", @style = "color:white" })
-            }
-            else
-            {
-                @Html.ActionLink("Lisää sijainti", "AddCoords", new { id = item.Kategoria.KategoriaID, itemName = item.Teksti }, new { @class = "btn btn-info", @style = "color:white" })
-
-            }
-        </td>
     </tr>
         }
 
