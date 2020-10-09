@@ -102,37 +102,37 @@
     }
 </div>
 
-<div class="buttonsDiv">    
     <div class="scrollButtons">
         @*Sivun loppuun vievä button (LL)*@
         <br />
         <a href="#end" class="scrollButton"><img src="~/Icons/arrow-down-circle.svg" style="width:3vw;height:3vw" /></a>
     </div>
-    <div class="jumbotron" style="text-align:center;">
-        <div class="row">
-            @* Tekee listan  tarkastusta varten niin ei tulostu samannimisiä, esim istumapaikkoja ja pöytiä. Karttatulostukseen koodaus että tulostaa
+    <div class="buttonsDiv">
+        <div class="jumbotron" style="text-align:center; padding:0px">
+            <div class="row">
+                @* Tekee listan  tarkastusta varten niin ei tulostu samannimisiä, esim istumapaikkoja ja pöytiä. Karttatulostukseen koodaus että tulostaa
                 Kaikkien samannimisten koordinaatit kartalle. Esimerkkinä just istumapaikkoja ja pöytiä.(R.J)*@
-            @*@{ List<string> lista = new List<string>();*@
-            @foreach (var item in Model)
-            {
-                <div class="col-md pt-3 buttonBody">
-                    @*muutin koordinaatti parameti item.KategoriaIdksi-sitten kontroller tarkistaa sitä onko koordinaatti taulussa sellasta ZK*@
-                    <div style="position:relative">
-                        <button type="button" class="button buttonVäri" style="display:inline-block" onclick="location.href='@Url.Action("Kategoriat", "User", new { referi = item.Kategoria.ReferTo, id = item.ReferTo, koordinaatit = item.Kategoria.KategoriaID, nimi = item.Teksti, luokka = item.Kategoria.Class, dublikaatti = item.Kategoria.SN })'">@Html.DisplayFor(modelItem => item.Teksti)</button>
-                        <a  href="#1" class="infoLink" >
-                           
-                        <img id="@Html.DisplayFor(modelItem => item.InfoTekstit.Infotext_ID)" class="infoKuva" src="~/Icons/info-circle.svg"data-toggle="popover" title=""  data-content="@Html.DisplayFor(modelItem => item.InfoTekstit.InfotextContent)" style="display: none;  width: 30px; height: 30px; position: absolute; bottom: 4px; float: left; margin-left: 1px " />
-                        </a>
+                @*@{ List<string> lista = new List<string>();*@
+                @foreach (var item in Model)
+                {
+                    <div class="col-md pt-3 buttonBody">
+                        @*muutin koordinaatti parameti item.KategoriaIdksi-sitten kontroller tarkistaa sitä onko koordinaatti taulussa sellasta ZK*@
+                        <div style="position:relative">
+                            <button type="button" class="button buttonVäri" style="display:inline-block" onclick="location.href='@Url.Action("Kategoriat", "User", new { referi = item.Kategoria.ReferTo, id = item.ReferTo, koordinaatit = item.Kategoria.KategoriaID, nimi = item.Teksti, luokka = item.Kategoria.Class, dublikaatti = item.Kategoria.SN })'">@Html.DisplayFor(modelItem => item.Teksti)</button>
+                            <a href="#1" class="infoLink">
+
+                                <img id="@Html.DisplayFor(modelItem => item.InfoTekstit.Infotext_ID)" class="infoKuva" src="~/Icons/info-circle.svg" data-toggle="popover" title="" data-content="@Html.DisplayFor(modelItem => item.InfoTekstit.InfotextContent)" style="display: none;  width: 25px; height: 25px; position: absolute; bottom: 2px; float: left; " />
+                            </a>
+                        </div>
                     </div>
-                </div>    
-                    }
+                }
 
+            </div>
+            <div id="end">
+                @*Sivun alkuun vievä button (LL)*@
+                <a href="#home" class="scrollButton"><img src="~/Icons/arrow-up-circle.svg" style="width:3vw;height:3vw" /></a>
+            </div>
         </div>
-        <div id="end">
-            @*Sivun alkuun vievä button (LL)*@
-            <a href="#home" class="scrollButton"><img src="~/Icons/arrow-up-circle.svg" style="width:3vw;height:3vw" /></a>
-        </div>
+
     </div>
-
-</div>
 
