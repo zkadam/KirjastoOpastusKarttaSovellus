@@ -18,6 +18,7 @@ namespace KirjastoAppScrum.Controllers
 
         public ActionResult Index()
         {
+            Session.Abandon();
             return View();
         }
     }

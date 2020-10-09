@@ -43,6 +43,7 @@ namespace KirjastoAppScrum.Controllers
             Session["koordinaatiPolku"] = koordinaatit;
             Session["linkkiPolkku"] = referi;
             Session["luokkaPolku"] = luokka;
+            Session["dublikaattiPolkku"] = null;
             //Session["koordinaattiPolku"] = referi;
             //setiing the language for session and filtering results ZK
             //if there is no session nor kieli parameter, we set them both to FI -zk
@@ -149,7 +150,7 @@ namespace KirjastoAppScrum.Controllers
             {
                 luokka = 2;
             }
-
+            Session["dublikaattiPolkku"] = null;
             Session["koordinaatiPolku"] = koordinaatit;
             Session["linkkiPolkku"] = referi;
             Session["luokkaPolku"] = luokka;
@@ -249,6 +250,8 @@ namespace KirjastoAppScrum.Controllers
         //-----------------------------------------------action result karttan näyttämisen porautumisen jälkeen-ZK----------------------------------------------------------------
         public ActionResult NaytaKartta(int? referi, int? koordinaatit, string kieli, int? id,int? dublikaatti, int? luokka) 
         {
+            //HOUM!!!!! SESSION-DUBLIKAATTIPLKKU ON AINA NULLATTAVA MUISTA ACTIONRESULTEISTA KUN NAYTAKARTTA
+
             // Muokattu karttanäkymää sillä tavalla että tuo koordinaatit näkyviin kartalle. Jos esim monta itemiä referöi samaan ja on porautumisen lopetus niin tulostaa kaikki kohteet kartalle,
             // tätä varten on määritelty luokka määritykseksi kategorian 'class' muuttuja. Esim WC on class 1, mutta wc1,wc2,wc3,wc4 ovat class 2.
 
@@ -409,6 +412,8 @@ namespace KirjastoAppScrum.Controllers
 
         public ActionResult Map(string kieli)
         {
+            Session["dublikaattiPolkku"] = null;
+
             string setLang = "";
             if ((Session["setLangTemp"] == null) && string.IsNullOrEmpty(kieli))
             {

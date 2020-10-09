@@ -14,19 +14,23 @@
     <script>
         var MaxWidth = 0;   // Alustetaan MaxWidth
         var MaxHeight = 0; // Alustetaan MaxHeight
-        $('.button').each(function (index) {
-            var currentWidth = $(this).width();   // otetaan currentWidth
-            var currentHeight = $(this).height(); // otetaan currentHeight
+        $(document).ready(function () {
 
-            if (currentWidth > MaxWidth) {
-                MaxWidth = currentWidth;     // asetetaan MaxWidth jos current > maxWidth
-            }
-            if (currentHeight > MaxHeight) {
-                MaxHeight = currentHeight;   // asetetaan MaxHeight jos current > maxHeight
-            }
+            $('.button').each(function (index) {
+                var currentWidth = $(this).width();   // otetaan currentWidth
+                var currentHeight = $(this).height(); // otetaan currentHeight
+
+                if (currentWidth > MaxWidth) {
+                    MaxWidth = currentWidth;     // asetetaan MaxWidth jos current > maxWidth
+                }
+                if (currentHeight > MaxHeight) {
+                    MaxHeight = currentHeight;   // asetetaan MaxHeight jos current > maxHeight
+                }
+            });
+            $('.button').width(MaxWidth); // muutetaan .button width => maxWidth
+            $('.button').height(MaxHeight); // muutetaan .button height => maxHeight
+
         });
-        $('.button').width(MaxWidth); // muutetaan .button width => maxWidth
-        $('.button').height(MaxHeight); // muutetaan .button height => maxHeight
     </script>
 
     <script type="text/javascript">
