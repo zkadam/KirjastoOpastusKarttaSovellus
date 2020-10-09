@@ -35,7 +35,7 @@ namespace KirjastoAppScrum.Controllers
             //setting apumuuttuja if it is null (eg you start the page from somewhere else then index) 
             //----------------------------------- - this was just necessary coz the code only had options for0 and 1ZK
 
-            if (luokka == 1 && referi == null)
+            if (luokka == 1 && referi == null||luokka==null&&referi==null)
             {
                 luokka = 2;
             }
