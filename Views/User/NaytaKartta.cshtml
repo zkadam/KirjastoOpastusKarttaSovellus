@@ -461,7 +461,14 @@
                             ctx.lineWidth = "18";
                             ctx.globalAlpha = 1; //sets the transparency ZK
                             ctx.beginPath();
-                            ctx.rect(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3);
+                            if (drawIcon==true) {
+
+                                ctx.rect(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3);
+                            }
+                            else {
+
+                            ctx.rect(shape.x * 3+15, shape.y * 3+15, shape.width * 3-30, shape.height * 3-30);
+                            }
                             ctx.stroke();
                             ctx.closePath();
                          
@@ -504,7 +511,6 @@
                         ctx.globalAlpha = 0.6; //sets the transparency ZK
 
                         ctx.shadowColor = "transparent";
-                        //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
                         ctx.arc(1750, 1340, 30, 0, Math.PI * 2, );//drawing circle by given koords the math.pi*2 is to make a full circle ZK
                         ctx.fill();
                         ctx.strokeStyle = 'red'; //setting shape color ZK
