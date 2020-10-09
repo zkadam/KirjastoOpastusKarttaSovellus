@@ -303,7 +303,7 @@ namespace KirjastoAppScrum.Controllers
                     coordName = coordName.Where(c => c.ReferTo == koordinaatit && c.KieliID == "SE");
                     name = coordName.SingleOrDefault().Teksti;
                     // jos ei löydy referiä niin noCoords stringiin tulee kielen mukainen EiKoordinaatteja-teksti RJ
-                    noCoords = "Inget läge.";
+                    //noCoords = "Inget läge.";
                 }
             }
             else if (Session["setLangTemp"].ToString() == "EN")
@@ -325,7 +325,7 @@ namespace KirjastoAppScrum.Controllers
                     coordName = coordName.Where(c => c.ReferTo == koordinaatit && c.KieliID == "EN");
                     name = coordName.SingleOrDefault().Teksti;
                     // jos ei löydy referiä niin noCoords stringiin tulee kielen mukainen EiKoordinaatteja-teksti RJ
-                    noCoords = "No location information.";
+                    //noCoords = "No location information.";
                 }
             }
             else
@@ -347,7 +347,7 @@ namespace KirjastoAppScrum.Controllers
                     coordName = coordName.Where(c => c.ReferTo == koordinaatit && c.KieliID == "FI");
                     name = coordName.SingleOrDefault().Teksti;
                     // jos ei löydy referiä niin noCoords stringiin tulee kielen mukainen EiKoordinaatteja-teksti RJ
-                    noCoords = "Ei sijaintitietoja";
+                    //noCoords = "Ei sijaintitietoja";
                 }
             }
 
