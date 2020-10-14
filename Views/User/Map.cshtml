@@ -27,37 +27,29 @@
     if (Session["setLangTemp"].ToString() == "FI")
     {
         <h1>Pohjakartta</h1>
-        <div class="map">
-            <img id="floorImg" class="mapImg" src="/Maps/1krs_hyllyilla_V5.svg" alt="Map" style="max-width:78vw;">
-        </div>
-        <button id="changeFloor1" class="floorBtn btn btn-primary btn-lg">1. @ViewBag.Kerros</button>
-        <button id="changeFloor2" class="floorBtn btn btn-primary">2. @ViewBag.Kerros</button>
+
     }
     else if (Session["setLangTemp"].ToString() == "SE")
     {
-        <h1>Plan</h1>
-        <div class="map">
-            <img id="floorImg" class="mapImg" src="/Maps/1krs_hyllyilla_V5.svg" alt="Map" style="max-width:78vw;">
-        </div>
-        <button id="changeFloor1" class="floorBtn btn btn-primary btn-lg">1:a @ViewBag.Kerros</button>
-        <button id="changeFloor2" class="floorBtn btn btn-primary">2:a @ViewBag.Kerros</button>
+    <h1>Plan</h1>
     }
+
     else if (Session["setLangTemp"].ToString() == "EN")
     {
-        <h1>Library map</h1>
-        <div class="map">
-            <img id="floorImg" class="mapImg" src="/Maps/1krs_hyllyilla_V5.svg" alt="Map" style="max-width:78vw;">
-        </div>
-        <button id="changeFloor1" class="floorBtn btn btn-primary btn-lg">1st @ViewBag.Kerros</button>
-        <button id="changeFloor2" class="floorBtn btn btn-primary">2nd @ViewBag.Kerros</button>
+    <h1> Library map </h1>
 
     }
-}
+
+
+    }
 else
 {
     <h1>Pohjakartta</h1>
+
+    }
     <div class="map">
         <img id="floorImg" class="mapImg" src="/Maps/1krs_hyllyilla_V5.svg" alt="Map" style="max-width:78vw;">
     </div>
-}
+    <button id="changeFloor1" class="floorBtn btn btn-lg">1. @ViewBag.Kerros</button>
+    <button id="changeFloor2" class="floorBtn btn">2. @ViewBag.Kerros</button>
 
