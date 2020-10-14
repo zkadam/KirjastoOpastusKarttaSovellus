@@ -2,16 +2,17 @@
     color: white;
     border: none;
     color: white;
-    padding: 40px 80px;
-    text-align: center;
+    padding: 30px 40px;
+    /**/ text-align: center;
     text-decoration: none;
     display: inline-block;
     font-family: inherit;
     font-size: 25px;
-    margin: 20px 0px;
-    border-radius: 12px;
+    margin: 20px 0px 0px 1px;
+    border-radius: 10px;
+/*    box-shadow: -5px 10px 30px 2px rgba(0,0,0,0.52);
+*/    box-shadow: 2px 20px 30px 1px rgba(0,0,0,0.52);
     font-weight: bold;
-    box-shadow: 0 9px #999;
 }
 
 
@@ -19,9 +20,11 @@
     background-color: #113c68; /*Tumman merensininen(Näyttö default)*/
     font-weight: bold !important;
     font-size: 25px !important;
-    position:relative;
+    position: relative;
+    margin-left: 10px;
+    margin-right: 1px;
 }
-.buttonBody .button {
+.buttonBody  {
 
 }
 
@@ -29,9 +32,7 @@
     text-align: center;
 }
 
-.jumbotron {
-    /*background-color: #ffff;*/ /*Perus vakoinen(Näyttö defaultille contentille väri rajaus)*/
-}
+
 body,
 .jumbotron {
     background-color: #ffff;
@@ -185,16 +186,17 @@ a:hover {
 }
 
 /*fixed footer pois jos laitella on pinempi näyttö*/
-@media only screen and (max-width: 600px) {
-    .footerDiv {
-        position: relative;
+@media only screen and (max-width: 800px) {
+    .footerDiv, .FooterLeft, .FooterRow{
+        position: relative !important;
     }
-    
+    #end, .scrollButtons{display:none}
+
 
 }
 
 .FooterRow {
-    padding-top: 20px;
+    padding-top: 0px;
     flex-wrap: wrap;
     margin-right: 10px;
     margin-left: 10px;
@@ -225,9 +227,7 @@ a:hover {
     left: 20px;
 }
 /*margin render bodyn alla niin kerrosvaihto buttonit ja muu ei peittyy fixed footerista*/
-/*.bodyRender {
-    margin-bottom: 100px; // voi olla 0px
-}*/
+/
 /*Porvoon värikoodista*/
 /*background-color: #fd495c;*/ /*(Syke)Vaaleapunainen*/
 /*background-color: #c84436;*/ /*Punamulta*/
@@ -287,3 +287,32 @@ a:hover {
     max-width: 800px !important;
     
 }
+
+.scrollButtons {
+    margin: 0px 0px;
+    padding: 0px 0px;
+}
+
+.navbar{margin-bottom:0px;
+        padding-bottom:0px
+}
+
+.navlista {
+    margin: 0px 0px 0px 0px !important;
+    padding: 0px 0px 0px 0px !important;
+}
+
+
+*.bodyRender {
+    padding-top: 0px;
+}
+
+#end{margin-top:15px;}
+
+#changeFloor1, #changeFloor2 {
+    background-color: #113c68;
+    box-shadow: 2px 20px 30px 1px rgba(0,0,0,0.52);
+    font-weight: bold;
+    color:white;
+}
+

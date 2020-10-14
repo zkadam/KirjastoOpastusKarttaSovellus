@@ -97,9 +97,9 @@
 @*kerros vaihto buttonien value käytetään js kartta pohjan sekä kordinaattien kerros filteröintiin
     buttonin teksti tulee viewbagin kautta, niin se vaihtuu kielen mukaan - ZK*@
 
-<button id="changeFloor1" class="btn btn-primary" value="KirjastonKarttaKuva1" onclick="drawTheCanvas(this.value,1)">1  @ViewBag.Kerros</button>
+<button id="changeFloor1" class="btn" value="KirjastonKarttaKuva1" onclick="drawTheCanvas(this.value,1)">1  @ViewBag.Kerros</button>
 
-<button id="changeFloor2" class="btn btn-primary" value="KirjastonKarttaKuva2" onclick="drawTheCanvas(this.value,2)">2  @ViewBag.Kerros</button>
+<button id="changeFloor2" class="btn" value="KirjastonKarttaKuva2" onclick="drawTheCanvas(this.value,2)">2  @ViewBag.Kerros</button>
 
 @*divin tarkoitus toimia booleanina, koska on helppo vaihta inner html-in, js functio tarkistaa inner htmlin myöhämmin ja asetta sen "1" iks, sen jälkeen funktio ei toistu koska ekaks tarkistetaan onko innerhtml == 0 -ZK*@
 <div id="boolDiv" style="display:none">0</div>
