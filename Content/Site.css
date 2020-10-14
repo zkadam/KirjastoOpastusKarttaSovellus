@@ -22,19 +22,17 @@
     font-size: 25px !important;
     position: relative;
     margin-left: 10px;
-    margin-right: 4px;
+    margin-right: 1px;
 }
 .buttonBody  {
-/*    margin-top:0px;
-*/}
+
+}
 
 .row {
     text-align: center;
 }
 
-.jumbotron {
-    /*background-color: #ffff;*/ /*Perus vakoinen(Näyttö defaultille contentille väri rajaus)*/
-}
+
 body,
 .jumbotron {
     background-color: #ffff;
@@ -188,16 +186,17 @@ a:hover {
 }
 
 /*fixed footer pois jos laitella on pinempi näyttö*/
-@media only screen and (max-width: 600px) {
-    .footerDiv {
-        position: relative;
+@media only screen and (max-width: 800px) {
+    .footerDiv, .FooterLeft, .FooterRow{
+        position: relative !important;
     }
-    
+    #end, .scrollButtons{display:none}
+
 
 }
 
 .FooterRow {
-    padding-top: 20px;
+    padding-top: 0px;
     flex-wrap: wrap;
     margin-right: 10px;
     margin-left: 10px;
@@ -308,4 +307,12 @@ a:hover {
     padding-top: 0px;
 }
 
-*/
+#end{margin-top:15px;}
+
+#changeFloor1, #changeFloor2 {
+    background-color: #113c68;
+    box-shadow: 2px 20px 30px 1px rgba(0,0,0,0.52);
+    font-weight: bold;
+    color:white;
+}
+
