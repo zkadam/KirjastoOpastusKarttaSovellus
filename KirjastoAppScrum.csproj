@@ -218,6 +218,7 @@
     <Content Include="Maps\1krs_Tyhja_V3.svg" />
     <Content Include="Maps\1krs_Tyhja_V4.svg" />
     <Content Include="Maps\1krs_Tyhja_V5.svg" />
+    <Content Include="Maps\1krs_Tyhja_V6.svg" />
     <Content Include="Maps\2krs_Hyllyt.jpg" />
     <Content Include="Maps\2krs_Tyhja_V1.1_3840x1881.png" />
     <Content Include="Maps\2krs_Tyhja_V1.2_3840x1881.png" />
@@ -225,6 +226,7 @@
     <Content Include="Maps\2krs_Tyhja_V3.svg" />
     <Content Include="Maps\2krs_Tyhja_V4.svg" />
     <Content Include="Maps\2krs_Tyhja_V5.svg" />
+    <Content Include="Maps\2krs_Tyhja_V6.svg" />
     <Content Include="Models\KirjastoDBEntities.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>KirjastoDBEntities.edmx</DependentUpon>
