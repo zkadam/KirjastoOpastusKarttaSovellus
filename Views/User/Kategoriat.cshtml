@@ -32,8 +32,9 @@
     <script type="text/javascript">
         //Lasketaan kuinka monta buttonia tulostuu ruudulle. Jos enemmän kuin 6, tulostetaan Loppuun ja Alkuun buttonit skrollausta varten.(LL)
         $(function () {
-                    var buttons = $('.buttonsDiv button').length;
-                    if (buttons > 6) { // Tätä määrää voi muuttaa halutessa
+            var buttons = $('.buttonsDiv button').length;
+            console.log(MaxWidth);
+            if ((buttons > 9 && $('.buttonsDiv').height() > $(window).height()*0.9)) { // Tätä määrää voi muuttaa halutessa
                         console.log("More than 6 buttons");
                         $('.scrollButton').show();
                     }
@@ -91,7 +92,7 @@
     Käyttää Action metodia joka kutsuu Kategoriat actionin UserControllerista.
     (R.J)  *@
 
-<div>
+<div class="navlista">
     @if (ViewBag.naviListToData != null)
     {
         foreach (var data in ViewBag.naviListToData)
@@ -104,7 +105,7 @@
 
     <div class="scrollButtons">
         @*Sivun loppuun vievä button (LL)*@
-        <br />
+       
         <a href="#end" class="scrollButton"><img src="~/Icons/arrow-down-circle.svg" style="width:3vw;height:3vw" /></a>
     </div>
     <div class="buttonsDiv">
