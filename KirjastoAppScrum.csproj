@@ -211,24 +211,14 @@
     <Content Include="Icons\info-circle.svg" />
     <Content Include="Icons\info-square.svg" />
     <Content Include="Icons\map.svg" />
-    <Content Include="Maps\1krs_hyllyilla.svg" />
     <Content Include="Maps\1krs_hyllyilla_V5.svg" />
     <Content Include="Maps\1krs_Hyllyt.jpg" />
     <Content Include="Maps\1krs_Tyhja_V1.1_3840x1881.png" />
     <Content Include="Maps\1krs_Tyhja_V1.2_3840x1881.png" />
-    <Content Include="Maps\1krs_Tyhja_V2.svg" />
-    <Content Include="Maps\1krs_Tyhja_V3.svg" />
-    <Content Include="Maps\1krs_Tyhja_V4.svg" />
-    <Content Include="Maps\1krs_Tyhja_V5.svg" />
     <Content Include="Maps\2krs_hyllyilla_V5.svg" />
-    <Content Include="Maps\2krs_Hyllylilla_V5.svg" />
     <Content Include="Maps\2krs_Hyllyt.jpg" />
     <Content Include="Maps\2krs_Tyhja_V1.1_3840x1881.png" />
     <Content Include="Maps\2krs_Tyhja_V1.2_3840x1881.png" />
-    <Content Include="Maps\2krs_Tyhja_V2.svg" />
-    <Content Include="Maps\2krs_Tyhja_V3.svg" />
-    <Content Include="Maps\2krs_Tyhja_V4.svg" />
-    <Content Include="Maps\2krs_Tyhja_V5.svg" />
     <Content Include="Models\KirjastoDBEntities.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>KirjastoDBEntities.edmx</DependentUpon>
