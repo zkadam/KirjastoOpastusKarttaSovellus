@@ -155,17 +155,22 @@
 <script charset="UTF-8">
 
     //kun sivu latautuu kutsutaan canvas piirto funktion, johon välitetään eka kerroksen parametrit ZK
+    var firstTime = true;
+    var drawIcon = true;
+    var viestiBool = true;
+    var RedrawCanvasIcons;
     window.onload = drawTheCanvas("KirjastonKarttaKuva1", 1);
+    
+    function clickKerrosButton() {
+        
 
-    function clickKerrosButton(){
         if (document.getElementById("KirjastonKarttaKuva1").style.display != "none") {
-            console.log('we are in if - click first floor');
+
             drawTheCanvas("KirjastonKarttaKuva1", 1)
 
         }
         else {
 
-            console.log('we are in else- click second floor');
             drawTheCanvas("KirjastonKarttaKuva2", 2);
         }
 
@@ -175,15 +180,11 @@
     //canvas piirtyy aina kun kerros button on painettu ZK
 
     function drawTheCanvas(imgIdPar, floorPar) {
-
-
         //clearing imagemap everytime so highlights will be clickable
         var imagemap = document.getElementById('kuvaKartta');
         while (imagemap.firstChild) {
             imagemap.removeChild(imagemap.firstChild);
         }
-
-
 
 
         //sijoitetaan parametrit kuvan id ja kerroksen numero ZK
@@ -202,12 +203,12 @@
         //importing shape coordinates with htmlattribute class="koordinates" ZK
         var Koordinates = document.getElementsByClassName('koordinaatit');
 
-        console.log(Koordinates);
+        //console.log(Koordinates);
 
         //defining apumuuttuja and an array where we collect the koordinates ZK
         let k;
         var koordArray = [];
-            console.log(Koordinates.value)
+            //console.log(Koordinates.value)
             //silmukka goes thrue koordinates , parse them to JSON objects and pushes them to array ZK
             for (k = 0; k < Koordinates.length; k++) {
                 koordArray.push(JSON.parse(Koordinates[k].textContent));
@@ -216,8 +217,9 @@
             }
         //tsekkataan onko yhteen elementti, jos ei oo, niin pushataan fantom elementin että kartta piirtyis siltiZK
         if (!koordArray.length > 0) {
-
-            console.log(Koordinates.value)
+            if (viestiBool) {
+                //bool apumuuttuja, että vain kerran näytettäis viesti(auto redrawing canvas)
+                viestiBool = false;
             //puhsataan yhden fantom koordinaatit että eka kerros tulisi näkymään, ja ilmoitetaan asiakas että sijainti ei löytyy viewbagin kautta ZK
             koordArray.push({ x: 0, y: 0, width: 0, height: 0, kerros: 1, color: 'orange' });
             document.getElementById("changeModal").innerText = ("@Html.Raw(ViewBag.notFound)");
@@ -227,6 +229,7 @@
             //modal piiloutuu automaattisesti ZK
             function closeModal() {
                 $("#myModal").modal("hide");
+            }
             }
 
         }
@@ -257,7 +260,7 @@
 
                     //tässä tarkistetaan onko ekass kerroksessa yhteen etsitty elementti, jos ei oo katsotaan onko tokassa - ja jos sieltä löytyy piirrätään sen ekaks ZK
                     if (ekaKerrosCount > 0) {
-                        console.log("we ar in if");
+                        //console.log("we ar in if");
 
                         //buttonien näkymä vaihtoo sen mukaan kummassa kerroksessa ollaan -ZK
 
@@ -276,7 +279,6 @@
                         let imgId2 = "KirjastonKarttaKuva2";
 
 
-                        console.log('we are in else if');
                         drawAll(imgId2, currentFloor2);
 
                         //kutsutaan modalin näkyväksi ZK
@@ -297,8 +299,6 @@
                         let currentFloor = 1;
 
                         let imgId = "KirjastonKarttaKuva1";
-                        console.log("we ar in else");
-
                         drawAll(imgId, currentFloor);
 
                     }
@@ -315,6 +315,11 @@
         }
 
 
+        //vain eka kertaa kutsutaan rutiini joka joka 1,5s piirtää kanvaksen uudestaan
+        if (firstTime == true) {
+            firstTime = false;
+            RedrawCanvasIcons = setInterval(clickKerrosButton, 500);
+        }
 
         //------------------------------------the actual drawing function------------------------
             function drawAll(imgIdPar, currentFloorPar) {
@@ -355,6 +360,7 @@
                 ctx.fillStyle = "black";
                 ctx.textAlign = "center";
                 //kerros texti tulee kontrollerin kautta, monikielinen sovelluksen takia
+                ctx.shadowColor = "transparent";
                 ctx.fillText(currentFloorPar + ". @Html.Raw(ViewBag.Kerros)", 700, 80);
                 ctx.globalAlpha = 0.8; //sets the transparency
                 ctx.lineWidth = "18";
@@ -375,20 +381,34 @@
                             ctx.globalAlpha = 1; //sets the transparency ZK
                             // Shadow
 
-                            ctx.shadowColor = 'black';
-                            ctx.shadowBlur = 30;
-                            ctx.shadowOffsetX = 20;
-                            ctx.shadowOffsetY = 20;
+                           
                             ctx.beginPath();
                             ctx.fillStyle = shape.color;
+                            if (drawIcon == true) {
+                                ctx.arc(shape.x * 3, shape.y * 3, shape.radius * 3, 0, Math.PI * 2);//drawing circle by given koords the math.pi*2 is to make a full circle ZK
+
+                            }
+                            else {
+                                ctx.arc(shape.x * 3, shape.y * 3, shape.radius * 3-4, 0, Math.PI * 2);//drawing circle by given koords the math.pi*2 is to make a full circle ZK
+                            }
+                            ctx.stroke();
+                            //if (shape.kuvaID && drawIcon == true) {
+                                ctx.shadowColor = 'black';
+                                ctx.shadowBlur = 30;
+                                ctx.shadowOffsetX = 20;
+                            ctx.shadowOffsetY = 20;
+                            //}
+                            //else {
+                            //    ctx.shadowColor = 'transparent';
+
+                            //}
+                            ctx.stroke();
 
                             ctx.strokeStyle = shape.color; //setting shape color ZK
                             //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
-                            ctx.arc(shape.x * 3, shape.y * 3, shape.radius * 3, 0, Math.PI * 2);//drawing circle by given koords the math.pi*2 is to make a full circle ZK
-                            ctx.stroke();
-                            ctx.globalAlpha = 0.4; //sets the transparency ZK
-
+                                ctx.globalAlpha = 0.2; //sets the transparency ZK
                             ctx.fill();
+
                             ctx.closePath();
                 //iconin piirto jos on kuva
                             if (shape.kuvaID) {
@@ -397,11 +417,26 @@
                                 var ikoni = document.getElementById("kuvaIkoni");
                                
                                 //ctx.globalCompositeOperation = 'source-over';
-                                ctx.color = "white";
                                 ctx.globalAlpha = 1; //sets the transparency ZK
                                 ctx.shadowColor = "transparent";
                                 ctx.beginPath();
-                                ctx.fillStyle = "white";
+                                ctx.fillStyle = 'green';
+                                if (drawIcon) {
+
+                                    ctx.shadowColor = 'green';
+                                    ctx.shadowBlur = 20;
+                                    ctx.shadowOffsetX = 20;
+                                    ctx.shadowOffsetY = 20;
+                                }
+                                else {
+
+                                }
+
+                                ctx.fillRect(shape.x * 3 - 58, shape.y * 3 - 53, 85 + 26, 80 + 36);
+
+                                ctx.shadowColor = 'transparent';
+
+                                ctx.fillStyle = "rgba(181,253,255,1)";
                                 ctx.fillRect(shape.x * 3 - 45, shape.y * 3-40, 85,80 );
                                 ctx.fill();
                                 ctx.drawImage(ikoni, (shape.x * 3)-50, (shape.y * 3)-50 , 100, 100);
@@ -413,16 +448,26 @@
                         } else if (shape.width) {
                             // Shadow
 
-                            ctx.shadowColor = 'black';
-                            ctx.shadowBlur = 30;
-                            ctx.shadowOffsetX = 20;
-                            ctx.shadowOffsetY = 20;
-                            ctx.beginPath();
+                         
                             ctx.fillStyle = shape.color;
                             // it's a rectangle ZK
                             ctx.strokeStyle = shape.color;
+                                ctx.globalAlpha = 0.4; //sets the transparency ZK
+                            ctx.beginPath();
                             //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
-                            ctx.globalAlpha = 0.4; //sets the transparency ZK
+                            //if (shape.kuvaID && drawIcon == true) {
+                                ctx.shadowColor = 'black';
+                                ctx.shadowBlur = 30;
+                                ctx.shadowOffsetX = 20;
+                                ctx.shadowOffsetY = 20;
+                                ctx.globalAlpha = 0.2; //sets the transparency ZK
+
+                            //}
+                            //else {
+                                //ctx.shadowColor = 'transparent';
+
+
+                            //}
 
                             ctx.fillRect(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3);
                             ctx.closePath();
@@ -430,7 +475,14 @@
                             ctx.lineWidth = "18";
                             ctx.globalAlpha = 1; //sets the transparency ZK
                             ctx.beginPath();
-                            ctx.rect(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3);
+                            if (drawIcon==true) {
+
+                                ctx.rect(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3);
+                            }
+                            else {
+
+                            ctx.rect(shape.x * 3+2.5, shape.y * 3+2.5, shape.width * 3-5, shape.height * 3-5);
+                            }
                             ctx.stroke();
                             ctx.closePath();
                          
@@ -446,40 +498,36 @@
                                 ctx.shadowColor = "transparent";
                                 ctx.beginPath();
                                 ctx.fillStyle = "white";
-                                //ctx.fillRect(shape.x * 3 - 45, shape.y * 3 - 40, 85, 80);
                                 ctx.fill();
-                                //ctx.drawImage(ikoni, (shape.x * 3) - 50, (shape.y * 3) - 50, 100, 100);
                                 ctx.stroke();
-                                //mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
-
-                                ctx.fillRect(((shape.x * 3) + (shape.width * 3) / 2) - 45, (shape.y * 3) + (shape.height * 3) / 2-40, 85, 80);
+                                //drawing white rectangle around picture
+                                ctx.fillRect(((shape.x * 3) + (shape.width * 3) / 2) - 45, (shape.y * 3) + (shape.height * 3) / 2 - 40, 85, 80);
+                                //drawing image to center of rectangle
                                 ctx.drawImage(ikoni, ((shape.x * 3) + (shape.width * 3) / 2) - 50, (shape.y * 3) + (shape.height*3)/2-50, 100, 100);
                                 ctx.stroke();
-                                //mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
                             }
                         }
                         //calling the areamap clickable links resizing function so areamaps correlate with the drawen shapes
-                        if (shape.kuvaID) {
+                        if (shape.kuvaID ) {
 
                         mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
                         }
                     }
 
                 }
-                //olet tässä pisten piirto eka kerrokseen
+                @*//olet tässä pisten piirto eka kerrokseen
                     if (currentFloor == 1) {
 
                         ctx.beginPath();
                         ctx.fillStyle = 'red';
                         ctx.globalAlpha = 0.6; //sets the transparency ZK
 
-                        //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
+                        ctx.shadowColor = "transparent";
                         ctx.arc(1750, 1340, 30, 0, Math.PI * 2, );//drawing circle by given koords the math.pi*2 is to make a full circle ZK
                         ctx.fill();
                         ctx.strokeStyle = 'red'; //setting shape color ZK
                         //ctx.stroke();
                         ctx.closePath();
-                        ctx.shadowColor = 'white';
 
                         ctx.fillStyle = "white";
                         //piirretään valkoinen neliön textin ympäri koska muuten mustat seinät antaisivat huonon kntrastin
@@ -494,7 +542,7 @@
                         ctx.fillText("@Html.Raw(ViewBag.OletTassa)", 1750, 1450);
                         ctx.globalAlpha = 0.6;
                         ctx.shadowColor = 'black';
-                    }
+                    }*@
                 //jos elementti on 2. kerroksessa highlight portaille pushataan arrayin ja piirrätään niitä ZK
                 if (currentFloor == 2) {
                     var portaat = [];
@@ -542,6 +590,13 @@
                         }
                     }
                 }
+
+                        if (drawIcon == true) {
+                            drawIcon = false;
+                        }
+                        else {
+                            drawIcon = true;
+                        }
             }
     }
 
@@ -550,7 +605,6 @@
 
 
         function mapResize(x, y, width, height, radius, kuvaID) {
-            console.log('resized');       
 
             //we check hight and width of canvas
             var newHeight = document.getElementById('myCanvas').offsetHeight;
@@ -560,7 +614,6 @@
             var newWidthRatio = newWidth / 3840
             //we count new coordinates by getting the original ones and multipling them with the new height or width ratio
             var alue = document.createElement("area");
-            console.log(radius.toString());
 
             //checking if there is radius- so it is a circle or rectangle(radius null didnt work), then counting coordinates +- 18-the border width
             if (radius) {
@@ -588,7 +641,6 @@
                 $("#changeKuvaModal").replaceWith(divi);
 
                 id = this.id;
-                console.log('avataan kuva' + id);
 
                 /*luodaan kontrollerin url viittaus
                
@@ -615,7 +667,6 @@
             //alue.onclick = function () { avaaKuvan(kuvaID); }
             //alue.onclick = avaaKuvan(kuvaID);
             //element.setAttribute(onclick, avaaKuvan(kuvaID))
-            console.log(alue);
             document.getElementById("kuvaKartta").appendChild(alue);
         }
 

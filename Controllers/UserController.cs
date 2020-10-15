@@ -25,6 +25,8 @@ namespace KirjastoAppScrum.Controllers
 
         public ActionResult Kategoriat(string kieli, int? referi, int? id, int? koordinaatit, int? luokka, int? dublikaatti)
         {
+
+
             var lista = from t in db.Tekstit.Include(t => t.Kategoria).Include(t => t.Kategoria.Koordinaatit).Include(t=>t.InfoTekstit)
                         select t;
 
@@ -349,6 +351,7 @@ namespace KirjastoAppScrum.Controllers
                 {
 
                     coordName = coordName.Where(c => c.ReferTo == koordinaatit && c.KieliID == "FI");
+
                     name = coordName.SingleOrDefault().Teksti;
                     // jos ei löydy referiä niin noCoords stringiin tulee kielen mukainen EiKoordinaatteja-teksti RJ
                     //noCoords = "Ei sijaintitietoja";
