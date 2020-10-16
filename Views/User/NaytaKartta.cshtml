@@ -68,9 +68,8 @@
     HUOM2 id="container" - siihen viitataan scriptillä! ZK
     -->
 
-<img src="~/Icons/image.svg" id="kuvaIkoni" style="color:blue;fill:blue;display:none; width:40px; height:40px;" alt="Katso kuvat" title="Katso kuvat" onload="clickKerrosButton()" />
-<img src="~/Icons/image2.svg" id="kuvaIkoni2" style="color:blue;fill:blue;display:none; width:40px; height:40px;" alt="Katso kuvat" title="Katso kuvat" onload="clickKerrosButton()" />
-<img src="~/Icons/camera-fill.svg" id="kuvaIkoni3" style="color:blue;fill:blue;display:none; width:40px; height:40px;" alt="Katso kuvat" title="Katso kuvat" onload="clickKerrosButton()" />
+<img src="~/Icons/camera-fill.svg" id="kuvaIkoni" style="color:blue;fill:blue;display:none; width:40px; height:40px;" alt="Katso kuvat" title="Katso kuvat" onload="clickKerrosButton()" />
+
 <div id="container" style="text-align:center; ">
 
     @*putting the library picture to the background , setting the z-index to -1 so that the canvas objects are being drawn over it
@@ -101,9 +100,9 @@
 @*kerros vaihto buttonien value käytetään js kartta pohjan sekä kordinaattien kerros filteröintiin
     buttonin teksti tulee viewbagin kautta, niin se vaihtuu kielen mukaan - ZK*@
 
-<button id="changeFloor1" class="btn" value="KirjastonKarttaKuva1" onclick="drawTheCanvas(this.value,1)">1  @ViewBag.Kerros</button>
+<button id="changeFloor1" class="btn" value="KirjastonKarttaKuva1" onclick="drawTheCanvas(this.value,1)">1.  @ViewBag.Kerros</button>
 
-<button id="changeFloor2" class="btn" value="KirjastonKarttaKuva2" onclick="drawTheCanvas(this.value,2)">2  @ViewBag.Kerros</button>
+<button id="changeFloor2" class="btn" value="KirjastonKarttaKuva2" onclick="drawTheCanvas(this.value,2)">2.  @ViewBag.Kerros</button>
 
 @*divin tarkoitus toimia booleanina, koska on helppo vaihta inner html-in, js functio tarkistaa inner htmlin myöhämmin ja asetta sen "1" iks, sen jälkeen funktio ei toistu koska ekaks tarkistetaan onko innerhtml == 0 -ZK*@
 <div id="boolDiv" style="display:none">0</div>
@@ -368,7 +367,6 @@
                 ctx.lineWidth = "18";
 
 
-                //condition to decide if it is circle or rectangle(based on if it has radius) ZK
 
                 for (var i = 0; i < koordArray.length; i++) {
 
@@ -382,8 +380,14 @@
                             // it's a circle ZK
                             ctx.globalAlpha = 1; //sets the transparency ZK
 
-                           
+                            ctx.strokeStyle = shape.color; //setting shape color ZK
+
                             ctx.beginPath();
+
+                            ctx.shadowColor = 'black';
+                            ctx.shadowBlur = 30;
+                            ctx.shadowOffsetX = 20;
+                            ctx.shadowOffsetY = 20;
                             ctx.fillStyle = shape.color;
                             if (drawIcon == true) {
                                 ctx.arc(shape.x * 3, shape.y * 3, shape.radius * 3, 0, Math.PI * 2);//drawing circle by given koords the math.pi*2 is to make a full circle ZK
@@ -393,67 +397,55 @@
                                 ctx.arc(shape.x * 3, shape.y * 3, shape.radius * 3-4, 0, Math.PI * 2);//drawing circle by given koords the math.pi*2 is to make a full circle ZK
                             }
                             ctx.stroke();
-                            //if (shape.kuvaID && drawIcon == true) {
                                 ctx.shadowColor = 'black';
                                 ctx.shadowBlur = 100;
                                 ctx.shadowOffsetX = 20;
                             ctx.shadowOffsetY = 20;
+                            //if (shape.kuvaID && drawIcon == true) {
                             //}
                             //else {
                             //    ctx.shadowColor = 'transparent';
 
                             //}
+                            ctx.closePath();
                             ctx.stroke();
-
                             ctx.strokeStyle = shape.color; //setting shape color ZK
                             //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
                                 ctx.globalAlpha = 0.2; //sets the transparency ZK
                             ctx.fill();
 
                             ctx.closePath();
-                //iconin piirto jos on kuva
+                            //iconin piirto jos on kuva
                             if (shape.kuvaID) {
-
-
                                 var ikoni = document.getElementById("kuvaIkoni");
-                                var ikoni2 = document.getElementById("kuvaIkoni2");
-                               
-                                //ctx.globalCompositeOperation = 'source-over';
+                                ctx.save();
                                 ctx.globalAlpha = 1; //sets the transparency ZK
+                                ctx.shadowColor = "transparent";
+                                ctx.fillStyle = '#0e8eab'; //color behind icon
+                                ctx.strokeStyle = "#0e8eab";
+                                ctx.shadowColor = 'rgba(0, 0, 0,1)';
+                                //shadow for icon background
+                                ctx.shadowBlur = 20;
+                                ctx.shadowOffsetX = 10;
+                                ctx.shadowOffsetY = 10;
+                                ctx.lineWidth = 1;
                                 ctx.beginPath();
-
-                                    ctx.shadowColor = 'rgba(0, 0, 0,0.4)';
-                                    ctx.shadowBlur = 5;
-                                    ctx.shadowOffsetX = 20;
-                                    ctx.shadowOffsetY = 20;
-
-
-                                ctx.fillStyle = "white";
-                                ctx.fillRect(shape.x * 3 - 58, shape.y * 3 - 53, 85 + 26, 80 + 36);
-
-
+                                //drawing circle behind icon with shadow
+                                ctx.arc(shape.x * 3, shape.y * 3, 50, 0, Math.PI * 2);
                                 ctx.fill();
-                                ctx.stroke();
-
-                                ctx.closePath();
-                                ctx.shadowColor = 'transparent';
-                                ctx.fillStyle = "white";
-                                ctx.fillRect(shape.x * 3 - 45, shape.y * 3-40, 85,80 );
-                                ctx.beginPath();
-                                if (drawIcon) {
-
-                                ctx.drawImage(ikoni2, (shape.x * 3)-50, (shape.y * 3)-50 , 100, 100);
-                                }
-                                else {
-                                    ctx.drawImage(ikoni2, (shape.x * 3) - 50, (shape.y * 3) - 50, 100, 100);
-
-                                }
-                                ctx.stroke();
-                                //mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
+                                ctx.shadowColor = "transparent";
+                                //drawing circle behind icon without shadow -this needed cos otherwise would have ben shadow behind icon
+                                ctx.arc(shape.x * 3, shape.y * 3, 50, 0, Math.PI * 2);
+                                ctx.fill();
+                                //drawing image to center of circle/rectangle
+                                ctx.drawImage(ikoni, (shape.x * 3-35) , (shape.y * 3-35) , 70, 70);
+                                //restoring graphic settings so ne shape doesnt get effected of current settings
+                                ctx.restore();
                             }
-
-
-                        } else if (shape.width) {
+                                mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
+                        }
+                //rectangle
+                        else if (shape.width) {
                             // Shadow
 
                          
@@ -496,79 +488,33 @@
                          
                 //iconin piirto jos on kuva
                             if (shape.kuvaID) {
-
-
-                                var ikoni = document.getElementById("kuvaIkoni3");
-                                var ikoni2 = document.getElementById("kuvaIkoni3");
+                                var ikoni = document.getElementById("kuvaIkoni");
                                 ctx.save();
-                                //ctx.globalCompositeOperation = 'source-over';
-                                ctx.color = "white";
                                 ctx.globalAlpha = 1; //sets the transparency ZK
                                 ctx.shadowColor = "transparent";
-                                ctx.beginPath();
-                                ctx.fillStyle = "white";
-                                ctx.fill();
-                                ctx.stroke();
-                                //    ctx.shadowColor = 'rgba(0, 0, 0,0.9)';
-                                //    ctx.shadowBlur = 50;
-                                //    ctx.shadowOffsetX = 20;
-                                //ctx.shadowOffsetY = 20;
-                                //ctx.drawImage(ikoni, ((shape.x * 3) + (shape.width * 3) / 2) - 50, (shape.y * 3) + (shape.height * 3) / 2 - 50, 100, 100);
-
-                                //drawing white rectangle around picture
-                                //this is the exact background of image if needs to be modified the color
-                                //ctx.fillRect(((shape.x * 3) + (shape.width * 3) / 2) - 60, (shape.y * 3) + (shape.height * 3) / 2 - 55, 110, 110);
-                                ctx.fill();
-                                ctx.closePath();
-                                ctx.shadowColor = "transparent";
-                                ctx.fillStyle = '#0e8eab';
+                                ctx.fillStyle = '#0e8eab'; //color behind icon
                                 ctx.strokeStyle = "#0e8eab";
-                                //ctx.fillStyle = 'transparent';
-                                        ctx.shadowColor = 'rgba(0, 0, 0,0.6)';
-                                    ctx.shadowBlur = 10;
-                                    ctx.shadowOffsetX = 5;
-                                ctx.shadowOffsetY = 5;
-
+                                ctx.shadowColor = 'rgba(0, 0, 0,1)';
+                                //shadow for icon background
+                                ctx.shadowBlur = 20;
+                                ctx.shadowOffsetX = 10;
+                                ctx.shadowOffsetY = 10;
                                 ctx.lineWidth = 1;
                                 ctx.beginPath();
-                                ctx.arc((shape.x * 3) + (shape.width * 3 / 2), (shape.y * 3) + (shape.height * 3/2), 50, 0, Math.PI * 2);
-                                ctx.closePath();
-                                //ctx.shadowColor = "transparent";
-                                ctx.fill();
-                                //ctx.fillRect(((shape.x * 3) + (shape.width * 3) / 2) - 45, (shape.y * 3) + (shape.height * 3) / 2 -25, 85, 60);
-                                //ctx.shadowColor = 'rgba(0, 0, 0,0.8)';
-                                //ctx.shadowBlur = 45;
-                                //ctx.shadowOffsetX = 5;
-                                //ctx.shadowOffsetY = 5;
-
-                                //ctx.fillStyle = 'rgba(0, 0, 0,0.1)';
-                                //ctx.fillRect(((shape.x * 3) + (shape.width * 3) / 2) - 65, (shape.y * 3) + (shape.height * 3) / 2 - 60, 135, 135);
-
-
-                                //ctx.filter = 'blur(0px)';
-                      
-
-                                //ctx.fillRect(((shape.x * 3) + (shape.width * 3) / 2) - 60, (shape.y * 3) + (shape.height * 3) / 2 - 55, 110, 110);
-
-
-                                ctx.fill();
-                                ctx.stroke();
-                                ctx.closePath();
-                                ctx.beginPath();
-
-                                
-                                ctx.shadowColor = "transparent";
+                            //drawing circle behind icon with shadow
                                 ctx.arc((shape.x * 3) + (shape.width * 3 / 2), (shape.y * 3) + (shape.height * 3 / 2), 50, 0, Math.PI * 2);
                                 ctx.fill();
-
-                                //drawing image to center of rectangle
+                                ctx.shadowColor = "transparent";
+                             //drawing circle behind icon without shadow -this needed cos otherwise would have ben shadow behind icon
+                                ctx.arc((shape.x * 3) + (shape.width * 3 / 2), (shape.y * 3) + (shape.height * 3 / 2), 50, 0, Math.PI * 2);
+                                ctx.fill();
+                                //drawing image to center of circle/rectangle
                                 ctx.drawImage(ikoni, ((shape.x * 3) + (shape.width * 3) / 2) - 35, (shape.y * 3) + (shape.height*3)/2-35, 70, 70);
-                            
-                                ctx.stroke();
+                                //restoring graphic settings so ne shape doesnt get effected of current settings
                                 ctx.restore();
                             }
                         }
-                        //calling the areamap clickable links resizing function so areamaps correlate with the drawen shapes
+                //calling the areamap clickable links resizing function so areamaps correlate with the drawen shapes
                         if (shape.kuvaID ) {
 
                         mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
