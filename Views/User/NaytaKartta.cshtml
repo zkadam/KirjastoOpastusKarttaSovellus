@@ -69,6 +69,7 @@
     -->
 
 <img src="~/Icons/image.svg" id="kuvaIkoni" style="color:blue;fill:blue;display:none; width:40px; height:40px;" alt="Katso kuvat" title="Katso kuvat" onload="clickKerrosButton()" />
+<img src="~/Icons/image2.svg" id="kuvaIkoni2" style="color:blue;fill:blue;display:none; width:40px; height:40px;" alt="Katso kuvat" title="Katso kuvat" onload="clickKerrosButton()" />
 <div id="container" style="text-align:center; ">
 
     @*putting the library picture to the background , setting the z-index to -1 so that the canvas objects are being drawn over it
@@ -379,7 +380,6 @@
                         if (shape.radius) {
                             // it's a circle ZK
                             ctx.globalAlpha = 1; //sets the transparency ZK
-                            // Shadow
 
                            
                             ctx.beginPath();
@@ -394,7 +394,7 @@
                             ctx.stroke();
                             //if (shape.kuvaID && drawIcon == true) {
                                 ctx.shadowColor = 'black';
-                                ctx.shadowBlur = 30;
+                                ctx.shadowBlur = 100;
                                 ctx.shadowOffsetX = 20;
                             ctx.shadowOffsetY = 20;
                             //}
@@ -407,7 +407,7 @@
                             ctx.strokeStyle = shape.color; //setting shape color ZK
                             //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
                                 ctx.globalAlpha = 0.2; //sets the transparency ZK
-                            ctx.fill();
+                            //ctx.fill();
 
                             ctx.closePath();
                 //iconin piirto jos on kuva
@@ -415,31 +415,39 @@
 
 
                                 var ikoni = document.getElementById("kuvaIkoni");
+                                var ikoni2 = document.getElementById("kuvaIkoni2");
                                
                                 //ctx.globalCompositeOperation = 'source-over';
                                 ctx.globalAlpha = 1; //sets the transparency ZK
                                 ctx.shadowColor = "transparent";
                                 ctx.beginPath();
-                                ctx.fillStyle = 'green';
-                                if (drawIcon) {
 
-                                    ctx.shadowColor = 'green';
-                                    ctx.shadowBlur = 20;
+                                    ctx.shadowColor = 'rgba(0, 0, 0,0.4)';
+                                    ctx.shadowBlur = 5;
                                     ctx.shadowOffsetX = 20;
                                     ctx.shadowOffsetY = 20;
-                                }
-                                else {
+                                
 
-                                }
-
+                                ctx.fillStyle = "white";
                                 ctx.fillRect(shape.x * 3 - 58, shape.y * 3 - 53, 85 + 26, 80 + 36);
 
-                                ctx.shadowColor = 'transparent';
 
-                                ctx.fillStyle = "rgba(181,253,255,1)";
-                                ctx.fillRect(shape.x * 3 - 45, shape.y * 3-40, 85,80 );
                                 ctx.fill();
-                                ctx.drawImage(ikoni, (shape.x * 3)-50, (shape.y * 3)-50 , 100, 100);
+                                ctx.stroke();
+
+                                ctx.closePath();
+                                ctx.shadowColor = 'transparent';
+                                ctx.fillStyle = "white";
+                                ctx.fillRect(shape.x * 3 - 45, shape.y * 3-40, 85,80 );
+                                ctx.beginPath();
+                                if (drawIcon) {
+
+                                ctx.drawImage(ikoni2, (shape.x * 3)-50, (shape.y * 3)-50 , 100, 100);
+                                }
+                                else {
+                                    ctx.drawImage(ikoni2, (shape.x * 3) - 50, (shape.y * 3) - 50, 100, 100);
+
+                                }
                                 ctx.stroke();
                                 //mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
                             }
@@ -475,7 +483,7 @@
                             ctx.lineWidth = "18";
                             ctx.globalAlpha = 1; //sets the transparency ZK
                             ctx.beginPath();
-                            if (drawIcon==true) {
+                            if (drawIcon) {
 
                                 ctx.rect(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3);
                             }
@@ -491,6 +499,7 @@
 
 
                                 var ikoni = document.getElementById("kuvaIkoni");
+                                var ikoni2 = document.getElementById("kuvaIkoni2");
 
                                 //ctx.globalCompositeOperation = 'source-over';
                                 ctx.color = "white";
@@ -503,7 +512,25 @@
                                 //drawing white rectangle around picture
                                 ctx.fillRect(((shape.x * 3) + (shape.width * 3) / 2) - 45, (shape.y * 3) + (shape.height * 3) / 2 - 40, 85, 80);
                                 //drawing image to center of rectangle
+                                if (drawIcon) {
+
+                                ctx.shadowColor = 'black';
+                                ctx.shadowBlur = 80;
+                                ctx.shadowOffsetX = 5;
+                                ctx.shadowOffsetY = 5;
+                                }
+                                else {
+                                    ctx.shadowColor = "transparent";
+
+                                }
+
+                                ctx.fillRect(((shape.x * 3) + (shape.width * 3) / 2) - 60, (shape.y * 3) + (shape.height * 3) / 2 - 55, 110, 110);
+                                ctx.shadowColor = "transparent";
+
+                                
+
                                 ctx.drawImage(ikoni, ((shape.x * 3) + (shape.width * 3) / 2) - 50, (shape.y * 3) + (shape.height*3)/2-50, 100, 100);
+                            
                                 ctx.stroke();
                             }
                         }

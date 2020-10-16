@@ -209,6 +209,7 @@
     <Content Include="Icons\house.svg" />
     <Content Include="Icons\image-fill.svg" />
     <Content Include="Icons\image.svg" />
+    <Content Include="Icons\image2.svg" />
     <Content Include="Icons\info-circle.svg" />
     <Content Include="Icons\info-square.svg" />
     <Content Include="Icons\map.svg" />
