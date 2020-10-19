@@ -159,28 +159,34 @@
     var firstTime = true;
     var drawIcon = true;
     var viestiBool = true;
+    var resizeBool = false;
     var RedrawCanvasIcons;
     window.onload = drawTheCanvas("KirjastonKarttaKuva1", 1);
     
-    function clickKerrosButton() {
-        
+    function clickKerrosButton(resizebool) {
 
+        console.log(resizebool)
+        var resized = resizebool;
         if (document.getElementById("KirjastonKarttaKuva1").style.display != "none") {
 
-            drawTheCanvas("KirjastonKarttaKuva1", 1)
+            drawTheCanvas("KirjastonKarttaKuva1", 1,resized)
 
         }
         else {
 
-            drawTheCanvas("KirjastonKarttaKuva2", 2);
+            drawTheCanvas("KirjastonKarttaKuva2", 2,resized);
         }
 
     };
 
-    window.addEventListener("resize",  clickKerrosButton);
-    //canvas piirtyy aina kun kerros button on painettu ZK
+    if (firstTime) {
+        //canvas piirtyy aina kun viewport koko muuttuu ZK
+        window.addEventListener("resize", function () { console.log('in eventlistener') },false);
 
-    function drawTheCanvas(imgIdPar, floorPar) {
+    }
+
+    function drawTheCanvas(imgIdPar, floorPar, resized) {
+        console.log(resized);
         //clearing imagemap everytime so highlights will be clickable
         var imagemap = document.getElementById('kuvaKartta');
         while (imagemap.firstChild) {
@@ -319,7 +325,7 @@
         //vain eka kertaa kutsutaan rutiini joka joka 1,5s piirtää kanvaksen uudestaan
         if (firstTime == true) {
             firstTime = false;
-            RedrawCanvasIcons = setInterval(clickKerrosButton, 1500);
+            //RedrawCanvasIcons = setInterval(clickKerrosButton, 1500);
         }
 
         //------------------------------------the actual drawing function------------------------
@@ -612,7 +618,7 @@
 
 
         function mapResize(x, y, width, height, radius, kuvaID) {
-
+            //console.log('in map resize functio');
             //we check hight and width of canvas
             var newHeight = document.getElementById('myCanvas').offsetHeight;
             var newWidth = document.getElementById('myCanvas').offsetWidth;
