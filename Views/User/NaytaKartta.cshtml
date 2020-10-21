@@ -100,9 +100,9 @@
 @*kerros vaihto buttonien value käytetään js kartta pohjan sekä kordinaattien kerros filteröintiin
     buttonin teksti tulee viewbagin kautta, niin se vaihtuu kielen mukaan - ZK*@
 
-<button id="changeFloor1" class="btn" value="KirjastonKarttaKuva1" onclick="drawTheCanvas(this.value,1,true)">1.  @ViewBag.Kerros</button>
+<button id="changeFloor1" class="btn" value="KirjastonKarttaKuva1" onclick="drawTheCanvas(1,true)">1.  @ViewBag.Kerros</button>
 
-<button id="changeFloor2" class="btn" value="KirjastonKarttaKuva2" onclick="drawTheCanvas(this.value,2,true)">2.  @ViewBag.Kerros</button>
+<button id="changeFloor2" class="btn" value="KirjastonKarttaKuva2" onclick="drawTheCanvas(2,true)">2.  @ViewBag.Kerros</button>
 
 @*divin tarkoitus toimia booleanina, koska on helppo vaihta inner html-in, js functio tarkistaa inner htmlin myöhämmin ja asetta sen "1" iks, sen jälkeen funktio ei toistu koska ekaks tarkistetaan onko innerhtml == 0 -ZK*@
 <div id="boolDiv" style="display:none">0</div>
@@ -161,30 +161,21 @@
     var viestiBool = true;
     var firstDraw = true;
     var RedrawCanvasIcons;
-    window.onload = drawTheCanvas("KirjastonKarttaKuva1", 1);
+    window.onload = drawTheCanvas(1,true);
     
     function clickKerrosButton(resizebool) {
 
-        console.log(resizebool)
         if (document.getElementById("KirjastonKarttaKuva1").style.display != "none") {
-
-            drawTheCanvas("KirjastonKarttaKuva1", 1, resizebool)
-
+            drawTheCanvas(1, resizebool)
         }
         else {
-
-            drawTheCanvas("KirjastonKarttaKuva2", 2, resizebool);
+              drawTheCanvas(2, resizebool);
         }
-
-    };
-
+        };
     
-
-    function drawTheCanvas(imgIdPar, floorPar, resizebool) {
-        console.log(resizebool);
+    function drawTheCanvas(floorPar, resizebool) {
         //clearing imagemap everytime if we resize so exact highlights will be clickable
         if (resizebool || firstDraw) {
-
             var imagemap = document.getElementById('kuvaKartta');
             while (imagemap.firstChild) {
                 imagemap.removeChild(imagemap.firstChild);
@@ -193,7 +184,7 @@
 
 
         //sijoitetaan parametrit kuvan id ja kerroksen numero ZK
-        let imgId = imgIdPar;
+       
         let currentFloor = floorPar;
 
         // canvas related vars, setting the canvas up ZK
@@ -220,36 +211,36 @@
                 //console.log(koordArray[k].color); -just a testZK
 
             }
-        //tsekkataan onko yhteen elementti, jos ei oo, niin pushataan fantom elementin että kartta piirtyis siltiZK
-        if (!koordArray.length > 0) {
-            if (viestiBool) {
-                //bool apumuuttuja, että vain kerran näytettäis viesti(auto redrawing canvas)
-                viestiBool = false;
-            //puhsataan yhden fantom koordinaatit että eka kerros tulisi näkymään, ja ilmoitetaan asiakas että sijainti ei löytyy viewbagin kautta ZK
-            koordArray.push({ x: 0, y: 0, width: 0, height: 0, kerros: 1, color: 'orange' });
-            document.getElementById("changeModal").innerText = ("@Html.Raw(ViewBag.notFound)");
-            $("#myModal").modal("toggle");
-            setTimeout(closeModal, 180000);
+//tsekkataan onko yhteen elementti, jos ei oo, niin pushataan fantom elementin että kartta piirtyis siltiZK
+            if (!koordArray.length > 0) {
+                if (viestiBool) {
+                    //bool apumuuttuja, että vain kerran näytettäis viesti(auto redrawing canvas)
+                    viestiBool = false;
+                //puhsataan yhden fantom koordinaatit että eka kerros tulisi näkymään, ja ilmoitetaan asiakas että sijainti ei löytyy viewbagin kautta ZK
+                koordArray.push({ x: 0, y: 0, width: 0, height: 0, kerros: 1, color: 'orange' });
+                document.getElementById("changeModal").innerText = ("@Html.Raw(ViewBag.notFound)");
+                $("#myModal").modal("toggle");
+                setTimeout(closeModal, 180000);
 
-            //modal piiloutuu automaattisesti ZK
-            function closeModal() {
-                $("#myModal").modal("hide");
-            }
-            }
+                //modal piiloutuu automaattisesti ZK
+                function closeModal() {
+                    $("#myModal").modal("hide");
+                }
+                }
 
         }
 
-        //tässä tarkistetaan onko eka canvas piirto tehty jo, jos ei oo sitten lasketaan montako koordinaatti löytyy missä kerroksessa ZK
+//tässä tarkistetaan onko eka canvas piirto tehty jo, jos ei oo sitten lasketaan montako koordinaatti löytyy missä kerroksessa ZK
         if (document.getElementById("boolDiv").innerText == "0") {
-            kerrosTarkastus(imgId, resizebool);
+            kerrosTarkastus(resizebool);
 
-            function kerrosTarkastus(imgId,resizebool) {
+            function kerrosTarkastus(resizebool) {
 
-                //laitetaan boolDiville arvo 1 että se tätä ei tekisi seuraava kertaa
+            //laitetaan boolDiville arvo 1 että se tätä ei tekisi seuraava kertaa
                 document.getElementById("boolDiv").innerText = "1"
                 var ekaKerrosCount = 0;
                 var tokaKerrosCount = 0;
-                //silmukassa käydään läpi kaikki koordinaatteja jotka saatiin, ja lasketaan montako niitä on , jos eka kerroksessa ei oo, mutta tokassa on, niin vaihetaan kerros -ZK
+            //silmukassa käydään läpi kaikki koordinaatteja jotka saatiin, ja lasketaan montako niitä on , jos eka kerroksessa ei oo, mutta tokassa on, niin vaihetaan kerros -ZK
                 for (var j = 0; j < koordArray.length; j++) {
 
                     var shape = koordArray[j];
@@ -263,28 +254,16 @@
                         tokaKerrosCount = tokaKerrosCount + 1;
                     }
 
-                    //tässä tarkistetaan onko ekass kerroksessa yhteen etsitty elementti, jos ei oo katsotaan onko tokassa - ja jos sieltä löytyy piirrätään sen ekaks ZK
+                //tässä tarkistetaan onko ekass kerroksessa yhteen etsitty elementti, jos ei oo katsotaan onko tokassa - ja jos sieltä löytyy piirrätään sen ekaks ZK
                     if (ekaKerrosCount > 0) {
-                        //console.log("we ar in if");
-
-                        //buttonien näkymä vaihtoo sen mukaan kummassa kerroksessa ollaan -ZK
-
-
-
                         let currentFloor = 1;
-
-
-                        let imgId = "KirjastonKarttaKuva1"
-                        drawAll(imgId, currentFloor, resizebool);
+                        drawAll(currentFloor, resizebool);
                     }
+                    //tarkistetaan löytyykö tokassa kerroksessa jos ekassa ei löytynyt
                     else if (tokaKerrosCount > 0) {
-
-                        //document.getElementById("changeFloor2").click();
-                        let currentFloor2 = 2;
-                        let imgId2 = "KirjastonKarttaKuva2";
-
-
-                        drawAll(imgId2, currentFloor2,resizebool);
+                              
+                       let currentFloor2 = 2;
+                         drawAll( currentFloor2,resizebool);
 
                         //kutsutaan modalin näkyväksi ZK
                         $("#myModal").modal("toggle");
@@ -297,14 +276,10 @@
 
                         }
                     }
+                     //jos ei oo missään elementtejä, silti piirrätään eka kerroksen
                     else {
-
-                        //buttonien näkymä vaihtoo sen mukaan kummassa kerroksessa ollaan -ZK
-
-                        let currentFloor = 1;
-
-                        let imgId = "KirjastonKarttaKuva1";
-                        drawAll(imgId, currentFloor, resizebool);
+                         let currentFloor = 1;
+                        drawAll(currentFloor, resizebool);
 
                     }
                 }
@@ -315,23 +290,23 @@
 
 
             let currentFloor = floorPar;
-            let imgId = imgIdPar;
-            drawAll(imgId, currentFloor, resizebool)
+            
+            drawAll(currentFloor, resizebool)
         }
 
         if (firstTime == true) {
-            //canvas piirtyy aina kun viewport koko muuttuu ZK
+            //canvas piirtyy aina kun viewport koko muuttuu- true paramety kerto että kuvakarttakin pitää piirtää uudelleen ZK
             window.addEventListener("resize", function () { clickKerrosButton(true) }, false);
           }
-        //vain eka kertaa kutsutaan rutiini joka joka 1,5s piirtää kanvaksen uudestaan
+        //vain eka kertaa kutsutaan rutiini joka joka 0,5s piirtää kanvaksen uudestaan - animaation varteen
         if (firstTime == true) {
             firstTime = false;
             RedrawCanvasIcons = setInterval(clickKerrosButton, 500);
         }
 
-        //------------------------------------the actual drawing function------------------------
-            function drawAll(imgIdPar, currentFloorPar, resizebool) {
-                let imgId = imgIdPar;
+        //------------------------------------the actual drawing function(imgidpar is needless)------------------------
+            function drawAll( currentFloorPar, resizebool) {
+              
                 let currentFloor = currentFloorPar;
                 document.getElementById("kerrosNumero").innerText = currentFloor;
 
