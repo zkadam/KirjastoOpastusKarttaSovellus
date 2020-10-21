@@ -100,9 +100,9 @@
 @*kerros vaihto buttonien value käytetään js kartta pohjan sekä kordinaattien kerros filteröintiin
     buttonin teksti tulee viewbagin kautta, niin se vaihtuu kielen mukaan - ZK*@
 
-<button id="changeFloor1" class="btn" value="KirjastonKarttaKuva1" onclick="drawTheCanvas(this.value,1)">1.  @ViewBag.Kerros</button>
+<button id="changeFloor1" class="btn" value="KirjastonKarttaKuva1" onclick="drawTheCanvas(this.value,1,true)">1.  @ViewBag.Kerros</button>
 
-<button id="changeFloor2" class="btn" value="KirjastonKarttaKuva2" onclick="drawTheCanvas(this.value,2)">2.  @ViewBag.Kerros</button>
+<button id="changeFloor2" class="btn" value="KirjastonKarttaKuva2" onclick="drawTheCanvas(this.value,2,true)">2.  @ViewBag.Kerros</button>
 
 @*divin tarkoitus toimia booleanina, koska on helppo vaihta inner html-in, js functio tarkistaa inner htmlin myöhämmin ja asetta sen "1" iks, sen jälkeen funktio ei toistu koska ekaks tarkistetaan onko innerhtml == 0 -ZK*@
 <div id="boolDiv" style="display:none">0</div>
@@ -159,38 +159,36 @@
     var firstTime = true;
     var drawIcon = true;
     var viestiBool = true;
-    var resizeBool = false;
+    var firstDraw = true;
     var RedrawCanvasIcons;
     window.onload = drawTheCanvas("KirjastonKarttaKuva1", 1);
     
     function clickKerrosButton(resizebool) {
 
         console.log(resizebool)
-        var resized = resizebool;
         if (document.getElementById("KirjastonKarttaKuva1").style.display != "none") {
 
-            drawTheCanvas("KirjastonKarttaKuva1", 1,resized)
+            drawTheCanvas("KirjastonKarttaKuva1", 1, resizebool)
 
         }
         else {
 
-            drawTheCanvas("KirjastonKarttaKuva2", 2,resized);
+            drawTheCanvas("KirjastonKarttaKuva2", 2, resizebool);
         }
 
     };
 
-    if (firstTime) {
-        //canvas piirtyy aina kun viewport koko muuttuu ZK
-        window.addEventListener("resize", function () { console.log('in eventlistener') },false);
+    
 
-    }
+    function drawTheCanvas(imgIdPar, floorPar, resizebool) {
+        console.log(resizebool);
+        //clearing imagemap everytime if we resize so exact highlights will be clickable
+        if (resizebool || firstDraw) {
 
-    function drawTheCanvas(imgIdPar, floorPar, resized) {
-        console.log(resized);
-        //clearing imagemap everytime so highlights will be clickable
-        var imagemap = document.getElementById('kuvaKartta');
-        while (imagemap.firstChild) {
-            imagemap.removeChild(imagemap.firstChild);
+            var imagemap = document.getElementById('kuvaKartta');
+            while (imagemap.firstChild) {
+                imagemap.removeChild(imagemap.firstChild);
+        }
         }
 
 
@@ -243,9 +241,9 @@
 
         //tässä tarkistetaan onko eka canvas piirto tehty jo, jos ei oo sitten lasketaan montako koordinaatti löytyy missä kerroksessa ZK
         if (document.getElementById("boolDiv").innerText == "0") {
-            kerrosTarkastus(imgId);
+            kerrosTarkastus(imgId, resizebool);
 
-            function kerrosTarkastus(imgId) {
+            function kerrosTarkastus(imgId,resizebool) {
 
                 //laitetaan boolDiville arvo 1 että se tätä ei tekisi seuraava kertaa
                 document.getElementById("boolDiv").innerText = "1"
@@ -277,7 +275,7 @@
 
 
                         let imgId = "KirjastonKarttaKuva1"
-                        drawAll(imgId, currentFloor);
+                        drawAll(imgId, currentFloor, resizebool);
                     }
                     else if (tokaKerrosCount > 0) {
 
@@ -286,7 +284,7 @@
                         let imgId2 = "KirjastonKarttaKuva2";
 
 
-                        drawAll(imgId2, currentFloor2);
+                        drawAll(imgId2, currentFloor2,resizebool);
 
                         //kutsutaan modalin näkyväksi ZK
                         $("#myModal").modal("toggle");
@@ -306,7 +304,7 @@
                         let currentFloor = 1;
 
                         let imgId = "KirjastonKarttaKuva1";
-                        drawAll(imgId, currentFloor);
+                        drawAll(imgId, currentFloor, resizebool);
 
                     }
                 }
@@ -318,18 +316,21 @@
 
             let currentFloor = floorPar;
             let imgId = imgIdPar;
-            drawAll(imgId, currentFloor)
+            drawAll(imgId, currentFloor, resizebool)
         }
 
-
+        if (firstTime == true) {
+            //canvas piirtyy aina kun viewport koko muuttuu ZK
+            window.addEventListener("resize", function () { clickKerrosButton(true) }, false);
+          }
         //vain eka kertaa kutsutaan rutiini joka joka 1,5s piirtää kanvaksen uudestaan
         if (firstTime == true) {
             firstTime = false;
-            //RedrawCanvasIcons = setInterval(clickKerrosButton, 1500);
+            RedrawCanvasIcons = setInterval(clickKerrosButton, 500);
         }
 
         //------------------------------------the actual drawing function------------------------
-            function drawAll(imgIdPar, currentFloorPar) {
+            function drawAll(imgIdPar, currentFloorPar, resizebool) {
                 let imgId = imgIdPar;
                 let currentFloor = currentFloorPar;
                 document.getElementById("kerrosNumero").innerText = currentFloor;
@@ -407,12 +408,7 @@
                                 ctx.shadowBlur = 100;
                                 ctx.shadowOffsetX = 20;
                             ctx.shadowOffsetY = 20;
-                            //if (shape.kuvaID && drawIcon == true) {
-                            //}
-                            //else {
-                            //    ctx.shadowColor = 'transparent';
-
-                            //}
+                           
                             ctx.closePath();
                             ctx.stroke();
                             ctx.strokeStyle = shape.color; //setting shape color ZK
@@ -447,8 +443,11 @@
                                 ctx.drawImage(ikoni, (shape.x * 3-35) , (shape.y * 3-35) , 70, 70);
                                 //restoring graphic settings so ne shape doesnt get effected of current settings
                                 ctx.restore();
-                            }
+                                if (resizebool || firstDraw) {
+
                                 mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
+                            }
+                            }
                         }
                 //rectangle
                         else if (shape.width) {
@@ -518,12 +517,12 @@
                                 ctx.drawImage(ikoni, ((shape.x * 3) + (shape.width * 3) / 2) - 35, (shape.y * 3) + (shape.height*3)/2-35, 70, 70);
                                 //restoring graphic settings so ne shape doesnt get effected of current settings
                                 ctx.restore();
-                            }
-                        }
-                //calling the areamap clickable links resizing function so areamaps correlate with the drawen shapes
-                        if (shape.kuvaID ) {
+                                //calling the areamap clickable links resizing function so areamaps correlate with the drawen shapes
+                                if (resizebool || firstDraw) {
 
                         mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
+                        }
+                            }
                         }
                     }
 
@@ -610,7 +609,8 @@
                         else {
                             drawIcon = true;
                         }
-            }
+        }
+        firstDraw = false;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------//
