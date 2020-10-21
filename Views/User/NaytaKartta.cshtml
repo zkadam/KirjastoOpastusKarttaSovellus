@@ -157,7 +157,7 @@
 
     //kun sivu latautuu kutsutaan canvas piirto funktion, johon välitetään eka kerroksen parametrit ZK
     var firstTime = true;
-    var drawIcon = true;
+    var animateBool = true;
     var viestiBool = true;
     var firstDraw = true;
     var RedrawCanvasIcons;
@@ -223,37 +223,26 @@
                 setTimeout(closeModal, 180000);
 
                 //modal piiloutuu automaattisesti ZK
-                function closeModal() {
-                    $("#myModal").modal("hide");
-                }
-                }
-
-        }
+                function closeModal() {$("#myModal").modal("hide");}}
+            }
 
 //tässä tarkistetaan onko eka canvas piirto tehty jo, jos ei oo sitten lasketaan montako koordinaatti löytyy missä kerroksessa ZK
         if (document.getElementById("boolDiv").innerText == "0") {
             kerrosTarkastus(resizebool);
-
             function kerrosTarkastus(resizebool) {
-
             //laitetaan boolDiville arvo 1 että se tätä ei tekisi seuraava kertaa
                 document.getElementById("boolDiv").innerText = "1"
                 var ekaKerrosCount = 0;
                 var tokaKerrosCount = 0;
             //silmukassa käydään läpi kaikki koordinaatteja jotka saatiin, ja lasketaan montako niitä on , jos eka kerroksessa ei oo, mutta tokassa on, niin vaihetaan kerros -ZK
                 for (var j = 0; j < koordArray.length; j++) {
-
                     var shape = koordArray[j];
-
                     if (shape.kerros == 1) {
-
                         ekaKerrosCount = ekaKerrosCount + 1;
                     }
                     if (shape.kerros == 2) {
-
                         tokaKerrosCount = tokaKerrosCount + 1;
                     }
-
                 //tässä tarkistetaan onko ekass kerroksessa yhteen etsitty elementti, jos ei oo katsotaan onko tokassa - ja jos sieltä löytyy piirrätään sen ekaks ZK
                     if (ekaKerrosCount > 0) {
                         let currentFloor = 1;
@@ -261,37 +250,27 @@
                     }
                     //tarkistetaan löytyykö tokassa kerroksessa jos ekassa ei löytynyt
                     else if (tokaKerrosCount > 0) {
-                              
-                       let currentFloor2 = 2;
+                         let currentFloor2 = 2;
                          drawAll( currentFloor2,resizebool);
-
                         //kutsutaan modalin näkyväksi ZK
                         $("#myModal").modal("toggle");
                         setTimeout(closeModal, 180000);
 
                         //modal piiloutuu automaattisesti ZK
                         function closeModal() {
-
-                            $("#myModal").modal("hide");
-
-                        }
-                    }
+                            $("#myModal").modal("hide");} }
                      //jos ei oo missään elementtejä, silti piirrätään eka kerroksen
                     else {
                          let currentFloor = 1;
                         drawAll(currentFloor, resizebool);
-
-                    }
+                         }
                 }
             }
         }
-
+        //if kerrostarkastus on jo tehty, piirrätään elementit heti
         else {
-
-
             let currentFloor = floorPar;
-            
-            drawAll(currentFloor, resizebool)
+             drawAll(currentFloor, resizebool)
         }
 
         if (firstTime == true) {
@@ -304,7 +283,7 @@
             RedrawCanvasIcons = setInterval(clickKerrosButton, 500);
         }
 
-        //------------------------------------the actual drawing function(imgidpar is needless)------------------------
+        //------------------------------------the actual drawing function------------------------
             function drawAll( currentFloorPar, resizebool) {
               
                 let currentFloor = currentFloorPar;
@@ -312,14 +291,10 @@
 
                 // clear the canvasv, the background stays coz its a div behind the canvas ZK
                 ctx.clearRect(0, 0, cw, ch);
-
                 //global alpha - eli läpinäkevyys aina pitää laitta 1 arvoks, että kuva tulisi terävänä ZK
                 ctx.globalAlpha = 1;
-
-
-                // canvaksen alla vaihtuu kerros kuva ZK
+                // canvaksen alla vaihtuu kerros kuva ja buttonien ulkomuoto ZK
                 if (currentFloorPar == 2) {
-
                     document.getElementById("KirjastonKarttaKuva2").style.display = "";
                     document.getElementById("KirjastonKarttaKuva1").style.display = "none";
                     document.getElementById("changeFloor1").classList.remove("active");
@@ -347,9 +322,7 @@
                 ctx.fillText(currentFloorPar + ". @Html.Raw(ViewBag.Kerros)", 700, 80);
                 ctx.globalAlpha = 0.8; //sets the transparency
                 ctx.lineWidth = "18";
-
-
-
+//drawing each shape
                 for (var i = 0; i < koordArray.length; i++) {
 
                     var shape = koordArray[i];
@@ -361,17 +334,14 @@
                         if (shape.radius) {
                             // it's a circle ZK
                             ctx.globalAlpha = 1; //sets the transparency ZK
-
                             ctx.strokeStyle = shape.color; //setting shape color ZK
-
                             ctx.beginPath();
-
                             ctx.shadowColor = 'black';
                             ctx.shadowBlur = 30;
                             ctx.shadowOffsetX = 20;
                             ctx.shadowOffsetY = 20;
                             ctx.fillStyle = shape.color;
-                            if (drawIcon == true) {
+                            if (animateBool == true) {
                                 ctx.arc(shape.x * 3, shape.y * 3, shape.radius * 3, 0, Math.PI * 2);//drawing circle by given koords the math.pi*2 is to make a full circle ZK
                                 
                             }
@@ -418,53 +388,39 @@
                                 ctx.drawImage(ikoni, (shape.x * 3-35) , (shape.y * 3-35) , 70, 70);
                                 //restoring graphic settings so ne shape doesnt get effected of current settings
                                 ctx.restore();
+                                //calling function to resize image map if the screen has been resized or if it is first dra
                                 if (resizebool || firstDraw) {
-
                                 mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
                             }
                             }
                         }
                 //rectangle
                         else if (shape.width) {
-                            // Shadow
-
-                         
-                            ctx.fillStyle = shape.color;
-                            // it's a rectangle ZK
-                            ctx.strokeStyle = shape.color;
+                                ctx.fillStyle = shape.color;
+                                ctx.strokeStyle = shape.color;
                                 ctx.globalAlpha = 0.4; //sets the transparency ZK
-                            ctx.beginPath();
+                                ctx.beginPath();
                             //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
-                            //if (shape.kuvaID && drawIcon == true) {
                                 ctx.shadowColor = 'black';
                                 ctx.shadowBlur = 30;
                                 ctx.shadowOffsetX = 20;
                                 ctx.shadowOffsetY = 20;
                                 ctx.globalAlpha = 0.2; //sets the transparency ZK
+                                ctx.fillRect(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3);
+                                ctx.closePath();
 
-                            //}
-                            //else {
-                                //ctx.shadowColor = 'transparent';
-
-
-                            //}
-
-                            ctx.fillRect(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3);
-                            ctx.closePath();
-
-                            ctx.lineWidth = "18";
-                            ctx.globalAlpha = 1; //sets the transparency ZK
-                            ctx.beginPath();
-                            if (drawIcon) {
-
+                                ctx.lineWidth = "18";
+                                ctx.globalAlpha = 1; //sets the transparency ZK
+                                ctx.beginPath();
+                            //every second time the item gets drawn smaller so it has popping effect
+                            if (animateBool) {
                                 ctx.rect(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3);
                             }
                             else {
-
-                            ctx.rect(shape.x * 3+2.5, shape.y * 3+2.5, shape.width * 3-5, shape.height * 3-5);
+                            ctx.rect(shape.x * 3+3, shape.y * 3+3, shape.width * 3-6, shape.height * 3-6);
                             }
-                            ctx.stroke();
-                            ctx.closePath();
+                                ctx.stroke();
+                                ctx.closePath();
                          
                 //iconin piirto jos on kuva
                             if (shape.kuvaID) {
@@ -493,16 +449,16 @@
                                 //restoring graphic settings so ne shape doesnt get effected of current settings
                                 ctx.restore();
                                 //calling the areamap clickable links resizing function so areamaps correlate with the drawen shapes
+                            //calling function to resize image map if the screen has been resized or if it is first dra
                                 if (resizebool || firstDraw) {
-
-                        mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
-                        }
+                                  mapResize(shape.x * 3, shape.y * 3, shape.width * 3, shape.height * 3, shape.radius * 3, shape.kuvaID);
+                                }
                             }
                         }
                     }
 
                 }
-                @*//olet tässä pisten piirto eka kerrokseen
+                @*//olet tässä pisten piirto eka kerrokseen -----------OTETTU POIS AINAKIN VÄLIAIKAISESTI
                     if (currentFloor == 1) {
 
                         ctx.beginPath();
@@ -539,21 +495,15 @@
                     portaat.push({ x: 912, y: 491, radius: 25, kerros: 2, color: 'orange' });
 
                     for (var t = 0; t < portaat.length; t++) {
-
                         var stairs = portaat[t];
-
                         //checking the floor number so we only draw the coordinates belonging to the current floor - ZK
                         if (currentFloor == stairs.kerros) {
-
                             //checking if circle or rectangle and drawing them -ZK
                             if (stairs.radius) {
                                 // it's a circle ZK
-
                                 ctx.beginPath();
                                 ctx.fillStyle = stairs.color;
                                 ctx.globalAlpha = 0.6; //sets the transparency ZK
-
-                                //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
                                 ctx.arc(stairs.x * 3, stairs.y * 3, stairs.radius * 3, 0, Math.PI * 2);//drawing circle by given koords the math.pi*2 is to make a full circle ZK
                                 ctx.fill();
                                 ctx.strokeStyle = stairs.color; //setting shape color ZK
@@ -565,10 +515,8 @@
                                 ctx.globalAlpha = 0.6; //sets the transparency ZK
                                 ctx.beginPath();
                                 ctx.fillStyle = stairs.color;
-
                                 ctx.lineWidth = "18";
                                 //jokaisen arvon suurennetaan koska kuva oli pienempi Admin puolella ZK
-
                                 ctx.fillRect(stairs.x * 3, stairs.y * 3, stairs.width * 3, stairs.height * 3);
                                 ctx.strokeStyle = stairs.color;
                                 ctx.stroke();
@@ -577,21 +525,15 @@
                         }
                     }
                 }
-
-                        if (drawIcon == true) {
-                            drawIcon = false;
-                        }
-                        else {
-                            drawIcon = true;
-                        }
+                //changing animateBool every time so items get re-drawn smaller-bigger
+                        if (animateBool == true) { animateBool = false;}
+                            else {animateBool = true;}
         }
         firstDraw = false;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------//
         //----------------------------------------------------------FUNCTION FOR RESIZING IMAGE MAP COORDINATES FOR BEING CORRECT--------------------------------------//
-
-
         function mapResize(x, y, width, height, radius, kuvaID) {
             //console.log('in map resize functio');
             //we check hight and width of canvas
@@ -602,7 +544,6 @@
             var newWidthRatio = newWidth / 3840
             //we count new coordinates by getting the original ones and multipling them with the new height or width ratio
             var alue = document.createElement("area");
-
             //checking if there is radius- so it is a circle or rectangle(radius null didnt work), then counting coordinates +- 18-the border width
             if (radius) {
                 alue.shape = "circle";
@@ -618,8 +559,6 @@
             alue.alt = "klikkaa tänne jos haluat nähdä kuvan";
             alue.id = kuvaID;
             alue.href = '#1';
-
-
             //funtion jolla kutsutan partial viewin kautta kuvan
             alue.onclick = function avaaKuvan(kuvaID) {
                 var divi = document.createElement("div");
@@ -627,13 +566,9 @@
                 divi.innerHTML = "<p>Ladataan kuva...</p>";
                 //korvataan $detailDiv - muuttujan elementin latausviestillä
                 $("#changeKuvaModal").replaceWith(divi);
-
                 id = this.id;
-
                 /*luodaan kontrollerin url viittaus
-               
-               
-                   /*korvataan $detailDiv - muuttujan elementin sisältö kontrollerin palauttamalla partial view:llä*/
+               /*korvataan $detailDiv - muuttujan elementin sisältö kontrollerin palauttamalla partial view:llä*/
                var url = "/kuvat/_naytakuva/?id=" + id;  
                /*kutsutaan kontrollerin */
                 $.get(url, function (data) {                                
@@ -647,20 +582,9 @@
                 function closeModal2() {
                     $("#kuvaModal").modal("hide");
                 }
-
-
-
-
-            }
-            //alue.onclick = function () { avaaKuvan(kuvaID); }
-            //alue.onclick = avaaKuvan(kuvaID);
-            //element.setAttribute(onclick, avaaKuvan(kuvaID))
-            document.getElementById("kuvaKartta").appendChild(alue);
+             }
+              document.getElementById("kuvaKartta").appendChild(alue);
         }
 
-    //function avaaKuvan(kuvaID) {
-
-    //    console.log('avataan kuva' + kuvaID);
-    //}
 </script>
 
