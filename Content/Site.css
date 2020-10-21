@@ -78,18 +78,22 @@ textarea {
 
 /*Home/Index sivun ohjekupla*/
 .ohjeButton {
-    border: 1px solid black !important;
-    border-radius: 25px !important;
-    width: 100% !important;
+/*    border: 1px solid black !important;
+*/    /*    border-radius: 25px !important;
+*/ width: 100% !important;
     min-height: 150px !important;
     min-width: 350px !important;
     font-weight: bold !important;
     font-size: 25px !important;
     overflow-wrap: break-word !important;
-    background-color: #8abfdb !important;
+    background-color: #167085 !important;
     cursor: none !important;
-    margin: 0 80px 0 80px!important;
-    padding:20px;
+    margin: 0 80px 0 80px !important;
+    padding: 20px;
+    box-shadow: 2px 20px 30px 1px rgba(0,0,0,0.60);
+    color:white;
+    border:none;
+
 }
 /*---------- Navbar START (LL) ----------*/
 
