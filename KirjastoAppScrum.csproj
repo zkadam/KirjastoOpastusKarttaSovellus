@@ -209,7 +209,9 @@
     <Content Include="Icons\camera-fill.svg" />
     <Content Include="Icons\camera.svg" />
     <Content Include="Icons\chevron-double-down.svg" />
+    <Content Include="Icons\chevron-double-up.svg" />
     <Content Include="Icons\chevron-down.svg" />
+    <Content Include="Icons\chevron-up.svg" />
     <Content Include="Icons\house.svg" />
     <Content Include="Icons\image-fill.svg" />
     <Content Include="Icons\image.svg" />

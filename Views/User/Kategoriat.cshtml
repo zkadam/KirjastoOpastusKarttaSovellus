@@ -78,6 +78,9 @@
                     svgBool = true;
                 }
             }, 600);
+
+
+           
         })
 //bs jquery that enables poppers for additional information to categories
  //funktio sulje popupit kun clickataan, ja jos clickattiin popupiconin, avaa sen- näin aina vain yks popup on auki
@@ -100,18 +103,34 @@
             
         });
         });
+        $('.slowScroll').click(function () {
+            var clickedId = $(this).attr('href');
+            $('html, body').animate({ scrollTop: ($(clickedId).offset().top) }, 6000);
+            return false;
+        });
 
-     
+        function toggleUpDown() {
+
+
+        }
+
+
     </script>
 
    
 }
 @*----------------------------------------------------------------------------------------END OF SCRIPT-----------------------------------------------------------*@
+
 <div id="goDown" class="toggleShow scrollButtons">
     @*Sivun loppuun vievä button (LL)*@
-    <div class="toggleShow scrollButtonsCircle" >
-         <a href="#footer1" class="toggleShow scrollButton"><img id="doubleDown" src="~/Icons/chevron-double-down.svg" style="width:45px;height:auto" />
+    <div id=""class="toggleShow scrollButtonsCircle" onclick="toggleUpDown" >
+         <a class="slowScroll toggleShow scrollButton" href="#footer1"><img id="doubleDown" src="~/Icons/chevron-double-down.svg" style="width:45px;height:auto" />
         <img id="oneDown" src="~/Icons/chevron-down.svg" style="width:45px;height:auto;display:none" /></a>
+    </div>
+    
+    <div class="toggleUp" >
+         <a class="slowScroll" href="#navLista"><img id="doubleUp" src="~/Icons/chevron-double-up.svg" style="width:45px;height:auto" />
+        <img id="oneDown" src="~/Icons/chevron-up.svg" style="width:45px;height:auto;display:none" /></a>
     </div>
 </div>
 
@@ -120,7 +139,7 @@
     Käyttää Action metodia joka kutsuu Kategoriat actionin UserControllerista.
     (R.J)  *@
 
-<div class="navlista">
+<div class="navlista" id="navLista">
     @if (ViewBag.naviListToData != null)
     {
         foreach (var data in ViewBag.naviListToData)
