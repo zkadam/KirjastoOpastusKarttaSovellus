@@ -329,16 +329,32 @@ a:hover {
 */ width: 60px;
     height: 60px;
     padding: 8px 0px 0px 0px;
-    background: rgb(83,100,171);
-    background: radial-gradient(circle, rgba(0, 110, 118,100) 0%, rgba(9, 112, 107,1) 100%);
-    box-shadow: 0px 5px 20px 5px rgba(0,0,0,0.52);
+    background: rgba(0, 110, 118,0.98);
+    /*    background: radial-gradient(circle, rgba(0, 110, 118,0.98) 0%, rgba(0, 110, 120,0.96) 100%);
+*/ box-shadow: 0px 5px 20px 5px rgba(0,0,0,0.52);
     border-radius: 50%;
     /*    margin-left: auto;
     margin-right: auto;*/
     left: 50%;
     bottom: 3%;
     transform: translate(-50%);
+    /**/
 }
-.scrollButtons{text-align:center;
-               display:none
+
+
+
+/**/
+.scrollButtons {
+    text-align: center;
+    /*               display:none
+*/
+}
+#backButton {
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background-color: lightblue
 }
