@@ -39,7 +39,7 @@
        function AddScrollButton() {
             var buttons = $('.buttonsDiv button').length;
             console.log(buttons);
-            if ((buttons > 9 && $('.buttonsDiv').height() > $(window).height()*0.9)) { // Tätä määrää voi muuttaa halutessa
+            if ($('.buttonsDiv').height() > $(window).height()*0.9) { // Tätä määrää voi muuttaa halutessa
                         //console.log("More than 6 buttons");
                         $('.toggleShow').show();
                     }
@@ -90,7 +90,7 @@
 
     @*Smooth scrolling efekti Loppuun ja Alkuun buttoneille.(LL)*@
     <script type="text/javascript">
-        $('.scrollButton').click(function () {
+        $('.scrollButtons').click(function () {
             var clickedId = $(this).attr('href');
             $('html, body').animate({ scrollTop: ($(clickedId).offset().top) }, 3000);
             return false;
@@ -101,25 +101,23 @@
 @*Foreach tuo kaikki kategoriat buttoneiksi näkymään.
     Käyttää Action metodia joka kutsuu Kategoriat actionin UserControllerista.
     (R.J)  *@
+<div class="toggleShow scrollButtons">
+    @*Sivun loppuun vievä button (LL)*@
+    <div class="toggleShow scrollButtonsCircle">
+         <a href="#end" class="toggleShow scrollButton"><img src="~/Icons/chevron-double-down.svg" style="width:45px;height:auto" /></a>
+    </div>
+</div>
 
 <div class="navlista">
     @if (ViewBag.naviListToData != null)
     {
         foreach (var data in ViewBag.naviListToData)
         {
-
             <a style="font-size:xx-large;font-weight:bold" href='@Url.Action("Kategoriat", "User", new { referi = @data.Refer, koordinaatit = @data.Koordinaatti, id = @data.Id, luokka = @data.Luokka})'> @data.Teksti > </a>
         }
     }
 </div>
 
-<div class="toggleShow scrollButtons">
-    @*Sivun loppuun vievä button (LL)*@
-    <div class="toggleShow scrollButtonsCircle">
-
-        <a href="#end" class="toggleShow scrollButton"><img src="~/Icons/chevron-double-down.svg" style="width:45px;height:auto" /></a>
-    </div>
-</div>
     <div class="buttonsDiv">
         <div class="jumbotron" style="text-align:center; padding:0px">
             <div class="row">
@@ -141,11 +139,12 @@
                 }
 
             </div>
-            <div id="end">
-                @*Sivun alkuun vievä button (LL)*@
-                <a href="#home" class="scrollButtons toggleShow"><img src="~/Icons/arrow-up-circle.svg" style="width:3vw;height:3vw" /></a>
-            </div>
         </div>
 
     </div>
 
+            <div id="end">
+                <a href="#home"></a>
+                   @*Sivun alkuun vievä button (LL)
+                <a href="#home" class="toggleShow"><img src="~/Icons/arrow-up-circle.svg" style="width:3vw;height:3vw" /></a>*@
+            </div>
