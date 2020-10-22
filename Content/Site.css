@@ -25,7 +25,7 @@
     margin-right: 1px;
 }
 .buttonBody  {
-
+    padding-top:0px!important
 }
 
 .row {
@@ -322,16 +322,18 @@ a:hover {
     color:white;
 }
 
-.scrollButtons {
-    position: relative;
-    margin-left: 45vh;
+.scrollButtonsCircle {
+    position:relative;
     width: 60px;
     height: 60px;
-    /*    border: 3px solid black;
-*/ /*border-radius: 50%;*/
-    padding: 5px 0px 0px 0px;
+    padding: 8px 0px 0px 0px;
     background: rgb(83,100,171);
     background: radial-gradient(circle, rgba(83,100,171,1) 0%, rgba(17,60,104,1) 100%);
     box-shadow: 0px 5px 20px 5px rgba(0,0,0,0.52);
-    border-radius: 50%
+    border-radius: 50%;
+    margin-left: auto;
+    margin-right: auto
+}
+.scrollButtons{text-align:center;
+               display:none
 }

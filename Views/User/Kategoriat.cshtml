@@ -32,20 +32,21 @@
 
         });
     </script>
-
+    
     <script type="text/javascript">
+        //----------------------------------------SCROLL BUTTONS HIDE-SHOW CODE
         //Lasketaan kuinka monta buttonia tulostuu ruudulle. Jos enemmän kuin 6, tulostetaan Loppuun ja Alkuun buttonit skrollausta varten.(LL)
-        $(function () {
+       function AddScrollButton() {
             var buttons = $('.buttonsDiv button').length;
-            console.log(MaxWidth);
+            console.log(buttons);
             if ((buttons > 9 && $('.buttonsDiv').height() > $(window).height()*0.9)) { // Tätä määrää voi muuttaa halutessa
                         //console.log("More than 6 buttons");
-                        $('.scrollButton').show();
+                        $('.toggleShow').show();
                     }
                     else {
-                        $('.scrollButton').hide();
+                $('.toggleShow').hide();
                     }
-                });
+                };
 
 
         //scrip tarkistaa jokaisen kategorian info tekstin(infoKuva class) , ja jos ne löytyy, vaihtaa displayin from none to ""
@@ -59,6 +60,11 @@
 
         });
 
+        //scrollbuttonin tarve aina tarkistetaan kun ikkunan koko vaihtuu
+        $(document).ready(function () {
+            AddScrollButton();
+            window.addEventListener("resize", AddScrollButton);
+        })
 //bs jquery that enables poppers for additional information to categories
  //funktio sulje popupit kun clickataan, ja jos clickattiin popupiconin, avaa sen- näin aina vain yks popup on auki
 
@@ -107,16 +113,18 @@
     }
 </div>
 
-    <div class="scrollButtons">
-        @*Sivun loppuun vievä button (LL)*@
-       
-        <a href="#end" class="scrollButton"><img src="~/Icons/chevron-double-down.svg" style="width:3vw;height:3vw" /></a>
+<div class="toggleShow scrollButtons">
+    @*Sivun loppuun vievä button (LL)*@
+    <div class="toggleShow scrollButtonsCircle">
+
+        <a href="#end" class="toggleShow scrollButton"><img src="~/Icons/chevron-double-down.svg" style="width:45px;height:auto" /></a>
     </div>
+</div>
     <div class="buttonsDiv">
         <div class="jumbotron" style="text-align:center; padding:0px">
             <div class="row">
                 @* Tekee listan  tarkastusta varten niin ei tulostu samannimisiä, esim istumapaikkoja ja pöytiä. Karttatulostukseen koodaus että tulostaa
-                Kaikkien samannimisten koordinaatit kartalle. Esimerkkinä just istumapaikkoja ja pöytiä.(R.J)*@
+                    Kaikkien samannimisten koordinaatit kartalle. Esimerkkinä just istumapaikkoja ja pöytiä.(R.J)*@
                 @*@{ List<string> lista = new List<string>();*@
                 @foreach (var item in Model)
                 {
@@ -135,7 +143,7 @@
             </div>
             <div id="end">
                 @*Sivun alkuun vievä button (LL)*@
-                <a href="#home" class="scrollButton"><img src="~/Icons/arrow-up-circle.svg" style="width:3vw;height:3vw" /></a>
+                <a href="#home" class="scrollButtons toggleShow"><img src="~/Icons/arrow-up-circle.svg" style="width:3vw;height:3vw" /></a>
             </div>
         </div>
 
