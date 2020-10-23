@@ -14,22 +14,40 @@
     <script>
         var MaxWidth = 0;   // Alustetaan MaxWidth
         var MaxHeight = 0; // Alustetaan MaxHeight
-        $('.button').each(function (index) {
-            var currentWidth = $(this).width();   // otetaan currentWidth
-            var currentHeight = $(this).height(); // otetaan currentHeight
+        $(document).ready(function () {
 
-            if (currentWidth > MaxWidth) {
-                MaxWidth = currentWidth;     // asetetaan MaxWidth jos current > maxWidth
-            }
-            if (currentHeight > MaxHeight) {
-                MaxHeight = currentHeight;   // asetetaan MaxHeight jos current > maxHeight
-            }
+            $('.button').each(function (index) {
+                var currentWidth = $(this).width();   // otetaan currentWidth
+                var currentHeight = $(this).height(); // otetaan currentHeight
+
+                if (currentWidth > MaxWidth) {
+                    MaxWidth = currentWidth;     // asetetaan MaxWidth jos current > maxWidth
+                }
+                if (currentHeight > MaxHeight) {
+                    MaxHeight = currentHeight;   // asetetaan MaxHeight jos current > maxHeight
+                }
+            });
+            $('.button').width(MaxWidth); // muutetaan .button width => maxWidth
+            $('.button').height(MaxHeight); // muutetaan .button height => maxHeight
+
         });
-        $('.button').width(MaxWidth); // muutetaan .button width => maxWidth
-        $('.button').height(MaxHeight); // muutetaan .button height => maxHeight
     </script>
 
     <script type="text/javascript">
+        //----------------------------------------SCROLL BUTTONS HIDE-SHOW CODE
+        //Lasketaan kuinka monta buttonia tulostuu ruudulle. Jos enemmän kuin 6, tulostetaan Loppuun ja Alkuun buttonit skrollausta varten.(LL)
+        function AddScrollButton() {
+            var buttons = $('.buttonsDiv button').length;
+            if ($('.buttonsDiv').height() > $(window).height() * 0.9) { // Tätä määrää voi muuttaa halutessa
+                //console.log("More than 6 buttons");
+                $('.toggleShow').show();
+            }
+            else {
+                $('.toggleShow').hide();
+            }
+        };
+
+
         //scrip tarkistaa jokaisen kategorian info tekstin(infoKuva class) , ja jos ne löytyy, vaihtaa displayin from none to ""
         //täällä tavalla ei tule system reference null errors jos ei ole info teksti kategorialle
         $('.infoKuva').each(function () {
@@ -40,7 +58,30 @@
             }
 
         });
+        var svgBool = true;
+        //scrollbuttonin tarve aina tarkistetaan kun ikkunan koko vaihtuu
+        $(document).ready(function () {
+            AddScrollButton();
+            window.addEventListener("resize", function () { AddScrollButton(); });
 
+            setInterval(function () {
+                if (svgBool) {
+                    document.getElementById("doubleDown").style.display = "";
+                    document.getElementById("oneDown").style.display = "none";
+
+                    svgBool = false;
+                } else {
+                    document.getElementById("oneDown").style.display = "";
+
+                    document.getElementById("doubleDown").style.display = "none";
+
+                    svgBool = true;
+                }
+            }, 600);
+
+
+
+        })
         //bs jquery that enables poppers for additional information to categories
         //funktio sulje popupit kun clickataan, ja jos clickattiin popupiconin, avaa sen- näin aina vain yks popup on auki
 
@@ -61,66 +102,55 @@
                 }
 
             });
-        });
-        //Lasketaan kuinka monta buttonia tulostuu ruudulle. Jos enemmän kuin 6, tulostetaan Loppuun ja Alkuun buttonit skrollausta varten.(LL)
-        $(function () {
-            var buttons = $('.buttonsDiv button').length;
-            console.log(buttons);
-            if (buttons > 6) { // Tätä määrää voi muuttaa halutessa
-                console.log("More than 6 buttons");
-                $('.scrollButton').show();
-            }
-            else {
-                console.log("Less than 6 buttons");
-                $('.scrollButton').hide();
-            }
-        });
-    </script>
 
-    @*Smooth scrolling efekti Loppuun ja Alkuun buttoneille., Click tai scrollaus lopettaa auto scrollin(LL)*@
-    <script type="text/javascript">
-        $('.scrollButton').click(function () {
+            window.addEventListener('scroll', function (e) { $('#goDown').hide() });
+        });
+        $('.slowScroll').click(function () {
             var buttons = $('.buttonsDiv button').length;
-            var animLength = 1000 * buttons/1.5;
+            var animLength = 1000 * buttons / 1.5;
             var clickedId = $(this).attr('href');
             var htmlBody = $("html, body");
-                     htmlBody.on("mousedown mousewheel keyup touchmove", function () {
-                    htmlBody.stop();
-                    });
-                     htmlBody.animate({ scrollTop: $(clickedId).offset().top }, animLength, function () {
-                     htmlBody.off("mousedown mousewheel keyup touchmove");
-                     });
-                    return false;
-           
+            htmlBody.on("mousedown mousewheel touchmove", function () {
+                htmlBody.stop();
+            });
+            htmlBody.animate({ scrollTop: $(clickedId).offset().top }, animLength, function () {
+                htmlBody.off("mousedown mousewheel touchmove");
+            });
+            return false;
         });
+
+
+
+
+
     </script>
+
+
 }
+@*----------------------------------------------------------------------------------------END OF SCRIPT-----------------------------------------------------------*@
+
+<div id="goDown" class="toggleShow scrollButtons" }>
+    @*Sivun loppuun vievä button (LL)*@
+    <div id="" class="toggleShow scrollButtonsCircle">
+        <a class="slowScroll toggleShow scrollButton" href="#footer1">
+            <img id="doubleDown" src="~/Icons/chevron-double-down.svg" style="width:45px;height:auto" />
+            <img id="oneDown" src="~/Icons/chevron-down.svg" style="width:45px;height:auto;display:none" />
+        </a>
+    </div>
+
+</div>
 
 @*Foreach tuo kaikki kategoriat buttoneiksi näkymään.
     Käyttää Action metodia joka kutsuu Kategoriat actionin UserControllerista.
     (R.J)  *@
 
-@*<div>
-    @if (ViewBag.naviListToData != null)
-    {
-        foreach (var data in ViewBag.naviListToData)
-        {
 
-            <a style="font-size:xx-large;font-weight:bold" href='@Url.Action("Kategoriat", "User", new { referi = @data.Refer, koordinaatit = @data.Koordinaatti, id = @data.Id, luokka = @data.Luokka})'> @data.Teksti > </a>
-        }
-    }
-</div>*@
 
 <div class="buttonsDiv">
-    <div class="scrollButtons">
-        @*Sivun loppuun vievä button (LL)*@
-        <br />
-        <a href="#end" class="scrollButton"><img src="~/Icons/arrow-down-circle.svg" style="width:3vw;height:3vw" /></a>
-    </div>
-    <div class="jumbotron"  style="text-align:center; padding:0px">
+    <div class="jumbotron" style="text-align:center; padding:0px">
         <div class="row">
             @* Tekee listan  tarkastusta varten niin ei tulostu samannimisiä, esim istumapaikkoja ja pöytiä. Karttatulostukseen koodaus että tulostaa
-        Kaikkien samannimisten koordinaatit kartalle. Esimerkkinä just istumapaikkoja ja pöytiä.(R.J)*@
+                Kaikkien samannimisten koordinaatit kartalle. Esimerkkinä just istumapaikkoja ja pöytiä.(R.J)*@
             @*@{ List<string> lista = new List<string>();*@
             @foreach (var item in Model)
             {
@@ -130,18 +160,15 @@
                         <button type="button" class="button buttonVäri" style="display:inline-block" onclick="location.href='@Url.Action("Kategoriat", "User", new { referi = item.Kategoria.ReferTo, id = item.ReferTo, koordinaatit = item.Kategoria.KategoriaID, nimi = item.Teksti, luokka = item.Kategoria.Class, dublikaatti = item.Kategoria.SN })'">@Html.DisplayFor(modelItem => item.Teksti)</button>
                         <a href="#1" class="infoLink">
 
-                            <img id="@Html.DisplayFor(modelItem => item.InfoTekstit.Infotext_ID)" class="infoKuva" src="~/Icons/info-circle.svg" data-toggle="popover" title="" data-content="@Html.DisplayFor(modelItem => item.InfoTekstit.InfotextContent)" style="display: none;  width: 30px; height: 30px; position: absolute; bottom: 4px; float: left; margin-left: 1px " />
+                            <img id="@Html.DisplayFor(modelItem => item.InfoTekstit.Infotext_ID)" class="infoKuva" src="~/Icons/info-circle-fill.svg" data-toggle="popover" title="" data-content="@Html.DisplayFor(modelItem => item.InfoTekstit.InfotextContent)" style="display: none;  width: 30px; height: 30px; position: absolute; bottom: 2px; float: left;  " />
                         </a>
                     </div>
                 </div>
             }
 
         </div>
-        <div id="end">
-            @*Sivun alkuun vievä button (LL)*@
-            <a href="#home" class="scrollButton"><img src="~/Icons/arrow-up-circle.svg" style="width:3vw;height:3vw" /></a>
-        </div>
     </div>
 
 </div>
 
+@*<a href="#home" class=""><img src="~/Icons/arrow-up-circle.svg" style="width:50px;height:50px" /></a>*@

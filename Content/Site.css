@@ -355,9 +355,59 @@ a:hover {
     position: fixed;
     bottom: 5px;
     left: 5px;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 12px;
     background-color: rgba(0, 110, 118,0.9);
     box-shadow: 2px 10px 20px 1px rgba(0,0,0,0.52);
+}
+
+#fi1 {
+    animation-name: fiPop;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+}#ru1 {
+    animation-name: ruPop;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+}#en1 {
+    animation-name: enPop;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes fiPop {
+    5% {
+        padding: 40px 80px;
+    }
+    10% {
+        padding: 45px 85px;
+    }
+   20% {
+        padding: 40px 80px;
+    }
+}@keyframes ruPop {
+
+    35% {
+        padding: 40px 80px;
+    }
+
+    40% {
+        padding:45px 85px;
+    }
+
+    45% {
+        padding: 40px 80px;
+    }
+}@keyframes enPop {
+
+    60% {
+        padding: 40px 80px;
+    }
+    65% {
+        padding: 45px 85px;
+    }
+   70% {
+        padding: 40px 80px;
+    }
 }

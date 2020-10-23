@@ -139,15 +139,6 @@
     </div>
 
 </div>
-<div id="goUp" class=" scrollButtons">
-
-    <div id="" class="toggleShow scrollButtonsCircle" onclick="toggleUpDown">
-        <a class="slowScroll" href="#navLista">
-            <img id="doubleUp" src="~/Icons/chevron-double-up.svg" style="width:45px;height:auto" />
-            <img id="oneUp" src="~/Icons/chevron-up.svg" style="width:45px;height:auto;display:none" />
-        </a>
-    </div>
-</div>
 
 @*Foreach tuo kaikki kategoriat buttoneiksi näkymään.
     Käyttää Action metodia joka kutsuu Kategoriat actionin UserControllerista.
@@ -177,7 +168,7 @@
                         <button type="button" class="button buttonVäri" style="display:inline-block" onclick="location.href='@Url.Action("Kategoriat", "User", new { referi = item.Kategoria.ReferTo, id = item.ReferTo, koordinaatit = item.Kategoria.KategoriaID, nimi = item.Teksti, luokka = item.Kategoria.Class, dublikaatti = item.Kategoria.SN })'">@Html.DisplayFor(modelItem => item.Teksti)</button>
                         <a href="#1" class="infoLink">
 
-                            <img id="@Html.DisplayFor(modelItem => item.InfoTekstit.Infotext_ID)" class="infoKuva" src="~/Icons/info-circle-fill.svg" data-toggle="popover" title="" data-content="@Html.DisplayFor(modelItem => item.InfoTekstit.InfotextContent)" style="display: none;  width: 25px; height: 25px; position: absolute; bottom: 2px; float: left;  " />
+                            <img id="@Html.DisplayFor(modelItem => item.InfoTekstit.Infotext_ID)" class="infoKuva" src="~/Icons/info-circle-fill.svg" data-toggle="popover" title="" data-content="@Html.DisplayFor(modelItem => item.InfoTekstit.InfotextContent)" style="display: none;  width: 30px; height: 30px; position: absolute; bottom: 2px; float: left;  " />
                         </a>
                     </div>
                 </div>
