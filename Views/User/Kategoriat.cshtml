@@ -32,26 +32,26 @@
 
         });
     </script>
-    
+
     <script type="text/javascript">
         //----------------------------------------SCROLL BUTTONS HIDE-SHOW CODE
         //Lasketaan kuinka monta buttonia tulostuu ruudulle. Jos enemmän kuin 6, tulostetaan Loppuun ja Alkuun buttonit skrollausta varten.(LL)
-       function AddScrollButton() {
+        function AddScrollButton() {
             var buttons = $('.buttonsDiv button').length;
-            if ($('.buttonsDiv').height() > $(window).height()*0.9) { // Tätä määrää voi muuttaa halutessa
-                        //console.log("More than 6 buttons");
-                        $('.toggleShow').show();
-                    }
-                    else {
+            if ($('.buttonsDiv').height() > $(window).height() * 0.9) { // Tätä määrää voi muuttaa halutessa
+                //console.log("More than 6 buttons");
+                $('.toggleShow').show();
+            }
+            else {
                 $('.toggleShow').hide();
-                    }
-                };
+            }
+        };
 
 
         //scrip tarkistaa jokaisen kategorian info tekstin(infoKuva class) , ja jos ne löytyy, vaihtaa displayin from none to ""
-                //täällä tavalla ei tule system reference null errors jos ei ole info teksti kategorialle
+        //täällä tavalla ei tule system reference null errors jos ei ole info teksti kategorialle
         $('.infoKuva').each(function () {
-            var datacont = $(this).attr('data-content');   
+            var datacont = $(this).attr('data-content');
             if (datacont.length > 0) {
 
                 $(this).css("display", "");
@@ -62,8 +62,8 @@
         //scrollbuttonin tarve aina tarkistetaan kun ikkunan koko vaihtuu
         $(document).ready(function () {
             AddScrollButton();
-            window.addEventListener("resize", function () { AddScrollButton(); console.log('resized') });
-      
+            window.addEventListener("resize", function () { AddScrollButton(); });
+
             setInterval(function () {
                 if (svgBool) {
                     document.getElementById("doubleDown").style.display = "";
@@ -80,60 +80,74 @@
             }, 600);
 
 
-           
+
         })
-//bs jquery that enables poppers for additional information to categories
- //funktio sulje popupit kun clickataan, ja jos clickattiin popupiconin, avaa sen- näin aina vain yks popup on auki
+        //bs jquery that enables poppers for additional information to categories
+        //funktio sulje popupit kun clickataan, ja jos clickattiin popupiconin, avaa sen- näin aina vain yks popup on auki
 
-        $(document).ready(function () {document.addEventListener("click", function closeThis(e) {
+        $(document).ready(function () {
+            document.addEventListener("click", function closeThis(e) {
 
-            $('.popover').popover('hide')            //        var SavedId = id;
-            $('.infoKuva').removeClass('opened')
+                $('.popover').popover('hide')            //        var SavedId = id;
+                $('.infoKuva').removeClass('opened')
 
-            if ($(event.target).hasClass('infoKuva') && $(event.target).hasClass('opened')) {
-                //$('.popover').popover('hide')
-                $(event.target).removeClass("opened")
-           
-            }
-            else if ($(event.target).hasClass('infoKuva'))
-            {
-                $(event.target).addClass("opened")
-                $(event.target).popover('show')
-            }
-            
-        });
+                if ($(event.target).hasClass('infoKuva') && $(event.target).hasClass('opened')) {
+                    //$('.popover').popover('hide')
+                    $(event.target).removeClass("opened")
+
+                }
+                else if ($(event.target).hasClass('infoKuva')) {
+                    $(event.target).addClass("opened")
+                    $(event.target).popover('show')
+                }
+
+            });
+
+            window.addEventListener('scroll', function (e) {$('#goDown').hide() });
         });
         $('.slowScroll').click(function () {
+            var buttons = $('.buttonsDiv button').length;
+            var animLength = 1000 * buttons / 1.5;
             var clickedId = $(this).attr('href');
-            $('html, body').animate({ scrollTop: ($(clickedId).offset().top) }, 6000);
+            var htmlBody = $("html, body");
+            htmlBody.on("mousedown mousewheel touchmove", function () {
+                htmlBody.stop();
+            });
+            htmlBody.animate({ scrollTop: $(clickedId).offset().top }, animLength, function () {
+                htmlBody.off("mousedown mousewheel touchmove");
+            });
             return false;
         });
 
-        function toggleUpDown() {
 
-
-        }
+        
 
 
     </script>
 
-   
+
 }
 @*----------------------------------------------------------------------------------------END OF SCRIPT-----------------------------------------------------------*@
 
-<div id="goDown" class="toggleShow scrollButtons">
+<div id="goDown" class="toggleShow scrollButtons"}>
     @*Sivun loppuun vievä button (LL)*@
-    <div id=""class="toggleShow scrollButtonsCircle" onclick="toggleUpDown" >
-         <a class="slowScroll toggleShow scrollButton" href="#footer1"><img id="doubleDown" src="~/Icons/chevron-double-down.svg" style="width:45px;height:auto" />
-        <img id="oneDown" src="~/Icons/chevron-down.svg" style="width:45px;height:auto;display:none" /></a>
+    <div id="" class="toggleShow scrollButtonsCircle" >
+        <a class="slowScroll toggleShow scrollButton" href="#footer1">
+            <img id="doubleDown" src="~/Icons/chevron-double-down.svg" style="width:45px;height:auto" />
+            <img id="oneDown" src="~/Icons/chevron-down.svg" style="width:45px;height:auto;display:none" />
+        </a>
     </div>
-    
-    <div class="toggleUp" >
-         <a class="slowScroll" href="#navLista"><img id="doubleUp" src="~/Icons/chevron-double-up.svg" style="width:45px;height:auto" />
-        <img id="oneDown" src="~/Icons/chevron-up.svg" style="width:45px;height:auto;display:none" /></a>
+
+</div>
+<div id="goUp" class=" scrollButtons">
+
+    <div id="" class="toggleShow scrollButtonsCircle" onclick="toggleUpDown">
+        <a class="slowScroll" href="#navLista">
+            <img id="doubleUp" src="~/Icons/chevron-double-up.svg" style="width:45px;height:auto" />
+            <img id="oneUp" src="~/Icons/chevron-up.svg" style="width:45px;height:auto;display:none" />
+        </a>
     </div>
 </div>
-
 
 @*Foreach tuo kaikki kategoriat buttoneiksi näkymään.
     Käyttää Action metodia joka kutsuu Kategoriat actionin UserControllerista.
@@ -149,29 +163,29 @@
     }
 </div>
 
-    <div class="buttonsDiv">
-        <div class="jumbotron" style="text-align:center; padding:0px">
-            <div class="row">
-                @* Tekee listan  tarkastusta varten niin ei tulostu samannimisiä, esim istumapaikkoja ja pöytiä. Karttatulostukseen koodaus että tulostaa
-                    Kaikkien samannimisten koordinaatit kartalle. Esimerkkinä just istumapaikkoja ja pöytiä.(R.J)*@
-                @*@{ List<string> lista = new List<string>();*@
-                @foreach (var item in Model)
-                {
-                    <div class="col-md pt-3 buttonBody">
-                        @*muutin koordinaatti parameti item.KategoriaIdksi-sitten kontroller tarkistaa sitä onko koordinaatti taulussa sellasta ZK*@
-                        <div style="position:relative">
-                            <button type="button" class="button buttonVäri" style="display:inline-block" onclick="location.href='@Url.Action("Kategoriat", "User", new { referi = item.Kategoria.ReferTo, id = item.ReferTo, koordinaatit = item.Kategoria.KategoriaID, nimi = item.Teksti, luokka = item.Kategoria.Class, dublikaatti = item.Kategoria.SN })'">@Html.DisplayFor(modelItem => item.Teksti)</button>
-                            <a href="#1" class="infoLink">
+<div class="buttonsDiv">
+    <div class="jumbotron" style="text-align:center; padding:0px">
+        <div class="row">
+            @* Tekee listan  tarkastusta varten niin ei tulostu samannimisiä, esim istumapaikkoja ja pöytiä. Karttatulostukseen koodaus että tulostaa
+                Kaikkien samannimisten koordinaatit kartalle. Esimerkkinä just istumapaikkoja ja pöytiä.(R.J)*@
+            @*@{ List<string> lista = new List<string>();*@
+            @foreach (var item in Model)
+            {
+                <div class="col-md pt-3 buttonBody">
+                    @*muutin koordinaatti parameti item.KategoriaIdksi-sitten kontroller tarkistaa sitä onko koordinaatti taulussa sellasta ZK*@
+                    <div style="position:relative">
+                        <button type="button" class="button buttonVäri" style="display:inline-block" onclick="location.href='@Url.Action("Kategoriat", "User", new { referi = item.Kategoria.ReferTo, id = item.ReferTo, koordinaatit = item.Kategoria.KategoriaID, nimi = item.Teksti, luokka = item.Kategoria.Class, dublikaatti = item.Kategoria.SN })'">@Html.DisplayFor(modelItem => item.Teksti)</button>
+                        <a href="#1" class="infoLink">
 
-                                <img id="@Html.DisplayFor(modelItem => item.InfoTekstit.Infotext_ID)" class="infoKuva" src="~/Icons/info-circle-fill.svg" data-toggle="popover" title="" data-content="@Html.DisplayFor(modelItem => item.InfoTekstit.InfotextContent)" style="display: none;  width: 25px; height: 25px; position: absolute; bottom: 2px; float: left;  " />
-                            </a>
-                        </div>
+                            <img id="@Html.DisplayFor(modelItem => item.InfoTekstit.Infotext_ID)" class="infoKuva" src="~/Icons/info-circle-fill.svg" data-toggle="popover" title="" data-content="@Html.DisplayFor(modelItem => item.InfoTekstit.InfotextContent)" style="display: none;  width: 25px; height: 25px; position: absolute; bottom: 2px; float: left;  " />
+                        </a>
                     </div>
-                }
+                </div>
+            }
 
-            </div>
         </div>
-
     </div>
 
-                @*<a href="#home" class=""><img src="~/Icons/arrow-up-circle.svg" style="width:50px;height:50px" /></a>*@
+</div>
+
+@*<a href="#home" class=""><img src="~/Icons/arrow-up-circle.svg" style="width:50px;height:50px" /></a>*@

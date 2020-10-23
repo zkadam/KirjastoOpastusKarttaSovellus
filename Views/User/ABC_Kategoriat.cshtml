@@ -77,12 +77,21 @@
         });
     </script>
 
-    @*Smooth scrolling efekti Loppuun ja Alkuun buttoneille.(LL)*@
+    @*Smooth scrolling efekti Loppuun ja Alkuun buttoneille., Click tai scrollaus lopettaa auto scrollin(LL)*@
     <script type="text/javascript">
         $('.scrollButton').click(function () {
+            var buttons = $('.buttonsDiv button').length;
+            var animLength = 1000 * buttons/1.5;
             var clickedId = $(this).attr('href');
-            $('html, body').animate({ scrollTop: ($(clickedId).offset().top) }, 10000);
-            return false;
+            var htmlBody = $("html, body");
+                     htmlBody.on("mousedown mousewheel keyup touchmove", function () {
+                    htmlBody.stop();
+                    });
+                     htmlBody.animate({ scrollTop: $(clickedId).offset().top }, animLength, function () {
+                     htmlBody.off("mousedown mousewheel keyup touchmove");
+                     });
+                    return false;
+           
         });
     </script>
 }
