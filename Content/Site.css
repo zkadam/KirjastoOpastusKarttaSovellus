@@ -14,7 +14,15 @@
 */    box-shadow: 2px 10px 20px 1px rgba(0,0,0,0.52);
     font-weight: bold;
 }
+@media only screen and (min-width: 2000px) {
+    .button {
+        padding: 60px 100px;
+    }
 
+    #end, .scrollButtons {
+        display: none;
+    }
+}
 
 .buttonVäri {
     background-color: #113c68; /*Tumman merensininen(Näyttö default)*/

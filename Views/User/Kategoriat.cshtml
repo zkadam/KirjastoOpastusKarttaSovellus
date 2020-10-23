@@ -27,13 +27,12 @@
                     MaxHeight = currentHeight;   // asetetaan MaxHeight jos current > maxHeight
                 }
             });
+            
             $('.button').width(MaxWidth); // muutetaan .button width => maxWidth
             $('.button').height(MaxHeight); // muutetaan .button height => maxHeight
 
         });
-    </script>
-
-    <script type="text/javascript">
+   
         //----------------------------------------SCROLL BUTTONS HIDE-SHOW CODE
         //Lasketaan kuinka monta buttonia tulostuu ruudulle. Jos enemmän kuin 6, tulostetaan Loppuun ja Alkuun buttonit skrollausta varten.(LL)
         function AddScrollButton() {
@@ -44,6 +43,11 @@
             }
             else {
                 $('.toggleShow').hide();
+            }
+            //vertailaan buttoncontainerin koko näyttöön kokon vastaan ja jos on pieni buttoncontainer(vähän buttonia), muutetaan ominaisuuksia, että buttonit olisivat enemmen keskällä
+
+            if ($('#buttonContainer').height() < $(window).height() * 0.6) { // Tätä määrää voi muuttaa halutessa
+                $('#buttonContainer').css('padding-top', $(window).height() * 0.15);
             }
         };
 
@@ -154,7 +158,7 @@
     }
 </div>
 
-<div class="buttonsDiv">
+<div class="buttonsDiv" id="buttonContainer">
     <div class="jumbotron" style="text-align:center; padding:0px">
         <div class="row">
             @* Tekee listan  tarkastusta varten niin ei tulostu samannimisiä, esim istumapaikkoja ja pöytiä. Karttatulostukseen koodaus että tulostaa
