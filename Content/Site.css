@@ -372,15 +372,15 @@ a:hover {
 
 #fi1 {
     animation-name: fiPop;
-    animation-duration: 10s;
+    animation-duration: 5s;
     animation-iteration-count: infinite;
 }#ru1 {
     animation-name: ruPop;
-    animation-duration: 10s;
+    animation-duration: 5s;
     animation-iteration-count: infinite;
 }#en1 {
     animation-name: enPop;
-    animation-duration: 10s;
+    animation-duration: 5s;
     animation-iteration-count: infinite;
 }
 
@@ -389,33 +389,33 @@ a:hover {
         padding: 40px 80px;
     }
     10% {
-        padding: 45px 85px;
+        padding: 50px 90px;
     }
-   20% {
+    20% {
         padding: 40px 80px;
     }
 }@keyframes ruPop {
 
-    35% {
+    45% {
         padding: 40px 80px;
     }
 
-    40% {
-        padding:45px 85px;
+    50% {
+        padding:50px 90px;
     }
 
-    45% {
+    55% {
         padding: 40px 80px;
     }
 }@keyframes enPop {
 
-    60% {
+    80% {
         padding: 40px 80px;
     }
-    65% {
-        padding: 45px 85px;
+    85% {
+        padding: 50px 90px;
     }
-   70% {
+   95% {
         padding: 40px 80px;
     }
 }
