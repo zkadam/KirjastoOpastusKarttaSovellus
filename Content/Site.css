@@ -383,7 +383,8 @@ a:hover {
     animation-iteration-count: infinite;
 }
 
-@keyframes fiPop {
+ /*------------------------------ANIMATIO INDEX SIVULLA, TESITSSÄ EI TOIMINUT HYVIN KUN KLIKKAUS EIAINA MENNYT LÄPI*/
+/*@keyframes fiPop {
     5% {
         padding: 40px 80px;
     }
@@ -417,4 +418,4 @@ a:hover {
    95% {
         padding: 40px 80px;
     }
-}
+}*/
