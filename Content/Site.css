@@ -323,9 +323,9 @@ a:hover {
 
 #end{margin-top:15px;}
 
-#changeFloor1, #changeFloor2 {
+#changeFloor1, #changeFloor2, .darkButton {
     background-color: #113c68;
-    box-shadow: 2px 20px 30px 1px rgba(0,0,0,0.52);
+    box-shadow: 2px 10px 30px 0px rgba(0,0,0,0.52);
     font-weight: bold;
     color:white;
 }
