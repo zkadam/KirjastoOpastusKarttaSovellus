@@ -132,6 +132,14 @@ namespace KirjastoAppScrum.Controllers
             //lopulta tuodaan elementit listalle ja järjestetään niitä suomen aakkosen mukaan
             var lista2 = lista.ToList().OrderBy(t => t.Teksti, StringComparer.Create(culture, false));
 
+
+            //this is a safety check in case some category was set to duplicate and later removed, then originally dupliacates will work as koordinates
+            if (dublikaatti==0&&koordinaatit!=null&&luokka==3)
+            {
+                return RedirectToAction("NaytaKartta", new { referi, koordinaatit, luokka, id });
+                // refer välittää parametrit NaytaKartta Actioniin RJ
+            }
+
             return View("Kategoriat", "_Layout_Kategoriat", lista2);
         } 
         //-------------------------------------------------ABC järjestyksessä kategoriat
