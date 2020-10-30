@@ -10,35 +10,35 @@
     @Html.ActionLink("Lataa uusi kuva", "Create", null, new { @class = "btn btn-primary text-white" })
 </p>
 
-<div class="justify-content-center">
+<div class="card-columns">
     @foreach (var item in Model)
     {
 
         //convertoidan kuva
-        <div class="card mt-1 mr-1" style="width:30vw;border-color:blueviolet ;float:left;">
+        <div class="card text-center border-primary">
             @if (item.Image != null)
             {
                 var base64 = Convert.ToBase64String(item.Image);
                 var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
-                <img class="card-img-top" style="max-height: 30vh" src="@imgsrc" alt="@item.AltText">
+            <img class="card-img-top" style="height: 30vh; width:auto; " src="@imgsrc" alt="@item.AltText">
             }
             else
             {
-                <img class="card-img-top" src="~/Icons/house.svg" alt="Kuva ei latautunut">
+        <img class="card-img-top" style="height: 30vh; width:auto; " src="~/Icons/house.svg" alt="Kuva ei latautunut">
 
             }
             <div class="card-body">
                 <h4 class="card-title"> @Html.DisplayFor(modelItem => item.AltText)</h4>
                 <p class="card-text">@Html.DisplayFor(modelItem => item.ImagePath)</p>
 
-          @* tänne tulee begin form jolla asetetaan/poistetaan valitun kuvan -tarvitse formin post ja antiforgeryn takia *@
+                @* tänne tulee begin form jolla asetetaan/poistetaan valitun kuvan -tarvitse formin post ja antiforgeryn takia *@
                 @if (ViewBag.kuvaID != item.KuvaId)
                 {
                     using (Html.BeginForm("AsetaKuva", "Kuvat", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
-                     
-                      
+
+
 
                         <div class="form-group">
                             <div class="col-md-offset-2 col-md-10">
@@ -47,15 +47,15 @@
                                 <input type="submit" value="Valitse kuva" class="btn btn-success" />
                             </div>
                         </div>
-                     }
+                    }
                 }
-                    else
-                    {
-                     using (Html.BeginForm("PoistaKuva", "Kuvat", FormMethod.Post))
+                else
+                {
+                    using (Html.BeginForm("PoistaKuva", "Kuvat", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
-                     
-                       <div class="form-group">
+
+                        <div class="form-group">
                             <div class="col-md-offset-2 col-md-10">
                                 <input type="hidden" id="id" name="id" value="@ViewBag.KoordId" />
                                 <input type="hidden" id="kuvaID" name="kuvaID" value="@ViewBag.kategoria" />
@@ -63,15 +63,15 @@
                                 <input type="submit" value="Poista kuva valinta" class="btn btn-secondary text-white" />
                             </div>
                         </div>
-                        }
+                    }
 
-                         }
+                }
 
             </div>
         </div>
 
 
 
-  }
+    }
 </div>
 
